@@ -1,0 +1,37 @@
+{
+  "name": "homecord",
+  "description": "HomeCord shows your Discord Server's current activity in a custom-made Home Channel!",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.6",
+    "discord.js": "^14.13.0",
+    "erlpack": "github:discord/erlpack",
+    "sodium-native": "^4.0.4",
+    "utf-8-validate": "^5.0.9",
+    "zlib-sync": "^0.1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwilightZebby/HomeCord.git"
+  },
+  "keywords": [
+    "discord",
+    "discordbot",
+    "discord-bot",
+    "discordjs",
+    "nodejs",
+    "homecord",
+    "discord-home-channel",
+    "discord-home"
+  ],
+  "author": "TwilightZebby",
+  "license": "SEE LICENSE IN https://github.com/TwilightZebby/license/blob/main/license.md",
+  "bugs": {
+    "url": "https://github.com/TwilightZebby/HomeCord/issues"
+  },
+  "homepage": "https://github.com/TwilightZebby/HomeCord#readme"
+}
