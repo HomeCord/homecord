@@ -74,5 +74,79 @@ module.exports = {
 
 
 
-    // ******* PLACEHOLDER HEADING
+    // ******* GENERIC HOMECORD STUFF
+    TRUE_UPPERCASE: `TRUE`,
+    FALSE_UPPERCASE: `FALSE`,
+    TRUE: `True`,
+    FALSE: `False`,
+
+    VERY_LOW_UPPERCASE: `VERY LOW`,
+    LOW_UPPERCASE: `LOW`,
+    MEDIUM_UPPERCASE: `MEDIUM`,
+    HIGH_UPPERCASE: `HIGH`,
+    VERY_HIGH_UPPERCASE: `VERY HIGH`,
+    VERY_LOW: `Very Low`,
+    LOW: `Low`,
+    MEDIUM: `Medium`,
+    HIGH: `High`,
+    VERY_HIGH: `Very High`,
+
+    PLEASE_SELECT_AN_OPTION: `Please select an option`,
+
+
+
+    // ******* SETUP COMMAND
+    SETUP_COMMAND_ERROR_HOME_ALREADY_SETUP: `You cannot use this Command when this Server already has a Home Channel setup!`,
+    SETUP_COMMAND_ERROR_MISSING_MANAGE_CHANNELS_PERMISSION: `Sorry, but I cannot create your Home Channel without the **Manage Channels** Permission. Please grant me that Permission in Server Settings > Roles!\n*(You can revoke this Permission from me after your Home Channel has been setup)*`,
+    SETUP_COMMAND_ERROR_MISSING_MANAGE_WEBHOOKS_PERMISSION: `Sorry, but I cannot setup your Home Channel without the **Manage Webhooks** Permission. Please grant me that Permission in Server Settings > Roles!\n*(You can revoke this Permission from me after your Home Channel has been setup)*`,
+
+
+
+    // ******* SETUP EMBED
+    SETUP_EMBED_TITLE: `Home Channel Setup`,
+    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nOnce it's configured, select "Save & Create" in order to fully create your Home Channel!`,
+    SETUP_EMBED_CHANNEL: `Channel to use for Home`,
+    CREATE_CHANNEL_FOR_ME: `Create Channel for me`,
+    SETUP_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
+    SETUP_EMBED_HIGHLIGHT_MESSAGES: `Highlight Messages`,
+    SETUP_EMBED_HIGHLIGHT_SCHEDULED_EVENTS: `Highlight Scheduled Events`,
+    SETUP_EMBED_HIGHLIGHT_VOICE_ACTIVITY: `Highlight Voice Activity`,
+    SETUP_EMBED_HIGHLIGHT_LIVE_STAGES: `Highlight Live Stages`,
+    SETUP_EMBED_HIGHLIGHT_ACTIVE_THREADS: `Highlight Active Threads & Posts`,
+    SETUP_EMBED_FOOTER_STEP_ONE: `Setup - Step 1 of 3`, // Configure Settings
+    SETUP_EMBED_FOOTER_STEP_TWO: `Setup - Step 2 of 3`, // Validate Permissions
+    SETUP_EMBED_FOOTER_STEP_THREE: `Setup - Step 3 of 3`, // Create & Setup "Home" Channel
+
+
+
+    // ******* SETUP SELECT
+    SETUP_SELECT_CHANNEL: `Set Channel`,
+    SETUP_SELECT_LABEL_ACTIVITY: `Set Activity Threshold`,
+    SETUP_SELECT_LABEL_MESSAGES: `Set Message Highlighting`,
+    SETUP_SELECT_LABEL_EVENTS: `Set Events Highlighting`,
+    SETUP_SELECT_LABEL_VOICE: `Set Voice Highlighting`,
+    SETUP_SELECT_LABEL_STAGES: `Set Stages Highlighting`,
+    SETUP_SELECT_LABEL_THREADS: `Set Threads Highlighting`,
+    SETUP_SELECT_LABEL_SAVE_AND_CREATE: `Save & Create`,
+    SETUP_SELECT_LABEL_CANCEL: `Cancel Setup`,
+
+    SETUP_EMBED_CHANNEL_DESCRIPTION: `Set which Channel to use for your Home Channel`,
+    SETUP_SELECT_EDIT_ACTIVITY_THRESHOLD: `Set the minimum Activity Threshold`,
+    SETUP_SELECT_TOGGLE_MESSAGES: `Toggle if Messages can be highlighted`,
+    SETUP_SELECT_TOGGLE_EVENTS: `Toggle if Scheduled Events can be highlighted`,
+    SETUP_SELECT_TOGGLE_VOICE: `Toggle if Voice Channels can be highlighted`,
+    SETUP_SELECT_TOGGLE_STAGES: `Toggle if live Stages can be highlighted`,
+    SETUP_SELECT_TOGGLE_THREADS: `Toggle if Threads and Forum Posts can be highlighted`,
+    SETUP_SELECT_SAVE: `Save the settings and create your Home Channel`,
+    SETUP_SELECT_CANCEL: `Cancel setup of your Home Channel`,
+
+
+
+    // ******* SETUP - SET CHANNEL
+    SETUP_SET_CHANNEL_SELECT_PLACEHOLDER: `Search for an existing Channel`,
+    SETUP_CREATE_CHANNEL_BUTTON_LABEL: `Create for me`,
+    SETUP_SET_CHANNEL_EMBED_TITLE: `Set Home Channel Location`,
+    SETUP_SET_CHANNEL_EMBED_DESCRIPTION: `Please set where you would like your Home Channel to be.\n\nIf you want to use an existing Text Channel, select it using the Channel Select Menu below.\n\nOtherwise, please tap the "Create for me" Button if you want HomeCord to create your Home Channel for you.`,
+    
+    SETUP_SET_CHANNEL_ERROR_INVALID_CHANNEL_TYPE: `Selected Channel was a Text Channel. Please select a Text Channel (not any other Channel Type).`,
 };

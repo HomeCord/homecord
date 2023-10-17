@@ -56,6 +56,7 @@ module.exports = {
         Data.description = this.Description;
         Data.descriptionLocalizations = this.LocalisedDescriptions;
         Data.type = ApplicationCommandType.ChatInput;
+        Data.dmPermission = false;
 
         return Data;
     },

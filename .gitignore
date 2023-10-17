@@ -1,6 +1,7 @@
 /node_modules
 config.js
 /.vscode
+/Mongoose
 
 bulkDeployCommands.js
 deployCommands.js

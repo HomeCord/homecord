@@ -1,4 +1,5 @@
 const { RateLimitError, DMChannel, PartialGroupDMChannel } = require("discord.js");
+const Mongoose = require("mongoose");
 const fs = require("fs");
 const { DiscordClient, Collections, checkPomelo } = require("./constants.js");
 const Config = require("./config.js");
@@ -91,6 +92,9 @@ DiscordClient.on('error', (err) => { console.error("***DISCORD ERROR: ", err); r
 
 // Discord Rate Limit - Only uncomment when debugging
 //DiscordClient.rest.on('rateLimited', (RateLimitError) => { console.log("***DISCORD RATELIMIT HIT: ", RateLimitError); return; });
+
+// Mongoose Errors
+Mongoose.connection.on('error', console.error);
 
 
 
@@ -211,4 +215,5 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 /******************************************************************************* */
 
-DiscordClient.login(Config.TOKEN); // Login to and start the Discord Bot Client
+DiscordClient.login(Config.TOKEN).catch(console.error); // Login to and start the Discord Bot Client
+Mongoose.connect(Config.MongoString).catch(console.error);

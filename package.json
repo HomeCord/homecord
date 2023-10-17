@@ -10,6 +10,7 @@
     "bufferutil": "^4.0.6",
     "discord.js": "^14.13.0",
     "erlpack": "github:discord/erlpack",
+    "mongoose": "^7.5.3",
     "sodium-native": "^4.0.4",
     "utf-8-validate": "^5.0.9",
     "zlib-sync": "^0.1.7"
