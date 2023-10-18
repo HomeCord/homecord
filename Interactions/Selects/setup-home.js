@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction, ActionRowBuilder, ChannelSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
+const { StringSelectMenuInteraction, ActionRowBuilder, ChannelSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js");
 const { DiscordClient, Collections } = require("../../constants.js");
 const { localize } = require("../../BotModules/LocalizationModule.js");
 
@@ -42,9 +42,28 @@ module.exports = {
                     new ButtonBuilder().setCustomId(`setup-create-channel_${selectInteraction.customId.slice(11)}`).setStyle(ButtonStyle.Primary).setLabel(localize(selectInteraction.locale, 'SETUP_CREATE_CHANNEL_BUTTON_LABEL'))
                 );
                 // Create Embed
-                let channelEmbed = new EmbedBuilder().setTitle(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_DESCRIPTION')).setColor('Grey');
+                let channelEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ components: [channelSelect, channelButtons], embeds: [channelEmbed] });
+                await selectInteraction.update({ embeds: [channelEmbed], components: [channelSelect, channelButtons] });
+                break;
+
+
+            // ACTIVITY THRESHOLD OPTION
+            case 'ACTIVITY_THRESHOLD':
+                // Create Activity Select
+                let activitySelect = new ActionRowBuilder().addComponents(
+                    new StringSelectMenuBuilder().setCustomId(`setup-set-activity_${selectInteraction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(selectInteraction.locale, 'VERY_LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(selectInteraction.locale, 'LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(selectInteraction.locale, 'MEDIUM')),
+                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(selectInteraction.locale, 'HIGH')),
+                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(selectInteraction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
+                    )
+                );
+                // Create Embed
+                let activityEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_SET_ACTIVITY_EMBED_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_SET_ACTIVITY_EMBED_DESCRIPTION'));
+                // ACK
+                await selectInteraction.update({ embeds: [activityEmbed], components: [activitySelect] });
                 break;
 
 
@@ -55,7 +74,7 @@ module.exports = {
 
 
             default:
-                await selectInteraction.update({ content: selectInteraction.message.content += `\n\n:warning: ${localize(selectInteraction.locale, 'SELECT_MENU_ERROR_GENERIC')}` });
+                await selectInteraction.update({ content: `\n\n:warning: ${localize(selectInteraction.locale, 'SELECT_MENU_ERROR_GENERIC')}` });
                 break;
         }
 

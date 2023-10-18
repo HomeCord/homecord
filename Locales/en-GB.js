@@ -150,5 +150,11 @@ module.exports = {
     SETUP_SET_CHANNEL_EMBED_TITLE: `Set Home Channel Location`,
     SETUP_SET_CHANNEL_EMBED_DESCRIPTION: `Please set where you would like your Home Channel to be.\n\nIf you want to use an existing Text Channel, select it using the Channel Select Menu below.\n\nOtherwise, please tap the "Create for me" Button if you want HomeCord to create your Home Channel for you.`,
     
-    SETUP_SET_CHANNEL_ERROR_INVALID_CHANNEL_TYPE: `Selected Channel was a Text Channel. Please select a Text Channel (not any other Channel Type).`,
+    SETUP_SET_CHANNEL_ERROR_INVALID_CHANNEL_TYPE: `Selected Channel was not a Text Channel. Please select a Text Channel (not any other Channel Type).`,
+
+
+
+    // ******* SETUP - SET ACTIVITY THRESHOLD
+    SETUP_SET_ACTIVITY_EMBED_TITLE: `Set Activity Threshold`,
+    SETUP_SET_ACTIVITY_EMBED_DESCRIPTION: `Please select which Activity Threshold you would like for your Home Channel.\n\nThe Activity Threshold is the minimum amount of activity any Message, Event, Voice Channel, Forum Post, or Thread should reach before it can be highlighted (if enabled) in your Home Channel.\n\n- For smaller or less active Servers, "Very Low" or "Low" may be best for you.\n- For large public Servers, it may be best to select "Medium" or "High", depending on how much daily activity you see.`,
 };
