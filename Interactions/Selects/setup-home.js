@@ -48,6 +48,12 @@ module.exports = {
                 break;
 
 
+            // CANCEL OPTION
+            case 'CANCEL':
+                await selectInteraction.update({ content: localize(selectInteraction.locale, 'SETUP_COMMAND_CANCEL_SETUP'), embeds: [], components: [] });
+                break;
+
+
             default:
                 await selectInteraction.update({ content: selectInteraction.message.content += `\n\n:warning: ${localize(selectInteraction.locale, 'SELECT_MENU_ERROR_GENERIC')}` });
                 break;

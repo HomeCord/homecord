@@ -96,6 +96,8 @@ module.exports = {
 
 
     // ******* SETUP COMMAND
+    SETUP_COMMAND_CANCEL_SETUP: `Cancelled setup of Home Channel. Feel free to delete or dismiss this message.`,
+
     SETUP_COMMAND_ERROR_HOME_ALREADY_SETUP: `You cannot use this Command when this Server already has a Home Channel setup!`,
     SETUP_COMMAND_ERROR_MISSING_MANAGE_CHANNELS_PERMISSION: `Sorry, but I cannot create your Home Channel without the **Manage Channels** Permission. Please grant me that Permission in Server Settings > Roles!\n*(You can revoke this Permission from me after your Home Channel has been setup)*`,
     SETUP_COMMAND_ERROR_MISSING_MANAGE_WEBHOOKS_PERMISSION: `Sorry, but I cannot setup your Home Channel without the **Manage Webhooks** Permission. Please grant me that Permission in Server Settings > Roles!\n*(You can revoke this Permission from me after your Home Channel has been setup)*`,
