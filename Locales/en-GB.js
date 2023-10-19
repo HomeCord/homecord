@@ -80,6 +80,9 @@ module.exports = {
     TRUE: `True`,
     FALSE: `False`,
 
+    ENABLE: `Enable`,
+    DISABLE: `Disable`,
+
     VERY_LOW_UPPERCASE: `VERY LOW`,
     LOW_UPPERCASE: `LOW`,
     MEDIUM_UPPERCASE: `MEDIUM`,
@@ -136,7 +139,7 @@ module.exports = {
     SETUP_SELECT_EDIT_ACTIVITY_THRESHOLD: `Set the minimum Activity Threshold`,
     SETUP_SELECT_TOGGLE_MESSAGES: `Toggle if Messages can be highlighted`,
     SETUP_SELECT_TOGGLE_EVENTS: `Toggle if Scheduled Events can be highlighted`,
-    SETUP_SELECT_TOGGLE_VOICE: `Toggle if Voice Channels can be highlighted`,
+    SETUP_SELECT_TOGGLE_VOICE: `Toggle if active Voice Channels can be highlighted`,
     SETUP_SELECT_TOGGLE_STAGES: `Toggle if live Stages can be highlighted`,
     SETUP_SELECT_TOGGLE_THREADS: `Toggle if Threads and Forum Posts can be highlighted`,
     SETUP_SELECT_SAVE: `Save the settings and create your Home Channel`,
@@ -157,4 +160,22 @@ module.exports = {
     // ******* SETUP - SET ACTIVITY THRESHOLD
     SETUP_SET_ACTIVITY_EMBED_TITLE: `Set Activity Threshold`,
     SETUP_SET_ACTIVITY_EMBED_DESCRIPTION: `Please select which Activity Threshold you would like for your Home Channel.\n\nThe Activity Threshold is the minimum amount of activity any Message, Event, Voice Channel, Forum Post, or Thread should reach before it can be highlighted (if enabled) in your Home Channel.\n\n- For smaller or less active Servers, "Very Low" or "Low" may be best for you.\n- For large public Servers, it may be best to select "Medium" or "High", depending on how much daily activity you see.`,
+
+
+
+    // ******* SETUP - TOGGLE HIGHLIGHTING STUFF
+    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Messages`,
+    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Messages being highlighted on your Home Channel.\n\nPlease note: Disabling Message Highlights will also prevent you from manually featuring Messages onto your Home Channel.`,
+
+    SETUP_TOGGLE_EVENT_HIGHLIGHTS_TITLE: `Toggle Highlighting Events`,
+    SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Scheduled Events being highlighted on your Home Channel.\n\nPlease note: Disabling Event Highlights will also prevent you from manually featuring Scheduled Events onto your Home Channel.`,
+
+    SETUP_TOGGLE_VOICE_HIGHLIGHTS_TITLE: `Toggle Highlighting Voice`,
+    SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Voice Channels being highlighted on your Home Channel.`,
+
+    SETUP_TOGGLE_STAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Stages`,
+    SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable live Stages being highlighted on your Home Channel.`,
+
+    SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE: `Toggle Highlighting Threads/Posts`,
+    SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Threads & Forum Posts being highlighted on your Home Channel.\n\nPlease note: Disabling Thread/Post Highlights will also prevent you from manually featuring Threads & Forum Posts onto your Home Channel.`,
 };
