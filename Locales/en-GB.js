@@ -108,7 +108,7 @@ module.exports = {
 
 
     // ******* SETUP EMBED
-    SETUP_EMBED_TITLE: `Home Channel Setup`,
+    SETUP_EMBED_TITLE: `Home Channel Setup - Settings`,
     SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nOnce it's configured, select "Save & Create" in order to fully create your Home Channel!`,
     SETUP_EMBED_CHANNEL: `Channel to use for Home`,
     CREATE_CHANNEL_FOR_ME: `Create Channel for me`,
@@ -132,7 +132,7 @@ module.exports = {
     SETUP_SELECT_LABEL_VOICE: `Set Voice Highlighting`,
     SETUP_SELECT_LABEL_STAGES: `Set Stages Highlighting`,
     SETUP_SELECT_LABEL_THREADS: `Set Threads Highlighting`,
-    SETUP_SELECT_LABEL_SAVE_AND_CREATE: `Save & Create`,
+    SETUP_SELECT_LABEL_SAVE_AND_CREATE: `Save & Proceed`,
     SETUP_SELECT_LABEL_CANCEL: `Cancel Setup`,
 
     SETUP_EMBED_CHANNEL_DESCRIPTION: `Set which Channel to use for your Home Channel`,
@@ -142,7 +142,7 @@ module.exports = {
     SETUP_SELECT_TOGGLE_VOICE: `Toggle if active Voice Channels can be highlighted`,
     SETUP_SELECT_TOGGLE_STAGES: `Toggle if live Stages can be highlighted`,
     SETUP_SELECT_TOGGLE_THREADS: `Toggle if Threads and Forum Posts can be highlighted`,
-    SETUP_SELECT_SAVE: `Save the settings and create your Home Channel`,
+    SETUP_SELECT_SAVE: `Save the settings and proceeds to Step 2`,
     SETUP_SELECT_CANCEL: `Cancel setup of your Home Channel`,
 
 
@@ -151,7 +151,7 @@ module.exports = {
     SETUP_SET_CHANNEL_SELECT_PLACEHOLDER: `Search for an existing Channel`,
     SETUP_CREATE_CHANNEL_BUTTON_LABEL: `Create for me`,
     SETUP_SET_CHANNEL_EMBED_TITLE: `Set Home Channel Location`,
-    SETUP_SET_CHANNEL_EMBED_DESCRIPTION: `Please set where you would like your Home Channel to be.\n\nIf you want to use an existing Text Channel, select it using the Channel Select Menu below.\n\nOtherwise, please tap the "Create for me" Button if you want HomeCord to create your Home Channel for you.`,
+    SETUP_SET_CHANNEL_EMBED_DESCRIPTION: `Please set where you would like your Home Channel to be.\n\nIf you want to use an existing Text Channel, select it using the Channel Select Menu below. *(It's recommended to pick a read-only Channel that Server Members cannot send messages into)*\n\nOtherwise, please tap the "Create for me" Button if you want HomeCord to create your Home Channel for you.`,
     
     SETUP_SET_CHANNEL_ERROR_INVALID_CHANNEL_TYPE: `Selected Channel was not a Text Channel. Please select a Text Channel (not any other Channel Type).`,
 
@@ -178,4 +178,44 @@ module.exports = {
 
     SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE: `Toggle Highlighting Threads/Posts`,
     SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Threads & Forum Posts being highlighted on your Home Channel.\n\nPlease note: Disabling Thread/Post Highlights will also prevent you from manually featuring Threads & Forum Posts onto your Home Channel.`,
+
+
+
+    // ******* SETUP - PAGE 2 - PROCESSING
+    SETUP_PAGE_2_TITLE: `Home Channel Setup - Validation`,
+    SETUP_PAGE_2_PROCESSING_DESCRIPTION: `*Validating Settings and checking Permissions...*`,
+    SETUP_VALIDATION_SERVER_BASED: `*HomeCord will check for Permissions in Server Settings > Roles, since you selected to have HomeCord create a Home Channel for you.*`,
+    SETUP_VALIDATION_CHANNEL_BASED: `*HomeCord will check for Permissions in {{0}}, the Text Channel you selected to be your Home Channel.*`,
+
+    SETUP_VALIDATION_REQUIREMENTS: `Requirements`,
+    SETUP_VALIDATION_REQUIREMENTS_DESCRIPTION: `*Required checks that need to be passed in order for HomeCord to correctly setup a Home Channel for your Server.*`,
+
+    SETUP_MANAGE_CHANNELS_PERMISSION_MISSING: `:warning: Missing "**Manage Channels**" Permission *(Needed to create Home Channel for you)*`,
+    SETUP_MANAGE_CHANNELS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Manage Channels**" Permission *(For creating Home Channel for you)*`,
+
+    SETUP_MANAGE_WEBHOOKS_PERMISSION_MISSING: `:warning: Missing "**Manage Webhooks**" Permission *(Needed to create a Webhook in Home Channel)*`,
+    SETUP_MANAGE_WEBHOOKS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Manage Webhooks**" Permission *(For creating a Webhook in Home Channel)*`,
+
+    SETUP_SEND_MESSAGES_REVOKE_FAILED: `:warning: "**Send Messages**" Permission needs to be revoked for @everyone in Home Channel`,
+    SETUP_SEND_MESSAGES_REVOKE_SUCCESS: `:white_check_mark: "**Send Messages**" Permission correctly revoked for @everyone in Home Channel`,
+
+    SETUP_VALIDATION_SUGGESTIONS: `Suggestions`,
+    SETUP_VALIDATION_SUGGESTIONS_DESCRIPTION: `*Optional extra things you may want to pass checks on to improve your Server's experience with HomeCord's Home Channel.\nIf a Permission is labelled as needing to be granted to @everyone, this is due to how Webhooks work on Discord. You can simply grant those Permissions in the Home Channel itself.*`,
+
+    SETUP_SUGGESTION_FOR_AT_EVERYONE: `for @everyone`, // For USE_EXTERNAL_EMOJIS Permission
+    SETUP_SUGGESTION_FOR_HOMECORD: `for HomeCord`, // For ATTACH_FILES, EMBED_LINKS Permissions
+
+    SETUP_EMBED_LINKS_PERMISSION_MISSING: `:information_source: Missing "**Embed Links**" Permission`,
+    SETUP_EMBED_LINKS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Embed Links**" Permission`,
+
+    SETUP_ATTACH_FILES_PERMISSION_MISSING: `:information_source: Missing "**Attach Files**" Permission`,
+    SETUP_ATTACH_FILES_PERMISSION_SUCCESS: `:white_check_mark: Has "**Attach Files**" Permission`,
+
+    SETUP_EXTERNAL_EMOJIS_PERMISSION_MISSING: `:information_source: Missing "**Use External Emojis**" Permission`,
+    SETUP_EXTERNAL_EMOJIS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Use External Emojis**" Permission`,
+
+    SETUP_STEP_2_SELECT_RECHECK: `Redo Validation`,
+    SETUP_STEP_2_SELECT_RECHECK_DESCRIPTION: `Redo the Validation Checks for your setup`,
+    SETUP_STEP_2_SELECT_CONFIRM: `Complete Setup`,
+    SETUP_STEP_2_SELECT_CONFIRM_DESCRIPTION: `Finish setup of your Home Channel`,
 };

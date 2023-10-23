@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction, ActionRowBuilder, ChannelSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js");
+const { StringSelectMenuInteraction, ActionRowBuilder, ChannelSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, PermissionFlagsBits, TextChannel } = require("discord.js");
 const { DiscordClient, Collections } = require("../../constants.js");
 const { localize } = require("../../BotModules/LocalizationModule.js");
 
@@ -39,7 +39,7 @@ module.exports = {
                 );
                 // Create Buttons
                 let channelButtons = new ActionRowBuilder().addComponents(
-                    new ButtonBuilder().setCustomId(`setup-create-channel_${selectInteraction.customId.slice(11)}`).setStyle(ButtonStyle.Primary).setLabel(localize(selectInteraction.locale, 'SETUP_CREATE_CHANNEL_BUTTON_LABEL'))
+                    new ButtonBuilder().setCustomId(`setup-create-channel_${selectInteraction.customId.slice(11)}`).setStyle(ButtonStyle.Secondary).setLabel(localize(selectInteraction.locale, 'SETUP_CREATE_CHANNEL_BUTTON_LABEL'))
                 );
                 // Create Embed
                 let channelEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_DESCRIPTION'));
@@ -147,6 +147,12 @@ module.exports = {
                 break;
 
 
+            // SAVE AND MOVE ONTO STEP 2
+            case 'SAVE_AND_CREATE':
+                await setupStep2(selectInteraction, SettingValueKeys);
+                break;
+
+
             // CANCEL OPTION
             case 'CANCEL':
                 await selectInteraction.update({ content: localize(selectInteraction.locale, 'SETUP_COMMAND_CANCEL_SETUP'), embeds: [], components: [] });
@@ -160,4 +166,102 @@ module.exports = {
 
         return;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Triggers step 2 of the Setup Command
+ * 
+ * @param {StringSelectMenuInteraction} interaction 
+ * @param {String[]} settingValues 
+ */
+async function setupStep2(interaction, settingValues)
+{
+    // Update to a "processing" state, just in case
+    let processingEmbed = new EmbedBuilder().setColor('Grey')
+    .setTitle(localize(interaction.locale, 'SETUP_PAGE_2_TITLE'))
+    .setDescription(localize(interaction.locale, 'SETUP_PAGE_2_PROCESSING_DESCRIPTION'))
+    .setFooter({ text: localize(interaction.locale, 'SETUP_EMBED_FOOTER_STEP_TWO') });
+
+    await interaction.update({ content: null, embeds: [processingEmbed], components: [] });
+
+
+
+    // ******* CHECK PERMISSIONS
+    let validationEmbed = new EmbedBuilder().setColor('Grey')
+    .setTitle(localize(interaction.locale, 'SETUP_PAGE_2_TITLE'))
+    .setFooter({ text: localize(interaction.locale, 'SETUP_EMBED_FOOTER_STEP_TWO') });
+
+    let requiredString = "";
+    let passRequirements = true;
+
+
+    // For checks specific to creating Home Channel for User
+    if ( settingValues[0] === 'c' )
+    {
+        // Manage Channels
+        if ( !interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageChannels) ) { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_MANAGE_CHANNELS_PERMISSION_MISSING')}`; passRequirements = false; }
+        else { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_MANAGE_CHANNELS_PERMISSION_SUCCESS')}`; }
+
+        // Manage Webhooks
+        if ( !interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageWebhooks) ) { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_MANAGE_WEBHOOKS_PERMISSION_MISSING')}`; passRequirements = false; }
+        else { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_MANAGE_WEBHOOKS_PERMISSION_SUCCESS')}`; }
+
+        // Set Embed Description
+        validationEmbed.setDescription(localize(interaction.locale, 'SETUP_VALIDATION_SERVER_BASED'));
+    }
+    // For checks specific to using an existing Home Channel
+    else
+    {
+        // Fetch Channel
+        /** @type {TextChannel} */
+        let fetchedChannel = await interaction.guild.channels.fetch(settingValues[0]);
+
+        // Manage Webhooks
+        if ( !interaction.guild.members.me.permissionsIn(settingValues[0]).has(PermissionFlagsBits.ManageWebhooks) ) { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_MANAGE_WEBHOOKS_PERMISSION_MISSING')}`; passRequirements = false; }
+        else { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_MANAGE_WEBHOOKS_PERMISSION_SUCCESS')}`; }
+
+        // Send Messages (for atEveryone)
+        if ( fetchedChannel.permissionsFor(interaction.guildId).has(PermissionFlagsBits.SendMessages) ) { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_SEND_MESSAGES_REVOKE_FAILED')}`; passRequirements = false; }
+        else { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_SEND_MESSAGES_REVOKE_SUCCESS')}`; }
+
+        // Set Embed Description
+        validationEmbed.setDescription(localize(interaction.locale, 'SETUP_VALIDATION_CHANNEL_BASED', `<#${settingValues[0]}>`));
+    }
+
+
+    // Edit Embed
+    validationEmbed.addFields(
+        { name: localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS'), value: `${localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS_DESCRIPTION')}\n\n${requiredString}` }
+    );
+
+    // Create Selects
+    let validationRevalidateSelect = new ActionRowBuilder().addComponents(
+        new StringSelectMenuBuilder().setCustomId(`setup-finalize_${settingValues.join("_")}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+            new StringSelectMenuOptionBuilder().setValue('REVALIDATE').setLabel(localize(interaction.locale, 'SETUP_STEP_2_SELECT_RECHECK')).setDescription(localize(interaction.locale, 'SETUP_STEP_2_SELECT_RECHECK_DESCRIPTION')).setEmoji(`⚙`),
+            new StringSelectMenuOptionBuilder().setValue('CANCEL').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_CANCEL')).setDescription(localize(interaction.locale, 'SETUP_SELECT_CANCEL')).setEmoji(`❌`)
+        )
+    );
+    let validationFullSelect = new ActionRowBuilder().addComponents(
+        new StringSelectMenuBuilder().setCustomId(`setup-finalize_${settingValues.join("_")}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+            new StringSelectMenuOptionBuilder().setValue('REVALIDATE').setLabel(localize(interaction.locale, 'SETUP_STEP_2_SELECT_RECHECK')).setDescription(localize(interaction.locale, 'SETUP_STEP_2_SELECT_RECHECK_DESCRIPTION')).setEmoji(`⚙`),
+            new StringSelectMenuOptionBuilder().setValue('CONFIRM').setLabel(localize(interaction.locale, 'SETUP_STEP_2_SELECT_CONFIRM')).setDescription(localize(interaction.locale, 'SETUP_STEP_2_SELECT_CONFIRM_DESCRIPTION')).setEmoji(`✅`),
+            new StringSelectMenuOptionBuilder().setValue('CANCEL').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_CANCEL')).setDescription(localize(interaction.locale, 'SETUP_SELECT_CANCEL')).setEmoji(`❌`)
+        )
+    );
+
+    // ACK
+    if ( passRequirements === false ) { await interaction.editReply({ content: null, embeds: [validationEmbed], components: [validationRevalidateSelect] }); }
+    else { await interaction.editReply({ content: null, embeds: [validationEmbed], components: [validationFullSelect] }); }
+
+    return;
 }
