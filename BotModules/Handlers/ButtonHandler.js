@@ -45,36 +45,39 @@ module.exports = {
             {
                 let timeLeft = ( ExpirationTime - Now ) / 1000; // How much time is left of cooldown, in seconds
 
-                switch (timeLeft)
+                // MINUTES
+                if ( timeLeft >= 60 && timeLeft < 3600 )
                 {
-                    // MINUTES
-                    case timeLeft >= 60 && timeLeft < 3600:
-                        timeLeft = timeLeft / 60; // For UX
-                        let cooldownMinutesMessage = `${localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_MINUTES', timeLeft.toFixed(1))}`;
-                        return await buttonInteraction.reply({ ephemeral: true, content: cooldownMinutesMessage });
-
-                    // HOURS
-                    case timeLeft >= 3600 && timeLeft < 86400:
-                        timeLeft = timeLeft / 3600; // For UX
-                        let cooldownHoursMessage = `${localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_HOURS', timeLeft.toFixed(1))}`;
-                        return await buttonInteraction.reply({ ephemeral: true, content: cooldownHoursMessage });
-
-                    // DAYS
-                    case timeLeft >= 86400 && timeLeft < 2.628e+6:
-                        timeLeft = timeLeft / 86400; // For UX
-                        let cooldownDaysMessage = `${localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_DAYS', timeLeft.toFixed(1))}`;
-                        return await buttonInteraction.reply({ ephemeral: true, content: cooldownDaysMessage });
-
-                    // MONTHS
-                    case timeLeft >= 2.628e+6:
-                        timeLeft = timeLeft / 2.628e+6; // For UX
-                        let cooldownMonthsMessage = `${localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_MONTHS', timeLeft.toFixed(1))}`;
-                        return await buttonInteraction.reply({ ephemeral: true, content: cooldownMonthsMessage });
-
-                    // SECONDS
-                    default:
-                        let cooldownSecondsMessage = `${localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_SECONDS', timeLeft.toFixed(1))}`;
-                        return await buttonInteraction.reply({ ephemeral: true, content: cooldownSecondsMessage });
+                    timeLeft = timeLeft / 60; // For UX
+                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_MINUTES', timeLeft.toFixed(1)) });
+                    return;
+                }
+                // HOURS
+                else if ( timeLeft >= 3600 && timeLeft < 86400 )
+                {
+                    timeLeft = timeLeft / 3600; // For UX
+                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_HOURS', timeLeft.toFixed(1)) });
+                    return;
+                }
+                // DAYS
+                else if ( timeLeft >= 86400 && timeLeft < 2.628e+6 )
+                {
+                    timeLeft = timeLeft / 86400; // For UX
+                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_DAYS', timeLeft.toFixed(1)) });
+                    return;
+                }
+                // MONTHS
+                else if ( timeLeft >= 2.628e+6 )
+                {
+                    timeLeft = timeLeft / 2.628e+6; // For UX
+                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_MONTHS', timeLeft.toFixed(1)) });
+                    return;
+                }
+                // SECONDS
+                else
+                {
+                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_SECONDS', timeLeft.toFixed(1)) });
+                    return;
                 }
             }
         }
