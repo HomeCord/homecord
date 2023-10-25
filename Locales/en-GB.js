@@ -202,17 +202,14 @@ module.exports = {
     SETUP_VALIDATION_SUGGESTIONS: `Suggestions`,
     SETUP_VALIDATION_SUGGESTIONS_DESCRIPTION: `*Optional extra things you may want to pass checks on to improve your Server's experience with HomeCord's Home Channel.\nIf a Permission is labelled as needing to be granted to @everyone, this is due to how Webhooks work on Discord. You can simply grant those Permissions in the Home Channel itself.*`,
 
-    SETUP_SUGGESTION_FOR_AT_EVERYONE: `for @everyone`, // For USE_EXTERNAL_EMOJIS Permission
-    SETUP_SUGGESTION_FOR_HOMECORD: `for HomeCord`, // For ATTACH_FILES, EMBED_LINKS Permissions
-
     SETUP_EMBED_LINKS_PERMISSION_MISSING: `:information_source: Missing "**Embed Links**" Permission`,
     SETUP_EMBED_LINKS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Embed Links**" Permission`,
 
     SETUP_ATTACH_FILES_PERMISSION_MISSING: `:information_source: Missing "**Attach Files**" Permission`,
     SETUP_ATTACH_FILES_PERMISSION_SUCCESS: `:white_check_mark: Has "**Attach Files**" Permission`,
 
-    SETUP_EXTERNAL_EMOJIS_PERMISSION_MISSING: `:information_source: Missing "**Use External Emojis**" Permission`,
-    SETUP_EXTERNAL_EMOJIS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Use External Emojis**" Permission`,
+    SETUP_EXTERNAL_EMOJIS_PERMISSION_MISSING: `:information_source: Missing "**Use External Emojis**" Permission (on @everyone)`,
+    SETUP_EXTERNAL_EMOJIS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Use External Emojis**" Permission (on @everyone)`,
 
     SETUP_STEP_2_SELECT_RECHECK: `Redo Validation`,
     SETUP_STEP_2_SELECT_RECHECK_DESCRIPTION: `Redo the Validation Checks for your setup`,

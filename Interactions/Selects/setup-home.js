@@ -202,6 +202,7 @@ async function setupStep2(interaction, settingValues)
     .setFooter({ text: localize(interaction.locale, 'SETUP_EMBED_FOOTER_STEP_TWO') });
 
     let requiredString = "";
+    let suggestionString = "";
     let passRequirements = true;
 
 
@@ -217,7 +218,10 @@ async function setupStep2(interaction, settingValues)
         else { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_MANAGE_WEBHOOKS_PERMISSION_SUCCESS')}`; }
 
         // Set Embed Description
-        validationEmbed.setDescription(localize(interaction.locale, 'SETUP_VALIDATION_SERVER_BASED'));
+        validationEmbed.setDescription(localize(interaction.locale, 'SETUP_VALIDATION_SERVER_BASED'))
+        .addFields(
+            { name: localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS'), value: `${localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS_DESCRIPTION')}\n\n${requiredString}` }
+        );
     }
     // For checks specific to using an existing Home Channel
     else
@@ -234,15 +238,26 @@ async function setupStep2(interaction, settingValues)
         if ( fetchedChannel.permissionsFor(interaction.guildId).has(PermissionFlagsBits.SendMessages) ) { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_SEND_MESSAGES_REVOKE_FAILED')}`; passRequirements = false; }
         else { requiredString += `${requiredString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_SEND_MESSAGES_REVOKE_SUCCESS')}`; }
 
-        // Set Embed Description
-        validationEmbed.setDescription(localize(interaction.locale, 'SETUP_VALIDATION_CHANNEL_BASED', `<#${settingValues[0]}>`));
+        // Embed Links
+        if ( !interaction.guild.members.me.permissionsIn(settingValues[0]).has(PermissionFlagsBits.EmbedLinks) ) { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EMBED_LINKS_PERMISSION_MISSING')}`; }
+        else { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EMBED_LINKS_PERMISSION_SUCCESS')}`; }
+
+        // Attach Files
+        if ( !interaction.guild.members.me.permissionsIn(settingValues[0]).has(PermissionFlagsBits.AttachFiles) ) { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_ATTACH_FILES_PERMISSION_MISSING')}`; }
+        else { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_ATTACH_FILES_PERMISSION_SUCCESS')}`; }
+
+        // Use External Emojis
+        if ( !fetchedChannel.permissionsFor(interaction.guildId).has(PermissionFlagsBits.UseExternalEmojis) ) { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EXTERNAL_EMOJIS_PERMISSION_MISSING')}`; }
+        else { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EXTERNAL_EMOJIS_PERMISSION_SUCCESS')}`; }
+
+        // Set Embed Description & fields
+        validationEmbed.setDescription(localize(interaction.locale, 'SETUP_VALIDATION_CHANNEL_BASED', `<#${settingValues[0]}>`))
+        .addFields(
+            { name: localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS'), value: `${localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS_DESCRIPTION')}\n\n${requiredString}` },
+            { name: localize(interaction.locale, 'SETUP_VALIDATION_SUGGESTIONS'), value: `${localize(interaction.locale, 'SETUP_VALIDATION_SUGGESTIONS_DESCRIPTION')}\n\n${suggestionString}` }
+        );
     }
 
-
-    // Edit Embed
-    validationEmbed.addFields(
-        { name: localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS'), value: `${localize(interaction.locale, 'SETUP_VALIDATION_REQUIREMENTS_DESCRIPTION')}\n\n${requiredString}` }
-    );
 
     // Create Selects
     let validationRevalidateSelect = new ActionRowBuilder().addComponents(
