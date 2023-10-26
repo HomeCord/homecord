@@ -98,6 +98,26 @@ module.exports = {
 
 
 
+    // ******* FOR HOME CHANNEL ITSELF
+    HOME_TITLE: `# {{0}} - Home Channel`,
+    HOME_EMPTY: `*There doesn't seem to be anything highlighted...*\n*Maybe you can help by starting a conversation in this Server's Channels!*`,
+
+    HOME_FEATURED_CHANNELS_HEADER: `## Featured Channels\nChannels featured by this Server's Admins. You might want to check these out!\n*Note: Channels displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
+    HOME_SCHEDULED_EVENTS_HEADER: `## Upcoming Scheduled Events\nHighlighted upcoming Events happening right here in this Server!\n*Note: You can see a full list of this Server's Scheduled Events in the Events Tab at the top of your Channel List.*`,
+    HOME_ACTIVE_VOICE_HEADER: `## Active Voice Channels\nHighlighted active Voice Channels. Why not hop in and join the chaos?`,
+    HOME_ACTIVE_THREADS_HEADER: `## Active Threads & Forum Posts\nLooking for specific conversations? Maybe these active Threads or Forum Posts hold the answer!\n*Note: Threads/Posts displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
+    HOME_FEATURED_MESSAGES_HEADER: `## Highlighted Messages\nNoteworthy Messages a lot of Server Members seem to like!`,
+
+    HOME_FEATURED_EVENT_TAG: `**Featured Event!**`,
+    HOME_FEATURED_POST_TAG: `**Featured Post!**`,
+    HOME_FEATURED_THREAD_TAG: `**Featured Thread!**`,
+    HOME_FEATURED_MESSAGE_TAG: `**Featured Message**`,
+    HOME_ORIGINAL_MESSAGE_TAG: `Original Message`,
+
+    HOME_ACTIVE_VOICE_MEMBERS: `{{0}} Active Members`,
+
+
+
     // ******* SETUP COMMAND
     SETUP_COMMAND_CANCEL_SETUP: `Cancelled setup of Home Channel. Feel free to delete or dismiss this message.`,
 
@@ -215,4 +235,17 @@ module.exports = {
     SETUP_STEP_2_SELECT_RECHECK_DESCRIPTION: `Redo the Validation Checks for your setup`,
     SETUP_STEP_2_SELECT_CONFIRM: `Complete Setup`,
     SETUP_STEP_2_SELECT_CONFIRM_DESCRIPTION: `Finish setup of your Home Channel`,
+
+
+
+    // ******* SETUP - STEP 3 - FINALIZING SETUP
+    SETUP_PAGE_3_TITLE: `Home Channel Setup - Final Step`,
+    SETUP_PAGE_3_DESCRIPTION: `*HomeCord is now setting up your Home Channel, this will take anywhere between a few seconds to a few minutes, depending on current rate-limits and Discord's API...*`,
+
+    HOMECORD_WEBHOOK_NAME: `HomeCord`,
+    HOMECORD_WEBHOOK_CREATION_REASON: `Home Channel Setup, via "/setup" Command used by {{0}}`,
+
+    SETUP_SUCCESSFUL: `Successfully setup your new Home Channel in {{0}}!`,
+
+    SETUP_SAVE_ERROR_GENERIC: `Sorry, but there was a problem trying to complete & save the setup of your new Home Channel.\nIf this continues, please feel free to contact HomeCord's Developer either via GitHub or HomeCord's Support Server (both linked in my \`/help\` Command).`,
 };
