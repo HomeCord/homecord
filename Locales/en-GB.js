@@ -129,7 +129,7 @@ module.exports = {
 
     // ******* SETUP EMBED
     SETUP_EMBED_TITLE: `Home Channel Setup - Settings`,
-    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nOnce it's configured, select "Save & Create" in order to fully create your Home Channel!`,
+    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nOnce it's configured, select "Save & Proceed" in order to fully create your Home Channel!`,
     SETUP_EMBED_CHANNEL: `Channel to use for Home`,
     CREATE_CHANNEL_FOR_ME: `Create Channel for me`,
     SETUP_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
@@ -230,6 +230,8 @@ module.exports = {
 
     SETUP_EXTERNAL_EMOJIS_PERMISSION_MISSING: `:information_source: Missing "**Use External Emojis**" Permission (on @everyone)`,
     SETUP_EXTERNAL_EMOJIS_PERMISSION_SUCCESS: `:white_check_mark: Has "**Use External Emojis**" Permission (on @everyone)`,
+
+    SETUP_CHANNEL_POSITION: `:information_source: It's recommended to have {{0}} at the top of the Channel List. *(Channel positions cannot be checked by HomeCord)*`,
 
     SETUP_STEP_2_SELECT_RECHECK: `Redo Validation`,
     SETUP_STEP_2_SELECT_RECHECK_DESCRIPTION: `Redo the Validation Checks for your setup`,
