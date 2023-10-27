@@ -99,6 +99,9 @@ module.exports = {
 
 
     // ******* FOR HOME CHANNEL ITSELF
+    HOME_CHANNEL_NAME: `home`,
+    HOME_CHANNEL_DESCRIPTION: `See a summary of highlighted activity in this Home Channel, powered by the HomeCord Bot!`,
+
     HOME_TITLE: `# {{0}} - Home Channel`,
     HOME_EMPTY: `*There doesn't seem to be anything highlighted...*\n*Maybe you can help by starting a conversation in this Server's Channels!*`,
 
@@ -245,9 +248,11 @@ module.exports = {
     SETUP_PAGE_3_DESCRIPTION: `*HomeCord is now setting up your Home Channel, this will take anywhere between a few seconds to a few minutes, depending on current rate-limits and Discord's API...*`,
 
     HOMECORD_WEBHOOK_NAME: `HomeCord`,
-    HOMECORD_WEBHOOK_CREATION_REASON: `Home Channel Setup, via "/setup" Command used by {{0}}`,
+    HOMECORD_WEBHOOK_CREATION_REASON: `Home Channel Setup, via HomeCord's "/setup" Command used by {{0}}`,
+    HOMECORD_CHANNEL_CREATION_REASON: `via HomeCord's "/setup" Command used by {{0}}`,
 
-    SETUP_SUCCESSFUL: `Successfully setup your new Home Channel in {{0}}!`,
+    SETUP_SUCCESSFUL: `Successfully setup your new Home Channel in {{0}}!\n\nFeel free to revoke the **Manage Webhooks** Permission from me as I no longer need it :)`,
+    SETUP_CREATION_SUCCESSFUL: `Successfully setup your new Home Channel as {{0}}!\n\nFeel free to revoke the **Manage Channels** and **Manage Webhooks** Permissions from me as I no longer need them :)`,
 
     SETUP_SAVE_ERROR_GENERIC: `Sorry, but there was a problem trying to complete & save the setup of your new Home Channel.\nIf this continues, please feel free to contact HomeCord's Developer either via GitHub or HomeCord's Support Server (both linked in my \`/help\` Command).`,
 };

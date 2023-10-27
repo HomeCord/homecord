@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextChannel } = require("discord.js");
+const { StringSelectMenuInteraction, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextChannel, ChannelType, OverwriteType } = require("discord.js");
 const { DiscordClient, Collections, fetchDisplayName } = require("../../constants.js");
 const { localize } = require("../../BotModules/LocalizationModule.js");
 const { GuildConfig } = require("../../Mongoose/Models.js");
@@ -38,7 +38,7 @@ module.exports = {
 
 
             case 'CONFIRM':
-                if ( SettingValueKeys[0] === 'c' ) { /* placeholder */ }
+                if ( SettingValueKeys[0] === 'c' ) { await setupNewChannel(selectInteraction, SettingValueKeys); }
                 else { await setupExistingChannel(selectInteraction, SettingValueKeys); }
                 break;
 
@@ -54,6 +54,109 @@ module.exports = {
 
         return;
     }
+}
+
+
+
+
+
+
+
+
+/**
+ * Completes the Setup (for when "Create for me" option is selected)
+ * 
+ * @param {StringSelectMenuInteraction} interaction 
+ * @param {String[]} settingValues 
+ */
+async function setupNewChannel(interaction, settingValues)
+{
+    // Update to a "processing" state, just in case
+    let processingEmbed = new EmbedBuilder().setColor('Grey')
+    .setTitle(localize(interaction.locale, 'SETUP_PAGE_3_TITLE'))
+    .setDescription(localize(interaction.locale, 'SETUP_PAGE_3_DESCRIPTION'))
+    .setFooter({ text: localize(interaction.locale, 'SETUP_EMBED_FOOTER_STEP_THREE') });
+
+    await interaction.update({ content: null, embeds: [processingEmbed], components: [] });
+
+
+
+    // Create Channel
+    await interaction.guild.channels.create({
+        name: localize(interaction.guildLocale, 'HOME_CHANNEL_NAME'),
+        type: ChannelType.GuildText,
+        topic: localize(interaction.guildLocale, 'HOME_CHANNEL_DESCRIPTION'),
+        permissionOverwrites: [
+            { id: interaction.guildId, deny: PermissionFlagsBits.SendMessages, allow: PermissionFlagsBits.UseExternalEmojis, type: OverwriteType.Role }, // for atEveryone
+            { id: DiscordClient.user.id, allow: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageWebhooks], type: OverwriteType.Member } // for HomeCord
+        ],
+        reason: localize(interaction.guildLocale, 'HOMECORD_CHANNEL_CREATION_REASON', fetchDisplayName(interaction.user, true))
+    })
+    .then(async createdChannel => {
+
+        // ******* Attempt to create Webhook in Channel
+        await createdChannel.createWebhook({
+            name: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_NAME'),
+            avatar: "https://i.imgur.com/26R5QQl.png",
+            reason: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_CREATION_REASON', `${fetchDisplayName(interaction.user, true)}`)
+        })
+        .then(async createdWebhook => {
+
+            // Create the main Message
+            await createdWebhook.send({ allowedMentions: { parse: [] }, content: `${localize(interaction.guildLocale, 'HOME_TITLE', interaction.guild.name)}\n${localize(interaction.guildLocale, 'HOME_EMPTY')}` })
+            .then(async sentMessage => {
+
+                // Add to Database!
+                let checkConfig = await GuildConfig.exists({ guildId: interaction.guildId });
+                let fetchedConfig = null;
+
+                if ( checkConfig != null ) { fetchedConfig = await GuildConfig.findOne({ guildId: interaction.guildId }); fetchedConfig.isNew = false; }
+                // Only adding in three of the values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
+                else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: createdChannel.id, homeWebhookId: createdWebhook.id, mainMessageId: sentMessage.id }); }
+
+                fetchedConfig.homeChannelId = createdChannel.id;
+                fetchedConfig.homeWebhookId = createdWebhook.id;
+                fetchedConfig.mainMessageId = sentMessage.id;
+                fetchedConfig.activityThreshold = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : "VERY_LOW";
+                fetchedConfig.highlightMessages = settingValues[2] === "t" ? true : false;
+                fetchedConfig.highlightEvents = settingValues[3] === "t" ? true : false;
+                fetchedConfig.highlightVoice = settingValues[4] === "t" ? true : false;
+                fetchedConfig.highlightStages = settingValues[5] === "t" ? true : false;
+                fetchedConfig.highlightThreads = settingValues[6] === "t" ? true : false;
+
+                await fetchedConfig.save()
+                .then(async () => {
+
+                    await interaction.editReply({ content: localize(interaction.locale, 'SETUP_CREATION_SUCCESSFUL', `<#${createdChannel.id}>`), embeds: [], components: [] });
+                    return;
+                })
+                .catch(async err => {
+
+                    await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+                    return;
+                });
+            })
+            .catch(async err => {
+
+                await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+                return;
+            });
+        })
+        .catch(async err => {
+
+            await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+            return;
+        });
+    })
+    .catch(async err => {
+
+        await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+        return;
+    });
+    
+    
+
+    return;
 }
 
 
@@ -118,7 +221,7 @@ async function setupExistingChannel(interaction, settingValues)
             await fetchedConfig.save()
             .then(async () => {
 
-                await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SUCCESSFUL', `<#${fetchedChannel.id}>`), embeds: [], components: [] });
+                await interaction.editReply({ content: localize(interaction.locale, 'SETUP_EXISTING_SUCCESSFUL', `<#${fetchedChannel.id}>`), embeds: [], components: [] });
                 return;
             })
             .catch(async err => {
