@@ -259,8 +259,8 @@ module.exports = {
 
 
     // ******* SETTINGS COMMAND
-    SETTINGS_VIEW_EMBED_TITLE: `Home Settings for {{0}}`,
-    SETTINGS_VIEW_EMBED_DESCRIPTION: `- *To edit these settings, use the {{0}} Command & include any of the listed options*\n- *Please note that currently you cannot change which Channel your Home is located in.*`,
+    SETTINGS_VIEW_EMBED_TITLE: `Current Home Settings for {{0}}`,
+    SETTINGS_VIEW_EMBED_DESCRIPTION: `- *To edit these settings, use the {{0}} Command & include any of the provided options*\n- *Please note that currently you cannot change which Channel your Home is located in.*`,
     SETTINGS_VIEW_EMBED_HOME_CHANNEL: `Home Channel`,
     SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
     SETTINGS_VIEW_EMBED_MESSAGES: `Messages Highlightable?`,
@@ -268,6 +268,9 @@ module.exports = {
     SETTINGS_VIEW_EMBED_VOICE: `Active Voice Highlightable?`,
     SETTINGS_VIEW_EMBED_STAGES: `Live Stages Highlightable?`,
     SETTINGS_VIEW_EMBED_THREADS: `Threads & Forum Posts Highlightable?`,
+
+    SETTINGS_EDIT_EMBED_TITLE: `Updated Home Settings for {{0}}`,
+    SETTINGS_EDIT_EMBED_DESCRIPTION: `- *To view your current settings without changing them, use the {{0}} Command without including any of provided options.*`,
 
     SETTINGS_COMMAND_ERROR_HOME_NOT_SETUP: `This Server doesn't have a Home Channel setup using HomeCord. As such, there are no settings for you to view or edit!\nIf you want to setup a Home Channel using HomeCord, please use the {{0}} Command.`,
 };

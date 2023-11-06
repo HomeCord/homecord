@@ -22,7 +22,7 @@ module.exports = {
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing
-    Cooldown: 60,
+    Cooldown: 30,
 
     // Cooldowns for specific subcommands and/or subcommand-groups
     //     IF SUBCOMMAND: name as "subcommandName"
@@ -227,7 +227,73 @@ async function viewSettings(interaction)
  */
 async function editSettings(interaction)
 {
-    //.
-    await interaction.reply({ ephemeral: true, content: `*Editing settings has not yet been implemented.*` });
+    await interaction.deferReply({ ephemeral: true });
+
+    let homeCordCommands = await DiscordClient.application.commands.fetch();
+    let settingCommand = homeCordCommands.find(command => command.name === "settings");
+
+    // Fetch all the options
+    let activityOption = interaction.options.getString("activity_threshold");
+    let messagesOption = interaction.options.getBoolean("highlight_messages");
+    let eventsOption = interaction.options.getBoolean("highlight_events");
+    let voiceOption = interaction.options.getBoolean("highlight_voice");
+    let stageOption = interaction.options.getBoolean("highlight_stages");
+    let threadsOption = interaction.options.getBoolean("highlight_threads");
+
+    // Fetch current config
+    let serverConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
+
+    // Create Embed
+    let updateEmbed = new EmbedBuilder().setColor('Grey')
+    .setTitle(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_TITLE', interaction.guild.name))
+    .setDescription(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_DESCRIPTION', settingCommand != undefined ? `</settings:${settingCommand.id}>` : '`/settings`'));
+
+
+    // Now go through them, changing their values & adding to Embed
+    serverConfig.isNew = false;
+
+    if ( activityOption != null )
+    {
+        serverConfig.activityThreshold = activityOption === "VERY_LOW" ? 'VERY_LOW' : activityOption === "LOW" ? 'LOW' : activityOption === "MEDIUM" ? 'MEDIUM' : activityOption === "HIGH" ? 'HIGH' : 'VERY_HIGH';
+        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: localize(interaction.locale, activityOption === "VERY_LOW" ? 'VERY_LOW' : activityOption === "LOW" ? 'LOW' : activityOption === "MEDIUM" ? 'MEDIUM' : activityOption === "HIGH" ? 'HIGH' : 'VERY_HIGH') });
+    }
+
+    if ( messagesOption != null )
+    {
+        serverConfig.highlightMessages = messagesOption;
+        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES'), value: localize(interaction.locale, messagesOption ? 'TRUE' : 'FALSE') });
+    }
+
+    if ( eventsOption != null )
+    {
+        serverConfig.highlightEvents = eventsOption;
+        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS'), value: localize(interaction.locale, eventsOption ? 'TRUE' : 'FALSE') });
+    }
+
+    if ( voiceOption != null )
+    {
+        serverConfig.highlightVoice = voiceOption;
+        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_VOICE'), value: localize(interaction.locale, voiceOption ? 'TRUE' : 'FALSE') });
+    }
+
+    if ( stageOption != null )
+    {
+        serverConfig.highlightStages = stageOption;
+        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAGES'), value: localize(interaction.locale, stageOption ? 'TRUE' : 'FALSE') });
+    }
+
+    if ( threadsOption != null )
+    {
+        serverConfig.highlightThreads = threadsOption;
+        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS'), value: localize(interaction.locale, threadsOption ? 'TRUE' : 'FALSE') });
+    }
+
+
+    // Save to DB
+    await serverConfig.save();
+
+
+    // ACK
+    await interaction.editReply({ embeds: [updateEmbed] });
     return;
 }
