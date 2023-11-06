@@ -18,7 +18,7 @@ module.exports = {
     },
 
     // Command's Category
-    Category: "GENERAL",
+    Category: "MANAGEMENT",
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing

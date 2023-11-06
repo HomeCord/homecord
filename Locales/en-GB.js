@@ -255,4 +255,19 @@ module.exports = {
     SETUP_CREATION_SUCCESSFUL: `Successfully setup your new Home Channel as {{0}}!\n\nFeel free to revoke the **Manage Channels** and **Manage Webhooks** Permissions from me as I no longer need them :)`,
 
     SETUP_SAVE_ERROR_GENERIC: `Sorry, but there was a problem trying to complete & save the setup of your new Home Channel.\nIf this continues, please feel free to contact HomeCord's Developer either via GitHub or HomeCord's Support Server (both linked in my \`/help\` Command).`,
+
+
+
+    // ******* SETTINGS COMMAND
+    SETTINGS_VIEW_EMBED_TITLE: `Home Settings for {{0}}`,
+    SETTINGS_VIEW_EMBED_DESCRIPTION: `- *To edit these settings, use the {{0}} Command & include any of the listed options*\n- *Please note that currently you cannot change which Channel your Home is located in.*`,
+    SETTINGS_VIEW_EMBED_HOME_CHANNEL: `Home Channel`,
+    SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
+    SETTINGS_VIEW_EMBED_MESSAGES: `Messages Highlightable?`,
+    SETTINGS_VIEW_EMBED_EVENTS: `Scheduled Events Highlightable?`,
+    SETTINGS_VIEW_EMBED_VOICE: `Active Voice Highlightable?`,
+    SETTINGS_VIEW_EMBED_STAGES: `Live Stages Highlightable?`,
+    SETTINGS_VIEW_EMBED_THREADS: `Threads & Forum Posts Highlightable?`,
+
+    SETTINGS_COMMAND_ERROR_HOME_NOT_SETUP: `This Server doesn't have a Home Channel setup using HomeCord. As such, there are no settings for you to view or edit!\nIf you want to setup a Home Channel using HomeCord, please use the {{0}} Command.`,
 };
