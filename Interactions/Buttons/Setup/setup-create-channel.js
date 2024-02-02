@@ -1,6 +1,6 @@
 const { ButtonInteraction } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
-const { setupMainPage } = require("../../BotModules/SetupPages.js");
+const { DiscordClient, Collections } = require("../../../constants.js");
+const { setupMainPage } = require("../../../BotModules/SetupPages.js");
 
 module.exports = {
     // Button's Name

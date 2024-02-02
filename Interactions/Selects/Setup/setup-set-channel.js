@@ -1,6 +1,6 @@
 const { ChannelSelectMenuInteraction, ChannelType, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require("discord.js");
-const { localize } = require("../../BotModules/LocalizationModule");
-const { setupMainPage } = require("../../BotModules/SetupPages");
+const { localize } = require("../../../BotModules/LocalizationModule");
+const { setupMainPage } = require("../../../BotModules/SetupPages");
 
 module.exports = {
     // Select's Name

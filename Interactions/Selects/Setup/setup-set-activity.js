@@ -1,14 +1,14 @@
 const { StringSelectMenuInteraction } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
-const { setupMainPage } = require("../../BotModules/SetupPages.js");
+const { DiscordClient, Collections } = require("../../../constants.js");
+const { setupMainPage } = require("../../../BotModules/SetupPages.js");
 
 module.exports = {
     // Select's Name
     //     Used as its custom ID (or at least the start of it)
-    Name: "setup-set-message",
+    Name: "setup-set-activity",
 
     // Select's Description
-    Description: `Toggles Message Highlighting for the Home Channel`,
+    Description: `Sets the Activity Threshold for the Home Channel`,
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing
@@ -23,13 +23,13 @@ module.exports = {
     async execute(interaction)
     {
         // Fetch selected option
-        const SelectedOption = interaction.values.shift();
+        const SelectedActivityThreshold = interaction.values.shift();
 
         // Store into Custom ID
         let settingValues = interaction.customId.split("_");
         settingValues.shift(); // Remove custom ID
         // Replace old value
-        settingValues[2] = SelectedOption === 'TRUE' ? 't' : 'f';
+        settingValues[1] = SelectedActivityThreshold === 'VERY_LOW' ? 'vl' : SelectedActivityThreshold === 'LOW' ? 'l' : SelectedActivityThreshold === 'MEDIUM' ? 'm' : SelectedActivityThreshold === 'HIGH' ? 'h' : 'vh';
 
         // Return to main setup page
         await interaction.update(setupMainPage(interaction.locale, settingValues));

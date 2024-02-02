@@ -1,6 +1,6 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
-const { localize } = require("../../BotModules/LocalizationModule.js");
+const { DiscordClient, Collections } = require("../../../constants.js");
+const { localize } = require("../../../BotModules/LocalizationModule.js");
 
 module.exports = {
     // Command's Name

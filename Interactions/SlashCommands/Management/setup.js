@@ -1,7 +1,7 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
-const { GuildConfig } = require("../../Mongoose/Models.js");
-const { localize } = require("../../BotModules/LocalizationModule.js");
+const { DiscordClient, Collections } = require("../../../constants.js");
+const { GuildConfig } = require("../../../Mongoose/Models.js");
+const { localize } = require("../../../BotModules/LocalizationModule.js");
 
 module.exports = {
     // Command's Name

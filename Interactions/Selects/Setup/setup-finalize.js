@@ -1,7 +1,7 @@
 const { StringSelectMenuInteraction, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextChannel, ChannelType, OverwriteType } = require("discord.js");
-const { DiscordClient, Collections, fetchDisplayName } = require("../../constants.js");
-const { localize } = require("../../BotModules/LocalizationModule.js");
-const { GuildConfig } = require("../../Mongoose/Models.js");
+const { DiscordClient, Collections, fetchDisplayName } = require("../../../constants.js");
+const { localize } = require("../../../BotModules/LocalizationModule.js");
+const { GuildConfig } = require("../../../Mongoose/Models.js");
 
 module.exports = {
     // Select's Name
