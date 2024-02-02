@@ -18,21 +18,21 @@ module.exports = {
 
     /**
      * Executes the Select
-     * @param {StringSelectMenuInteraction} selectInteraction 
+     * @param {StringSelectMenuInteraction} interaction 
      */
-    async execute(selectInteraction)
+    async execute(interaction)
     {
         // Fetch selected option
-        const SelectedOption = selectInteraction.values.shift();
+        const SelectedOption = interaction.values.shift();
 
         // Store into Custom ID
-        let settingValues = selectInteraction.customId.split("_");
+        let settingValues = interaction.customId.split("_");
         settingValues.shift(); // Remove custom ID
         // Replace old value
         settingValues[2] = SelectedOption === 'TRUE' ? 't' : 'f';
 
         // Return to main setup page
-        await selectInteraction.update(setupMainPage(selectInteraction.locale, settingValues));
+        await interaction.update(setupMainPage(interaction.locale, settingValues));
         return;
     }
 }

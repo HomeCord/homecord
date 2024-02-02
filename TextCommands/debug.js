@@ -1,22 +1,24 @@
 const { Message } = require("discord.js");
+const { DiscordClient, fetchDisplayName } = require("../constants.js");
+const { LogDebug } = require("../BotModules/LoggingModule.js");
 
 module.exports = {
     // Command's Name
     //     Use camelCase or full lowercase
-    Name: "commandName",
+    Name: "debug",
 
     // Command's Description
-    Description: `Description`,
+    Description: `Toggles Debug Mode for the Bot.`,
 
     // Command's Category
-    Category: "GENERAL",
+    Category: "DEVELOPMENT",
 
     // Alias(es) of Command, if any
     Alias: [],
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing
-    Cooldown: 3,
+    Cooldown: 10,
 
     // Scope of Command's usage
     //     One of the following: DM, GUILD
@@ -35,7 +37,7 @@ module.exports = {
 
     // Command Permission Level
     //     One of the following: DEVELOPER, SERVER_OWNER, ADMIN, MODERATOR, EVERYONE
-    PermissionLevel: "EVERYONE",
+    PermissionLevel: "DEVELOPER",
 
 
 
@@ -46,6 +48,13 @@ module.exports = {
      */
     async execute(message, arguments)
     {
-        //.
+        if ( DiscordClient.DebugMode ) { DiscordClient.DebugMode = false; }
+        else { DiscordClient.DebugMode = true; }
+
+        // ACK
+        await message.reply({ allowedMentions: { parse: [], repliedUser: false }, content: `Successfully toggled my Debug Mode to ${DiscordClient.DebugMode}` });
+        await LogDebug(`${fetchDisplayName(message.author)} toggled Debug Mode to ${DiscordClient.DebugMode}`);
+
+        return;
     }
 }

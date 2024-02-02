@@ -1,19 +1,27 @@
 const { AutocompleteInteraction } = require("discord.js");
 const { Collections } = require("../../constants.js");
 const { localize } = require("../LocalizationModule.js");
+const { LogToUser, LogError } = require("../LoggingModule.js");
 
 module.exports = {
     /**
      * Handles and runs received Autocomplete Interactions
-     * @param {AutocompleteInteraction} autocompleteInteraction 
+     * @param {AutocompleteInteraction} interaction 
      */
-    async Main(autocompleteInteraction)
+    async Main(interaction)
     {
         // Find Slash Command with matching name
-        const SlashCommand = Collections.SlashCommands.get(autocompleteInteraction.commandName);
-        if ( !SlashCommand ) { await autocompleteInteraction.respond([{name: `${localize(autocompleteInteraction.locale, 'AUTOCOMPLETE_ERROR_GENERIC')}`, value: "ERROR_FAILED"}]); return; }
+        const SlashCommand = Collections.SlashCommands.get(interaction.commandName);
+        if ( !SlashCommand ) { await interaction.respond([{name: `${localize(interaction.locale, 'AUTOCOMPLETE_ERROR_GENERIC')}`, value: "ERROR_FAILED"}]); return; }
 
         // Pass to Command's Autocomplete Method
-        return await SlashCommand.autocomplete(autocompleteInteraction);
+        try { await SlashCommand.autocomplete(interaction); }
+        catch(err)
+        {
+            await LogError(err);
+            await interaction.respond([{name: `${localize(interaction.locale, 'AUTOCOMPLETE_ERROR_GENERIC')}`, value: "ERROR_FAILED"}]);
+        }
+
+        return;
     }
 }

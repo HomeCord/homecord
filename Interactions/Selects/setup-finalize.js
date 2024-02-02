@@ -19,32 +19,32 @@ module.exports = {
 
     /**
      * Executes the Select
-     * @param {StringSelectMenuInteraction} selectInteraction 
+     * @param {StringSelectMenuInteraction} interaction 
      */
-    async execute(selectInteraction)
+    async execute(interaction)
     {
         // Grab option selected
-        const SelectedOption = selectInteraction.values.pop();
+        const SelectedOption = interaction.values.pop();
         // Split up Custom ID
-        const SettingValueKeys = selectInteraction.customId.split("_");
+        const SettingValueKeys = interaction.customId.split("_");
         SettingValueKeys.shift(); // Remove Custom ID itself
 
         // Act depending on which option was selected
         switch (SelectedOption)
         {
             case 'REVALIDATE':
-                await revalidateHome(selectInteraction, SettingValueKeys);
+                await revalidateHome(interaction, SettingValueKeys);
                 break;
 
 
             case 'CONFIRM':
-                if ( SettingValueKeys[0] === 'c' ) { await setupNewChannel(selectInteraction, SettingValueKeys); }
-                else { await setupExistingChannel(selectInteraction, SettingValueKeys); }
+                if ( SettingValueKeys[0] === 'c' ) { await setupNewChannel(interaction, SettingValueKeys); }
+                else { await setupExistingChannel(interaction, SettingValueKeys); }
                 break;
 
 
             case 'CANCEL':
-                await selectInteraction.update({ content: localize(selectInteraction.locale, 'SETUP_COMMAND_CANCEL_SETUP'), embeds: [], components: [] });
+                await interaction.update({ content: localize(interaction.locale, 'SETUP_COMMAND_CANCEL_SETUP'), embeds: [], components: [] });
                 break;
 
 

@@ -1,38 +1,42 @@
 const { ContextMenuCommandInteraction, DMChannel, Collection } = require("discord.js");
 const { Collections } = require("../../constants.js");
 const { localize } = require("../LocalizationModule.js");
+const { LogError, LogToUserInteraction } = require("../LoggingModule.js");
 
 module.exports = {
     /**
      * Handles and runs received Context Commands
-     * @param {ContextMenuCommandInteraction} contextInteraction 
+     * @param {ContextMenuCommandInteraction} interaction 
      */
-    async Main(contextInteraction)
+    async Main(interaction)
     {
         // Catch for spaces in Context Command Names
-        if ( contextInteraction.commandName.includes(" ") )
+        if ( interaction.commandName.includes(" ") )
         {
-            contextInteraction.commandName = contextInteraction.commandName.split("_").join(" ");
+            interaction.commandName = interaction.commandName.split("_").join(" ");
         }
 
-        const ContextCommand = Collections.ContextCommands.get(contextInteraction.commandName);
+        const ContextCommand = Collections.ContextCommands.get(interaction.commandName);
 
         if ( !ContextCommand )
         {
             // Couldn't find the file for this Context Command
-            return await contextInteraction.reply({ ephemeral: true, content: `${localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_GENERIC')}` });
+            await interaction.reply({ ephemeral: true, content: `${localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_GENERIC')}` });
+            return;
         }
 
         // DM Check
-        if ( ContextCommand.Scope === 'DM' && !(contextInteraction.channel instanceof DMChannel) )
+        if ( ContextCommand.Scope === 'DM' && !(interaction.channel instanceof DMChannel) )
         {
-            return await contextInteraction.reply({ ephemeral: true, content: `${localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_GUILDS_UNSUPPORTED')}` });
+            await interaction.reply({ ephemeral: true, content: `${localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_GUILDS_UNSUPPORTED')}` });
+            return;
         }
 
         // Guild Check
-        if ( ContextCommand.Scope === 'GUILD' && (contextInteraction.channel instanceof DMChannel) )
+        if ( ContextCommand.Scope === 'GUILD' && (interaction.channel instanceof DMChannel) )
         {
-            return await contextInteraction.reply({ ephemeral: true, content: `${localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_DMS_UNSUPPORTED')}` });
+            await interaction.reply({ ephemeral: true, content: `${localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_DMS_UNSUPPORTED')}` });
+            return;
         }
 
 
@@ -51,10 +55,10 @@ module.exports = {
         const CooldownAmount = ( ContextCommand.Cooldown || 3 ) * 1000;
 
         // Cooldown
-        if ( Timestamps.has(contextInteraction.user.id) )
+        if ( Timestamps.has(interaction.user.id) )
         {
             // Cooldown hit, tell User to cool off a little bit
-            const ExpirationTime = Timestamps.get(contextInteraction.user.id) + CooldownAmount;
+            const ExpirationTime = Timestamps.get(interaction.user.id) + CooldownAmount;
 
             if ( Now < ExpirationTime )
             {
@@ -64,34 +68,34 @@ module.exports = {
                 if ( timeLeft >= 60 && timeLeft < 3600 )
                 {
                     timeLeft = timeLeft / 60; // For UX
-                    await contextInteraction.reply({ ephemeral: true, content: localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_MINUTES', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_MINUTES', timeLeft.toFixed(1)) });
                     return;
                 }
                 // HOURS
                 else if ( timeLeft >= 3600 && timeLeft < 86400 )
                 {
                     timeLeft = timeLeft / 3600; // For UX
-                    await contextInteraction.reply({ ephemeral: true, content: localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_HOURS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_HOURS', timeLeft.toFixed(1)) });
                     return;
                 }
                 // DAYS
                 else if ( timeLeft >= 86400 && timeLeft < 2.628e+6 )
                 {
                     timeLeft = timeLeft / 86400; // For UX
-                    await contextInteraction.reply({ ephemeral: true, content: localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_DAYS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_DAYS', timeLeft.toFixed(1)) });
                     return;
                 }
                 // MONTHS
                 else if ( timeLeft >= 2.628e+6 )
                 {
                     timeLeft = timeLeft / 2.628e+6; // For UX
-                    await contextInteraction.reply({ ephemeral: true, content: localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_MONTHS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_MONTHS', timeLeft.toFixed(1)) });
                     return;
                 }
                 // SECONDS
                 else
                 {
-                    await contextInteraction.reply({ ephemeral: true, content: localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_SECONDS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_COOLDOWN_SECONDS', timeLeft.toFixed(1)) });
                     return;
                 }
             }
@@ -99,25 +103,18 @@ module.exports = {
         else
         {
             // Create new cooldown
-            Timestamps.set(contextInteraction.user.id, Now);
-            setTimeout(() => Timestamps.delete(contextInteraction.user.id), CooldownAmount);
+            Timestamps.set(interaction.user.id, Now);
+            setTimeout(() => Timestamps.delete(interaction.user.id), CooldownAmount);
         }
 
 
 
         // Attempt to run Command
-        try { await ContextCommand.execute(contextInteraction); }
+        try { await ContextCommand.execute(interaction); }
         catch (err)
         {
-            //console.error(err);
-            if ( contextInteraction.deferred )
-            {
-                await contextInteraction.editReply({ content: `${localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_GENERIC')}` });
-            }
-            else
-            {
-                await contextInteraction.reply({ ephemeral: true, content: `${localize(contextInteraction.locale, 'CONTEXT_COMMAND_ERROR_GENERIC')}` });
-            }
+            await LogError(err);
+            await LogToUserInteraction(interaction, null, err);
         }
 
         return;

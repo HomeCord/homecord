@@ -182,9 +182,9 @@ module.exports = {
 
     /**
      * Executes the Slash Command
-     * @param {ChatInputCommandInteraction} slashCommand 
+     * @param {ChatInputCommandInteraction} interaction 
      */
-    async execute(slashCommand)
+    async execute(interaction)
     {
         //.
     },
@@ -193,19 +193,19 @@ module.exports = {
 
     /**
      * Handles given Autocomplete Interactions for any Options in this Slash CMD that uses it
-     * @param {AutocompleteInteraction} autocompleteInteraction 
+     * @param {AutocompleteInteraction} interaction 
      */
-    async autocomplete(autocompleteInteraction)
+    async autocomplete(interaction)
     {
         // Since the only autocomplete subcommand is for finding Scheduled Events, I'm gonna be lazy and not add a check here for which subcommand is calling this method lol
 
         // Fetch Server's Events
-        let serverEvents = await autocompleteInteraction.guild.scheduledEvents.fetch();
+        let serverEvents = await interaction.guild.scheduledEvents.fetch();
 
         // Check there are actually Scheduled Events listed
         if ( serverEvents.size < 1 )
         {
-            await autocompleteInteraction.respond([{ name: localize(autocompleteInteraction.locale, 'FEATURE_COMMAND_AUTOCOMPLETE_NO_EVENTS_FOUND'), value: "EVENTS_NOT_FOUND" }]);
+            await interaction.respond([{ name: localize(interaction.locale, 'FEATURE_COMMAND_AUTOCOMPLETE_NO_EVENTS_FOUND'), value: "EVENTS_NOT_FOUND" }]);
             return;
         }
 
@@ -218,7 +218,7 @@ module.exports = {
             if ( responseArray.length < 25 ) { responseArray.push({ name: event.name, value: event.id }); }
         });
 
-        await autocompleteInteraction.respond(responseArray);
+        await interaction.respond(responseArray);
         return;
     }
 }

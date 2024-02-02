@@ -1,22 +1,23 @@
 const { ButtonInteraction, Collection } = require("discord.js");
 const { Collections } = require("../../constants.js");
 const { localize } = require("../LocalizationModule.js");
+const { LogError, LogToUserInteraction } = require("../LoggingModule.js");
 
 module.exports = {
     /**
      * Handles and runs received Buttons
-     * @param {ButtonInteraction} buttonInteraction 
+     * @param {ButtonInteraction} interaction 
      */
-    async Main(buttonInteraction)
+    async Main(interaction)
     {
         // Grab first part of Custom ID
-        const ButtonCustomId = buttonInteraction.customId.split("_").shift();
+        const ButtonCustomId = interaction.customId.split("_").shift();
         const Button = Collections.Buttons.get(ButtonCustomId)
 
         if ( !Button )
         {
             // Couldn't find the file for this Button
-            await buttonInteraction.reply({ ephemeral: true, content: `${localize(buttonInteraction.locale, 'BUTTON_ERROR_GENERIC')}` });
+            await interaction.reply({ ephemeral: true, content: `${localize(interaction.locale, 'BUTTON_ERROR_GENERIC')}` });
             return;
         }
 
@@ -36,10 +37,10 @@ module.exports = {
         const CooldownAmount = ( Button.Cooldown || 3 ) * 1000;
 
         // Cooldown
-        if ( Timestamps.has(buttonInteraction.user.id) )
+        if ( Timestamps.has(interaction.user.id) )
         {
             // Cooldown hit, tell User to cool off a little bit
-            const ExpirationTime = Timestamps.get(buttonInteraction.user.id) + CooldownAmount;
+            const ExpirationTime = Timestamps.get(interaction.user.id) + CooldownAmount;
 
             if ( Now < ExpirationTime )
             {
@@ -49,34 +50,34 @@ module.exports = {
                 if ( timeLeft >= 60 && timeLeft < 3600 )
                 {
                     timeLeft = timeLeft / 60; // For UX
-                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_MINUTES', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'BUTTON_ERROR_COOLDOWN_MINUTES', timeLeft.toFixed(1)) });
                     return;
                 }
                 // HOURS
                 else if ( timeLeft >= 3600 && timeLeft < 86400 )
                 {
                     timeLeft = timeLeft / 3600; // For UX
-                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_HOURS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'BUTTON_ERROR_COOLDOWN_HOURS', timeLeft.toFixed(1)) });
                     return;
                 }
                 // DAYS
                 else if ( timeLeft >= 86400 && timeLeft < 2.628e+6 )
                 {
                     timeLeft = timeLeft / 86400; // For UX
-                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_DAYS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'BUTTON_ERROR_COOLDOWN_DAYS', timeLeft.toFixed(1)) });
                     return;
                 }
                 // MONTHS
                 else if ( timeLeft >= 2.628e+6 )
                 {
                     timeLeft = timeLeft / 2.628e+6; // For UX
-                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_MONTHS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'BUTTON_ERROR_COOLDOWN_MONTHS', timeLeft.toFixed(1)) });
                     return;
                 }
                 // SECONDS
                 else
                 {
-                    await buttonInteraction.reply({ ephemeral: true, content: localize(buttonInteraction.locale, 'BUTTON_ERROR_COOLDOWN_SECONDS', timeLeft.toFixed(1)) });
+                    await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'BUTTON_ERROR_COOLDOWN_SECONDS', timeLeft.toFixed(1)) });
                     return;
                 }
             }
@@ -84,25 +85,18 @@ module.exports = {
         else
         {
             // Create new cooldown
-            Timestamps.set(buttonInteraction.user.id, Now);
-            setTimeout(() => Timestamps.delete(buttonInteraction.user.id), CooldownAmount);
+            Timestamps.set(interaction.user.id, Now);
+            setTimeout(() => Timestamps.delete(interaction.user.id), CooldownAmount);
         }
 
 
 
         // Attempt to process Button
-        try { await Button.execute(buttonInteraction); }
+        try { await Button.execute(interaction); }
         catch (err)
         {
-            //console.error(err);
-            if ( buttonInteraction.deferred )
-            {
-                await buttonInteraction.editReply({ content: `${localize(buttonInteraction.locale, 'BUTTON_ERROR_GENERIC')}` });
-            }
-            else
-            {
-                await buttonInteraction.reply({ ephemeral: true, content: `${localize(buttonInteraction.locale, 'BUTTON_ERROR_GENERIC')}` });
-            }
+            await LogError(err);
+            await LogToUserInteraction(interaction, null, err);
         }
 
         return;

@@ -18,14 +18,14 @@ module.exports = {
 
     /**
      * Executes the Select
-     * @param {StringSelectMenuInteraction} selectInteraction 
+     * @param {StringSelectMenuInteraction} interaction 
      */
-    async execute(selectInteraction)
+    async execute(interaction)
     {
         // Grab option selected
-        const SelectedOption = selectInteraction.values.pop();
+        const SelectedOption = interaction.values.pop();
         // Split up Custom ID
-        const SettingValueKeys = selectInteraction.customId.split("_");
+        const SettingValueKeys = interaction.customId.split("_");
         SettingValueKeys.shift(); // Remove Custom ID itself
 
         // Act depending on which option was selected
@@ -35,16 +35,16 @@ module.exports = {
             case 'CHANNEL':
                 // Create Channel Select
                 let channelSelect = new ActionRowBuilder().addComponents(
-                    new ChannelSelectMenuBuilder().setCustomId(`setup-set-channel_${selectInteraction.customId.slice(11)}`).setChannelTypes([ChannelType.GuildText]).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_SELECT_PLACEHOLDER'))
+                    new ChannelSelectMenuBuilder().setCustomId(`setup-set-channel_${interaction.customId.slice(11)}`).setChannelTypes([ChannelType.GuildText]).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'SETUP_SET_CHANNEL_SELECT_PLACEHOLDER'))
                 );
                 // Create Buttons
                 let channelButtons = new ActionRowBuilder().addComponents(
-                    new ButtonBuilder().setCustomId(`setup-create-channel_${selectInteraction.customId.slice(11)}`).setStyle(ButtonStyle.Secondary).setLabel(localize(selectInteraction.locale, 'SETUP_CREATE_CHANNEL_BUTTON_LABEL'))
+                    new ButtonBuilder().setCustomId(`setup-create-channel_${interaction.customId.slice(11)}`).setStyle(ButtonStyle.Secondary).setLabel(localize(interaction.locale, 'SETUP_CREATE_CHANNEL_BUTTON_LABEL'))
                 );
                 // Create Embed
-                let channelEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_EMBED_DESCRIPTION'));
+                let channelEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_SET_CHANNEL_EMBED_TITLE')).setDescription(localize(interaction.locale, 'SETUP_SET_CHANNEL_EMBED_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ content: null, embeds: [channelEmbed], components: [channelSelect, channelButtons] });
+                await interaction.update({ content: null, embeds: [channelEmbed], components: [channelSelect, channelButtons] });
                 break;
 
 
@@ -52,18 +52,18 @@ module.exports = {
             case 'ACTIVITY_THRESHOLD':
                 // Create Activity Select
                 let activitySelect = new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder().setCustomId(`setup-set-activity_${selectInteraction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(selectInteraction.locale, 'VERY_LOW')),
-                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(selectInteraction.locale, 'LOW')),
-                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(selectInteraction.locale, 'MEDIUM')),
-                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(selectInteraction.locale, 'HIGH')),
-                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(selectInteraction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
+                    new StringSelectMenuBuilder().setCustomId(`setup-set-activity_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
+                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(interaction.locale, 'HIGH')),
+                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(interaction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
                     )
                 );
                 // Create Embed
-                let activityEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_SET_ACTIVITY_EMBED_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_SET_ACTIVITY_EMBED_DESCRIPTION'));
+                let activityEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_SET_ACTIVITY_EMBED_TITLE')).setDescription(localize(interaction.locale, 'SETUP_SET_ACTIVITY_EMBED_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ content: null, embeds: [activityEmbed], components: [activitySelect] });
+                await interaction.update({ content: null, embeds: [activityEmbed], components: [activitySelect] });
                 break;
 
 
@@ -71,15 +71,15 @@ module.exports = {
             case 'HIGHLIGHT_MESSAGES':
                 // Create Select
                 let messageSelect = new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder().setCustomId(`setup-set-message_${selectInteraction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(selectInteraction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(selectInteraction.locale, 'DISABLE'))
+                    new StringSelectMenuBuilder().setCustomId(`setup-set-message_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
                     )
                 );
                 // Create Embed
-                let messageEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION'));
+                let messageEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_TITLE')).setDescription(localize(interaction.locale, 'SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ content: null, embeds: [messageEmbed], components: [messageSelect] });
+                await interaction.update({ content: null, embeds: [messageEmbed], components: [messageSelect] });
                 break;
 
 
@@ -87,15 +87,15 @@ module.exports = {
             case 'HIGHLIGHT_EVENTS':
                 // Create Select
                 let eventSelect = new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder().setCustomId(`setup-set-event_${selectInteraction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(selectInteraction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(selectInteraction.locale, 'DISABLE'))
+                    new StringSelectMenuBuilder().setCustomId(`setup-set-event_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
                     )
                 );
                 // Create Embed
-                let eventEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_TOGGLE_EVENT_HIGHLIGHTS_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION'));
+                let eventEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_TOGGLE_EVENT_HIGHLIGHTS_TITLE')).setDescription(localize(interaction.locale, 'SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ content: null, embeds: [eventEmbed], components: [eventSelect] });
+                await interaction.update({ content: null, embeds: [eventEmbed], components: [eventSelect] });
                 break;
 
 
@@ -103,15 +103,15 @@ module.exports = {
             case 'HIGHLIGHT_VOICE':
                 // Create Select
                 let voiceSelect = new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder().setCustomId(`setup-set-voice_${selectInteraction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(selectInteraction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(selectInteraction.locale, 'DISABLE'))
+                    new StringSelectMenuBuilder().setCustomId(`setup-set-voice_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
                     )
                 );
                 // Create Embed
-                let voiceEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_TOGGLE_VOICE_HIGHLIGHTS_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION'));
+                let voiceEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_TOGGLE_VOICE_HIGHLIGHTS_TITLE')).setDescription(localize(interaction.locale, 'SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ content: null, embeds: [voiceEmbed], components: [voiceSelect] });
+                await interaction.update({ content: null, embeds: [voiceEmbed], components: [voiceSelect] });
                 break;
 
 
@@ -119,15 +119,15 @@ module.exports = {
             case 'HIGHLIGHT_STAGES':
                 // Create Select
                 let stageSelect = new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder().setCustomId(`setup-set-stage_${selectInteraction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(selectInteraction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(selectInteraction.locale, 'DISABLE'))
+                    new StringSelectMenuBuilder().setCustomId(`setup-set-stage_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
                     )
                 );
                 // Create Embed
-                let stageEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_TOGGLE_STAGE_HIGHLIGHTS_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION'));
+                let stageEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_TOGGLE_STAGE_HIGHLIGHTS_TITLE')).setDescription(localize(interaction.locale, 'SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ content: null, embeds: [stageEmbed], components: [stageSelect] });
+                await interaction.update({ content: null, embeds: [stageEmbed], components: [stageSelect] });
                 break;
 
 
@@ -135,32 +135,32 @@ module.exports = {
             case 'HIGHLIGHT_THREADS':
                 // Create Select
                 let threadSelect = new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder().setCustomId(`setup-set-thread_${selectInteraction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(selectInteraction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(selectInteraction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(selectInteraction.locale, 'DISABLE'))
+                    new StringSelectMenuBuilder().setCustomId(`setup-set-thread_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
+                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
                     )
                 );
                 // Create Embed
-                let threadEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(selectInteraction.locale, 'SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE')).setDescription(localize(selectInteraction.locale, 'SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION'));
+                let threadEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE')).setDescription(localize(interaction.locale, 'SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION'));
                 // ACK
-                await selectInteraction.update({ content: null, embeds: [threadEmbed], components: [threadSelect] });
+                await interaction.update({ content: null, embeds: [threadEmbed], components: [threadSelect] });
                 break;
 
 
             // SAVE AND MOVE ONTO STEP 2
             case 'SAVE_AND_CREATE':
-                await setupStep2(selectInteraction, SettingValueKeys);
+                await setupStep2(interaction, SettingValueKeys);
                 break;
 
 
             // CANCEL OPTION
             case 'CANCEL':
-                await selectInteraction.update({ content: localize(selectInteraction.locale, 'SETUP_COMMAND_CANCEL_SETUP'), embeds: [], components: [] });
+                await interaction.update({ content: localize(interaction.locale, 'SETUP_COMMAND_CANCEL_SETUP'), embeds: [], components: [] });
                 break;
 
 
             default:
-                await selectInteraction.update({ content: `\n\n:warning: ${localize(selectInteraction.locale, 'SELECT_MENU_ERROR_GENERIC')}` });
+                await interaction.update({ content: `\n\n:warning: ${localize(interaction.locale, 'SELECT_MENU_ERROR_GENERIC')}` });
                 break;
         }
 

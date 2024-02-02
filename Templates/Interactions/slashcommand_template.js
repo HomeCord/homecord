@@ -1,5 +1,4 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
 
 module.exports = {
     // Command's Name
@@ -65,9 +64,9 @@ module.exports = {
 
     /**
      * Executes the Slash Command
-     * @param {ChatInputCommandInteraction} slashCommand 
+     * @param {ChatInputCommandInteraction} interaction 
      */
-    async execute(slashCommand)
+    async execute(interaction)
     {
         //.
     },
@@ -76,9 +75,9 @@ module.exports = {
 
     /**
      * Handles given Autocomplete Interactions for any Options in this Slash CMD that uses it
-     * @param {AutocompleteInteraction} autocompleteInteraction 
+     * @param {AutocompleteInteraction} interaction 
      */
-    async autocomplete(autocompleteInteraction)
+    async autocomplete(interaction)
     {
         //.
     }

@@ -18,34 +18,34 @@ module.exports = {
 
     /**
      * Executes the Select
-     * @param {ChannelSelectMenuInteraction} selectInteraction 
+     * @param {ChannelSelectMenuInteraction} interaction 
      */
-    async execute(selectInteraction)
+    async execute(interaction)
     {
         // Fetch Channel selected
-        const SelectedChannel = selectInteraction.channels.first();
+        const SelectedChannel = interaction.channels.first();
         
         if ( SelectedChannel == undefined )
         {
-            await selectInteraction.update({ content: localize(selectInteraction.locale, 'SELECT_MENU_ERROR_GENERIC') });
+            await interaction.update({ content: localize(interaction.locale, 'SELECT_MENU_ERROR_GENERIC') });
             return;
         }
 
         // Just in case, validate Channel is Text Channel
         if ( SelectedChannel.type != ChannelType.GuildText )
         {
-            await selectInteraction.update({ content: localize(selectInteraction.locale, 'SETUP_SET_CHANNEL_ERROR_INVALID_CHANNEL_TYPE') });
+            await interaction.update({ content: localize(interaction.locale, 'SETUP_SET_CHANNEL_ERROR_INVALID_CHANNEL_TYPE') });
             return;
         }
 
         // Store into custom ID
-        let settingValues = selectInteraction.customId.split("_");
+        let settingValues = interaction.customId.split("_");
         settingValues.shift(); // Remove custom ID
         settingValues[0] = `${SelectedChannel.id}`; // Replace Channel value
 
         
         // Return to main Setup Page
-        await selectInteraction.update(setupMainPage(selectInteraction.locale, settingValues));
+        await interaction.update(setupMainPage(interaction.locale, settingValues));
         return;
     }
 }

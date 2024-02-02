@@ -1,5 +1,4 @@
 const { StringSelectMenuInteraction, RoleSelectMenuInteraction, ChannelSelectMenuInteraction, UserSelectMenuInteraction, MentionableSelectMenuInteraction } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
 
 module.exports = {
     // Select's Name
@@ -17,9 +16,9 @@ module.exports = {
 
     /**
      * Executes the Select
-     * @param {StringSelectMenuInteraction|RoleSelectMenuInteraction|ChannelSelectMenuInteraction|UserSelectMenuInteraction|MentionableSelectMenuInteraction} selectInteraction 
+     * @param {StringSelectMenuInteraction|RoleSelectMenuInteraction|ChannelSelectMenuInteraction|UserSelectMenuInteraction|MentionableSelectMenuInteraction} interaction 
      */
-    async execute(selectInteraction)
+    async execute(interaction)
     {
         //.
     }

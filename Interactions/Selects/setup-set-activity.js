@@ -18,21 +18,21 @@ module.exports = {
 
     /**
      * Executes the Select
-     * @param {StringSelectMenuInteraction} selectInteraction 
+     * @param {StringSelectMenuInteraction} interaction 
      */
-    async execute(selectInteraction)
+    async execute(interaction)
     {
         // Fetch selected option
-        const SelectedActivityThreshold = selectInteraction.values.shift();
+        const SelectedActivityThreshold = interaction.values.shift();
 
         // Store into Custom ID
-        let settingValues = selectInteraction.customId.split("_");
+        let settingValues = interaction.customId.split("_");
         settingValues.shift(); // Remove custom ID
         // Replace old value
         settingValues[1] = SelectedActivityThreshold === 'VERY_LOW' ? 'vl' : SelectedActivityThreshold === 'LOW' ? 'l' : SelectedActivityThreshold === 'MEDIUM' ? 'm' : SelectedActivityThreshold === 'HIGH' ? 'h' : 'vh';
 
         // Return to main setup page
-        await selectInteraction.update(setupMainPage(selectInteraction.locale, settingValues));
+        await interaction.update(setupMainPage(interaction.locale, settingValues));
         return;
     }
 }

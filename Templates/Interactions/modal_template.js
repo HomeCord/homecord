@@ -1,5 +1,4 @@
 const { ModalSubmitInteraction, ModalMessageModalSubmitInteraction } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
 
 module.exports = {
     // Modal's Name
@@ -13,9 +12,9 @@ module.exports = {
 
     /**
      * Executes the Modal
-     * @param {ModalSubmitInteraction|ModalMessageModalSubmitInteraction} modalInteraction 
+     * @param {ModalSubmitInteraction|ModalMessageModalSubmitInteraction} interaction 
      */
-    async execute(modalInteraction)
+    async execute(interaction)
     {
         //.
     }

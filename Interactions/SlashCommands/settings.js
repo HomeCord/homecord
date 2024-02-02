@@ -137,24 +137,24 @@ module.exports = {
 
     /**
      * Executes the Slash Command
-     * @param {ChatInputCommandInteraction} slashCommand 
+     * @param {ChatInputCommandInteraction} interaction 
      */
-    async execute(slashCommand)
+    async execute(interaction)
     {
         let homeCordCommands = await DiscordClient.application.commands.fetch();
 
         // Ensure Server actually has a Home Channel setup
-        if ( await GuildConfig.exists({ guildId: slashCommand.guildId }) == null )
+        if ( await GuildConfig.exists({ guildId: interaction.guildId }) == null )
         {
             let setupCommand = homeCordCommands.find(command => command.name === "setup");
-            await slashCommand.reply({ ephemeral: true, content: localize(slashCommand.locale, 'SETTINGS_COMMAND_ERROR_HOME_NOT_SETUP', setupCommand != undefined ? `</setup:${setupCommand.id}>` : '`/setup`') });
+            await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'SETTINGS_COMMAND_ERROR_HOME_NOT_SETUP', setupCommand != undefined ? `</setup:${setupCommand.id}>` : '`/setup`') });
             return;
         }
 
 
         // If no options provided, default to "View Settings" - otherwise, edit the given Setting values
-        if ( slashCommand.options.data.length === 0 ) { await viewSettings(slashCommand); }
-        else { await editSettings(slashCommand); }
+        if ( interaction.options.data.length === 0 ) { await viewSettings(interaction); }
+        else { await editSettings(interaction); }
 
         return;
     },

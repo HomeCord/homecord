@@ -1,5 +1,4 @@
 const { ButtonInteraction } = require("discord.js");
-const { DiscordClient, Collections } = require("../../constants.js");
 
 module.exports = {
     // Button's Name
@@ -17,9 +16,9 @@ module.exports = {
 
     /**
      * Executes the Button
-     * @param {ButtonInteraction} buttonInteraction 
+     * @param {ButtonInteraction} interaction 
      */
-    async execute(buttonInteraction)
+    async execute(interaction)
     {
         //.
     }

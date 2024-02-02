@@ -18,17 +18,17 @@ module.exports = {
 
     /**
      * Executes the Button
-     * @param {ButtonInteraction} buttonInteraction 
+     * @param {ButtonInteraction} interaction 
      */
-    async execute(buttonInteraction)
+    async execute(interaction)
     {
         // Store into custom ID
-        let settingValues = buttonInteraction.customId.split("_");
+        let settingValues = interaction.customId.split("_");
         settingValues.shift(); // Remove custom ID
         settingValues[0] = `c`; // Replace Channel value
 
         // Swap back to main page
-        await buttonInteraction.update(setupMainPage(buttonInteraction.locale, settingValues));
+        await interaction.update(setupMainPage(interaction.locale, settingValues));
         return;
     }
 }
