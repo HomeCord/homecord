@@ -1,4 +1,7 @@
-const { Client, GatewayIntentBits, Collection, Partials, User, GuildMember } = require("discord.js");
+const { Client, Options, GatewayIntentBits, Collection, Partials, User, GuildMember } = require("discord.js");
+
+// User IDs for HomeCord and my Testing Bot just to prevent them from being removed from caches
+let homecordUserId = [ "795718481873469500", "784058687412633601" ];
 
 module.exports =
 {
@@ -8,7 +11,25 @@ module.exports =
             GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.MessageContent,
             GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildScheduledEvents
         ],
-        partials: [ Partials.Message ]
+        partials: [ Partials.Message ],
+        // For performance. Numbers are in seconds
+        sweepers: {
+            ...Options.DefaultSweeperSettings,
+            messages: { interval: 3_600, lifetime: 1_800 },
+            users: {
+                interval: 3_600,
+                filter: () => user => !homecordUserId.includes(user.id)
+            },
+            guildMembers: {
+                interval: 3_600,
+                filter: () => member => !homecordUserId.includes(member.id)
+            },
+            threadMembers: {
+                interval: 86_400,
+                filter: () => member => !homecordUserId.includes(member.id)
+            },
+            threads: { interval: 86_400, lifetime: 86_400 }
+        }
     }),
 
     // Collections that are used in many locations
