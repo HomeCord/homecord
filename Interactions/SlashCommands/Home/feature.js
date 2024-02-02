@@ -1,6 +1,10 @@
-const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData } = require("discord.js");
+const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData, Collection, GuildScheduledEvent } = require("discord.js");
 const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
+
+// To ensure not hitting 3 second limit on autocomplete response timings
+/** @type {Collection<String, Collection<String, GuildScheduledEvent>>} */
+const EventCache = new Collection();
 
 module.exports = {
     // Command's Name
@@ -200,25 +204,63 @@ module.exports = {
         // Since the only autocomplete subcommand is for finding Scheduled Events, I'm gonna be lazy and not add a check here for which subcommand is calling this method lol
 
         // Fetch Server's Events
-        let serverEvents = await interaction.guild.scheduledEvents.fetch();
+        let serverEvents = null;
+        let cachedEvents = EventCache.get(interaction.guildId);
+        if ( !cachedEvents ) { serverEvents = await interaction.guild.scheduledEvents.fetch(); }
+        else { serverEvents = cachedEvents; }
+
+        // Grab focused value
+        const FocusedValue = interaction.options.getFocused().trim();
+
 
         // Check there are actually Scheduled Events listed
         if ( serverEvents.size < 1 )
         {
             await interaction.respond([{ name: localize(interaction.locale, 'FEATURE_COMMAND_AUTOCOMPLETE_NO_EVENTS_FOUND'), value: "EVENTS_NOT_FOUND" }]);
-            return;
+        }
+        // If no input, default to first 25 Events
+        else if ( !FocusedValue || FocusedValue == "" )
+        {
+            // Construct an array from the Collection, taking into account 25 limit for autocomplete responses
+            /** @type {ApplicationCommandOptionChoiceData<String>[]} */
+            let responseArray = [];
+
+            serverEvents.forEach(event => {
+                if ( responseArray.length < 25 ) { responseArray.push({ name: event.name, value: event.id }); }
+            });
+
+            await interaction.respond(responseArray);
+        }
+        // Yes input, so filter based off Event Names
+        else
+        {
+            /** @type {ApplicationCommandOptionChoiceData<String>[]} */
+            let responseArrayFiltered = [];
+
+            // Filter events
+            serverEvents = serverEvents.filter(tempEvent => {
+                let returnValue = false;
+
+                if ( tempEvent.name.toLowerCase().includes(FocusedValue.toLowerCase()) ) { returnValue = true; }
+                if ( tempEvent.name.toLowerCase().startsWith(FocusedValue.toLowerCase()) ) { returnValue = true; }
+                // Just to support use of Event IDs as input, in case of power users lol
+                if ( tempEvent.id === FocusedValue ) { returnValue = true; }
+
+                return returnValue;
+            });
+
+            // Sort into respondable array
+            serverEvents.forEach(tempEvent => {
+                responseArrayFiltered.push({ name: tempEvent.name, value: tempEvent.id });
+            });
+
+            await interaction.respond(responseArrayFiltered);
         }
 
 
-        // Construct an array from the Collection, taking into account 25 limit for autocomplete responses
-        /** @type {ApplicationCommandOptionChoiceData<String>[]} */
-        let responseArray = [];
+        // Cache Events for reducing response times
+        EventCache.set(interaction.guildId, serverEvents);
 
-        serverEvents.forEach(event => {
-            if ( responseArray.length < 25 ) { responseArray.push({ name: event.name, value: event.id }); }
-        });
-
-        await interaction.respond(responseArray);
         return;
     }
 }
