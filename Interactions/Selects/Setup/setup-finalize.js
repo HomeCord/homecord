@@ -104,37 +104,60 @@ async function setupNewChannel(interaction, settingValues)
 
             // Create the main Message
             await createdWebhook.send({ allowedMentions: { parse: [] }, content: `${localize(interaction.guildLocale, 'HOME_TITLE', interaction.guild.name)}\n${localize(interaction.guildLocale, 'HOME_EMPTY')}` })
-            .then(async sentMessage => {
+            .then(async headerMessage => {
 
-                // Add to Database!
-                let checkConfig = await GuildConfig.exists({ guildId: interaction.guildId });
-                let fetchedConfig = null;
+                // Create Message for Events & Threads
+                await createdWebhook.send({ allowedMentions: { parse: [] }, content: `\u200B` })
+                .then(async eventThreadMessage => {
 
-                if ( checkConfig != null ) { fetchedConfig = await GuildConfig.findOne({ guildId: interaction.guildId }); fetchedConfig.isNew = false; }
-                // Only adding in three of the values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
-                else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: createdChannel.id, homeWebhookId: createdWebhook.id, mainMessageId: sentMessage.id }); }
+                    // Create Message for Stages & Voice
+                    await createdWebhook.send({ allowedMentions: { parse: [] }, content: `\u200B` })
+                    .then(async audioMessage => {
 
-                fetchedConfig.homeChannelId = createdChannel.id;
-                fetchedConfig.homeWebhookId = createdWebhook.id;
-                fetchedConfig.mainMessageId = sentMessage.id;
-                fetchedConfig.activityThreshold = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : "VERY_LOW";
-                fetchedConfig.highlightMessages = settingValues[2] === "t" ? true : false;
-                fetchedConfig.highlightEvents = settingValues[3] === "t" ? true : false;
-                fetchedConfig.highlightVoice = settingValues[4] === "t" ? true : false;
-                fetchedConfig.highlightStages = settingValues[5] === "t" ? true : false;
-                fetchedConfig.highlightThreads = settingValues[6] === "t" ? true : false;
+                        // Add to Database!
+                        let checkConfig = await GuildConfig.exists({ guildId: interaction.guildId });
+                        let fetchedConfig = null;
 
-                await fetchedConfig.save()
-                .then(async () => {
+                        if ( checkConfig != null ) { fetchedConfig = await GuildConfig.findOne({ guildId: interaction.guildId }); fetchedConfig.isNew = false; }
+                        // Only adding in three of the values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
+                        else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: createdChannel.id, homeWebhookId: createdWebhook.id, mainMessageId: headerMessage.id }); }
 
-                    await interaction.editReply({ content: localize(interaction.locale, 'SETUP_CREATION_SUCCESSFUL', `<#${createdChannel.id}>`), embeds: [], components: [] });
-                    return;
+                        fetchedConfig.homeChannelId = createdChannel.id;
+                        fetchedConfig.homeWebhookId = createdWebhook.id;
+                        fetchedConfig.headerMessageId = headerMessage.id;
+                        fetchedConfig.eventThreadsMessageId = eventThreadMessage.id;
+                        fetchedConfig.audioMessageId = audioMessage.id;
+                        fetchedConfig.activityThreshold = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : "VERY_LOW";
+                        fetchedConfig.highlightMessages = settingValues[2] === "t" ? true : false;
+                        fetchedConfig.highlightEvents = settingValues[3] === "t" ? true : false;
+                        fetchedConfig.highlightVoice = settingValues[4] === "t" ? true : false;
+                        fetchedConfig.highlightStages = settingValues[5] === "t" ? true : false;
+                        fetchedConfig.highlightThreads = settingValues[6] === "t" ? true : false;
+
+                        await fetchedConfig.save()
+                        .then(async () => {
+                        
+                            await interaction.editReply({ content: localize(interaction.locale, 'SETUP_CREATION_SUCCESSFUL', `<#${createdChannel.id}>`), embeds: [], components: [] });
+                            return;
+                        })
+                        .catch(async err => {
+                        
+                            await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+                            return;
+                        });
+                    })
+                    .catch(async err => {
+
+                        await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+                        return;
+                    });
                 })
                 .catch(async err => {
 
                     await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                     return;
                 });
+
             })
             .catch(async err => {
 
@@ -196,33 +219,55 @@ async function setupExistingChannel(interaction, settingValues)
     })
     .then(async createdWebhook => {
 
-        // Create the main Message
+        // Create the header Message
         await createdWebhook.send({ allowedMentions: { parse: [] }, content: `${localize(interaction.guildLocale, 'HOME_TITLE', interaction.guild.name)}\n${localize(interaction.guildLocale, 'HOME_EMPTY')}` })
-        .then(async sentMessage => {
+        .then(async headerMessage => {
 
-            // Add to Database!
-            let checkConfig = await GuildConfig.exists({ guildId: interaction.guildId });
-            let fetchedConfig = null;
-            
-            if ( checkConfig != null ) { fetchedConfig = await GuildConfig.findOne({ guildId: interaction.guildId }); fetchedConfig.isNew = false; }
-            // Only adding in three of the values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
-            else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: fetchedChannel.id, homeWebhookId: createdWebhook.id, mainMessageId: sentMessage.id }); }
+            // Create Message for Events & Threads
+            await createdWebhook.send({ allowedMentions: { parse: [] }, content: `\u200B` })
+            .then(async eventThreadMessage => {
 
-            fetchedConfig.homeChannelId = fetchedChannel.id;
-            fetchedConfig.homeWebhookId = createdWebhook.id;
-            fetchedConfig.mainMessageId = sentMessage.id;
-            fetchedConfig.activityThreshold = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : "VERY_LOW";
-            fetchedConfig.highlightMessages = settingValues[2] === "t" ? true : false;
-            fetchedConfig.highlightEvents = settingValues[3] === "t" ? true : false;
-            fetchedConfig.highlightVoice = settingValues[4] === "t" ? true : false;
-            fetchedConfig.highlightStages = settingValues[5] === "t" ? true : false;
-            fetchedConfig.highlightThreads = settingValues[6] === "t" ? true : false;
+                // Create Message for Stages & Voice
+                await createdWebhook.send({ allowedMentions: { parse: [] }, content: `\u200B` })
+                .then(async audioMessage => {
 
-            await fetchedConfig.save()
-            .then(async () => {
+                    // Add to Database!
+                    let checkConfig = await GuildConfig.exists({ guildId: interaction.guildId });
+                    let fetchedConfig = null;
 
-                await interaction.editReply({ content: localize(interaction.locale, 'SETUP_EXISTING_SUCCESSFUL', `<#${fetchedChannel.id}>`), embeds: [], components: [] });
-                return;
+                    if ( checkConfig != null ) { fetchedConfig = await GuildConfig.findOne({ guildId: interaction.guildId }); fetchedConfig.isNew = false; }
+                    // Only adding in three of the values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
+                    else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: createdChannel.id, homeWebhookId: createdWebhook.id, mainMessageId: headerMessage.id }); }
+
+                    fetchedConfig.homeChannelId = createdChannel.id;
+                    fetchedConfig.homeWebhookId = createdWebhook.id;
+                    fetchedConfig.headerMessageId = headerMessage.id;
+                    fetchedConfig.eventThreadsMessageId = eventThreadMessage.id;
+                    fetchedConfig.audioMessageId = audioMessage.id;
+                    fetchedConfig.activityThreshold = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : "VERY_LOW";
+                    fetchedConfig.highlightMessages = settingValues[2] === "t" ? true : false;
+                    fetchedConfig.highlightEvents = settingValues[3] === "t" ? true : false;
+                    fetchedConfig.highlightVoice = settingValues[4] === "t" ? true : false;
+                    fetchedConfig.highlightStages = settingValues[5] === "t" ? true : false;
+                    fetchedConfig.highlightThreads = settingValues[6] === "t" ? true : false;
+
+                    await fetchedConfig.save()
+                    .then(async () => {
+                    
+                        await interaction.editReply({ content: localize(interaction.locale, 'SETUP_CREATION_SUCCESSFUL', `<#${createdChannel.id}>`), embeds: [], components: [] });
+                        return;
+                    })
+                    .catch(async err => {
+                    
+                        await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+                        return;
+                    });
+                })
+                .catch(async err => {
+
+                    await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
+                    return;
+                });
             })
             .catch(async err => {
 
