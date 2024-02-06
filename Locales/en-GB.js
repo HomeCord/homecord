@@ -1,12 +1,13 @@
 module.exports = {
     // ******* GENERIC STUFF
     ERROR_GENERIC: `An error has occurred.`,
+    ERROR_WITH_PREVIEW: `An error has occurred. A preview of the raw error is as follows:\n\`\`\`{{0}}\`\`\``,
 
 
 
     // ******* FOR HOMECORD DESCRIPTIONS, ETC
-    HECCBOT_DESCRIPTION_SHORT: `HomeCord shows your Server's current activity in a custom-made Home Channel! You can also feature Channels, Events, Messages, and more with HomeCord.`,
-    HECCBOT_DESCRIPTION_LONG: `HomeCord allows you to feature activity from your Server in a custom-made Home Channel! Supports featuring or highlighting Channels, Events, Messages, Voice, and Stages. Use {{0}} for more information, or {{1}} to begin setting up HomeCord in your Server!`,
+    HOMECORD_DESCRIPTION_SHORT: `HomeCord shows your Server's current activity in a custom-made Home Channel! You can also feature Channels, Events, Messages, and more with HomeCord.`,
+    HOMECORD_DESCRIPTION_LONG: `HomeCord allows you to feature activity from your Server in a custom-made Home Channel! Supports featuring or highlighting Channels, Events, Messages, Threads, Forum/Media Posts, Voice, and Stages. Use {{0}} for more information, or {{1}} to begin setting up HomeCord in your Server!`,
 
 
 
@@ -14,7 +15,6 @@ module.exports = {
     SLASH_COMMAND_ERROR_GENERIC: `Sorry, but there was a problem trying to run this Slash Command...`,
     SLASH_COMMAND_ERROR_GUILDS_UNSUPPORTED: `Sorry, but this Slash Command can only be used in Direct Messages (DMs) with me.`,
     SLASH_COMMAND_ERROR_DMS_UNSUPPORTED: `Sorry, but this Slash Command cannot be used within Direct Messages (DMs) or Group DMs.`,
-    SLASH_COMMAND_ERROR_HECCBOT_DMS_UNSUPPORTED: `Sorry, but this Slash Command can only be used in Servers, not in Direct Messages (DMs) with me.`,
     SLASH_COMMAND_ERROR_ONLY_TEXT_CHANNELS: `Sorry, but this Slash Command can only be used inside of Server Text Channels.`,
     SLASH_COMMAND_ERROR_DISCORD_OUTAGE: `Sorry, but this Command is unusable while there's a Discord Outage affecting your Server. You can check [Discord's Outage Page](https://discordstatus.com) for extra details.`,
 
@@ -32,7 +32,6 @@ module.exports = {
     CONTEXT_COMMAND_ERROR_SYSTEM_AND_BOT_MESSAGES_UNSUPPORTED: `Sorry, but this Context Command cannot be used on a System or Bot Message.`,
     CONTEXT_COMMAND_ERROR_GUILDS_UNSUPPORTED: `Sorry, but this Context Command can only be used in Direct Messages (DMs) with me.`,
     CONTEXT_COMMAND_ERROR_DMS_UNSUPPORTED: `Sorry, but this Context Command cannot be used within Direct Messages (DMs) or Group DMs.`,
-    CONTEXT_COMMAND_ERROR_HECCBOT_DMS_UNSUPPORTED: `Sorry, but this Context Command can only be used in Servers, not in Direct Messages (DMs) with me.`,
 
     CONTEXT_COMMAND_ERROR_COOLDOWN_SECONDS: `Please wait {{0}} more seconds before using this Context Command again.`,
     CONTEXT_COMMAND_ERROR_COOLDOWN_MINUTES: `Please wait {{0}} more minutes before using this Context Command again.`,
@@ -277,5 +276,16 @@ module.exports = {
 
 
     // ******* FEATURE COMMAND - AUTOCOMPLETE OPTION(S)
-    FEATURE_COMMAND_AUTOCOMPLETE_NO_EVENTS_FOUND: `No Scheduled Events found`
+    FEATURE_COMMAND_AUTOCOMPLETE_NO_EVENTS_FOUND: `No Scheduled Events found`,
+
+
+
+    // ******* FEATURE COMMAND - SCHEDULED EVENTS
+    FEATURE_COMMAND_EVENT_SUCCESS: "Successfully featured that Event on your Home Channel!",
+    
+    FEATURE_COMMAND_EVENT_ERROR_NO_EVENTS_FOUND: "Either HomeCord isn't able to see any of your Scheduled Events, or you don't have any in this Server to be featured on your Home Channel!",
+    FEATURE_COMMAND_EVENT_ERROR_MAX_FEATURED_EVENTS: "Sorry, you cannot have more than 5 Events highlighted or featured on your Home Channel.",
+    FEATURE_COMMAND_EVENT_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Event in this Server.\nPlease try again, ensuring you select an existing Event in this Server.",
+    FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED: "That Event is already being featured on your Home Channel!",
+    FEATURE_COMMAND_EVENT_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Event to your Home Channel.",
 };

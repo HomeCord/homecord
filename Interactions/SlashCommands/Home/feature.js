@@ -1,6 +1,9 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData, Collection, GuildScheduledEvent } = require("discord.js");
 const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
+const { GuildConfig, FeaturedEvent } = require("../../../Mongoose/Models.js");
+const { calculateTimeUntil } = require("../../../BotModules/UtilityModule.js");
+const { LogError } = require("../../../BotModules/LoggingModule.js");
 
 // To ensure not hitting 3 second limit on autocomplete response timings
 /** @type {Collection<String, Collection<String, GuildScheduledEvent>>} */
@@ -190,7 +193,64 @@ module.exports = {
      */
     async execute(interaction)
     {
-        //.
+        await interaction.deferReply({ ephemeral: true });
+
+        // Ensure Home Channel has been setup
+        let fetchedHomeSettings = await GuildConfig.findOne({ guildId: interaction.guildId });
+        if ( !fetchedHomeSettings || fetchedHomeSettings == null ) { await interaction.editReply({ content: localize(interaction.locale, '') }); return; }
+
+        // Now fetch subcommand used
+        const SubcommandInput = interaction.options.getSubcommand(true);
+
+
+        // ******* EVENTS SUBCOMMAND
+        if ( SubcommandInput === "event" )
+        {
+            // Delete Autocomplete Event Cache now that Command has been submitted
+            EventCache.delete(interaction.guildId);
+
+            // Ensure we haven't hit the maximum number of Events featured on Home
+            let fetchedFeaturedEvents = await FeaturedEvent.find({ guildId: interaction.guildId });
+            if ( fetchedFeaturedEvents.length === 5 ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_MAX_FEATURED_EVENTS') }); return; }
+
+            // Grab Inputs
+            const InputEvent = interaction.options.getString("event", true);
+            const InputDuration = interaction.options.getString("duration", true);
+
+            // Validate there was actually an Event inputted
+            if ( InputEvent === "EVENTS_NOT_FOUND" ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_NO_EVENTS_FOUND') }); return; }
+            // Validate user input is a real Event ID in that Server
+            if ( interaction.guild.scheduledEvents.resolve(InputEvent) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_INVALID_INPUT') }); return; }
+
+            // Ensure that Event isn't already being featured
+            if ( fetchedFeaturedEvents.find(tempDoc => tempDoc.eventId === InputEvent && tempDoc.featureType === "FEATURE") != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED') }); return; }
+
+            // Add to database
+            await FeaturedEvent.create({ guildId: interaction.guildId, eventId: InputEvent, featureType: "FEATURE", featureUntil: calculateTimeUntil(InputDuration) })
+            .then(async (newDocument) => {
+                await newDocument.save()
+                .then(async () => {
+
+                    // Call method to update Home Channel to reflect newly featured Event!
+                    await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_SUCCESS') });
+                    return;
+
+                })
+                .catch(async err => {
+                    await LogError(err);
+                    await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_GENERIC') });
+                    return;
+                })
+            })
+            .catch(async err => {
+                await LogError(err);
+                await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_GENERIC') });
+                return;
+            });
+
+
+            return;
+        }
     },
 
 
