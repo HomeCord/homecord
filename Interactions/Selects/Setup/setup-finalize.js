@@ -2,6 +2,7 @@ const { StringSelectMenuInteraction, EmbedBuilder, PermissionFlagsBits, ActionRo
 const { DiscordClient, Collections, fetchDisplayName } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
 const { GuildConfig } = require("../../../Mongoose/Models.js");
+const { LogError } = require("../../../BotModules/LoggingModule.js");
 
 module.exports = {
     // Select's Name
@@ -97,7 +98,7 @@ async function setupNewChannel(interaction, settingValues)
         // ******* Attempt to create Webhook in Channel
         await createdChannel.createWebhook({
             name: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_NAME'),
-            avatar: "https://i.imgur.com/26R5QQl.png",
+            avatar: "https://us-east-1.tixte.net/uploads/zebby.is-from.space/homecord-icon.png",
             reason: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_CREATION_REASON', `${fetchDisplayName(interaction.user, true)}`)
         })
         .then(async createdWebhook => {
@@ -119,8 +120,8 @@ async function setupNewChannel(interaction, settingValues)
                         let fetchedConfig = null;
 
                         if ( checkConfig != null ) { fetchedConfig = await GuildConfig.findOne({ guildId: interaction.guildId }); fetchedConfig.isNew = false; }
-                        // Only adding in three of the values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
-                        else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: createdChannel.id, homeWebhookId: createdWebhook.id, mainMessageId: headerMessage.id }); }
+                        // Only adding in these values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
+                        else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: createdChannel.id, homeWebhookId: createdWebhook.id, headerMessageId: headerMessage.id, eventThreadsMessageId: eventThreadMessage.id, audioMessageId: audioMessage.id }); }
 
                         fetchedConfig.homeChannelId = createdChannel.id;
                         fetchedConfig.homeWebhookId = createdWebhook.id;
@@ -142,18 +143,21 @@ async function setupNewChannel(interaction, settingValues)
                         })
                         .catch(async err => {
                         
+                            await LogError(err);
                             await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                             return;
                         });
                     })
                     .catch(async err => {
 
+                        await LogError(err);
                         await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                         return;
                     });
                 })
                 .catch(async err => {
 
+                    await LogError(err);
                     await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                     return;
                 });
@@ -161,18 +165,21 @@ async function setupNewChannel(interaction, settingValues)
             })
             .catch(async err => {
 
+                await LogError(err);
                 await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                 return;
             });
         })
         .catch(async err => {
 
+            await LogError(err);
             await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
             return;
         });
     })
     .catch(async err => {
 
+        await LogError(err);
         await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
         return;
     });
@@ -214,7 +221,7 @@ async function setupExistingChannel(interaction, settingValues)
     // ******* Attempt to create Webhook in Channel
     await fetchedChannel.createWebhook({
         name: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_NAME'),
-        avatar: "https://i.imgur.com/26R5QQl.png",
+        avatar: "https://us-east-1.tixte.net/uploads/zebby.is-from.space/homecord-icon.png",
         reason: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_CREATION_REASON', `${fetchDisplayName(interaction.user, true)}`)
     })
     .then(async createdWebhook => {
@@ -236,10 +243,10 @@ async function setupExistingChannel(interaction, settingValues)
                     let fetchedConfig = null;
 
                     if ( checkConfig != null ) { fetchedConfig = await GuildConfig.findOne({ guildId: interaction.guildId }); fetchedConfig.isNew = false; }
-                    // Only adding in three of the values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
-                    else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: createdChannel.id, homeWebhookId: createdWebhook.id, mainMessageId: headerMessage.id }); }
+                    // Only adding in these values here to make it shut up about "You didn't pass required arguments" YES I AM WHAT ARE YOU ON ABOUT DO YOU NOT SEE THE VALUES BEING SET BEFORE I RUN .save()?!
+                    else { fetchedConfig = await GuildConfig.create({ guildId: interaction.guildId, homeChannelId: fetchedChannel.id, homeWebhookId: createdWebhook.id, headerMessageId: headerMessage.id, eventThreadsMessageId: eventThreadMessage.id, audioMessageId: audioMessage.id }); }
 
-                    fetchedConfig.homeChannelId = createdChannel.id;
+                    fetchedConfig.homeChannelId = fetchedChannel.id;
                     fetchedConfig.homeWebhookId = createdWebhook.id;
                     fetchedConfig.headerMessageId = headerMessage.id;
                     fetchedConfig.eventThreadsMessageId = eventThreadMessage.id;
@@ -254,35 +261,40 @@ async function setupExistingChannel(interaction, settingValues)
                     await fetchedConfig.save()
                     .then(async () => {
                     
-                        await interaction.editReply({ content: localize(interaction.locale, 'SETUP_CREATION_SUCCESSFUL', `<#${createdChannel.id}>`), embeds: [], components: [] });
+                        await interaction.editReply({ content: localize(interaction.locale, 'SETUP_CREATION_SUCCESSFUL', `<#${fetchedChannel.id}>`), embeds: [], components: [] });
                         return;
                     })
                     .catch(async err => {
                     
+                        await LogError(err);
                         await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                         return;
                     });
                 })
                 .catch(async err => {
 
+                    await LogError(err);
                     await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                     return;
                 });
             })
             .catch(async err => {
 
+                await LogError(err);
                 await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
                 return;
             });
         })
         .catch(async err => {
 
+            await LogError(err);
             await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
             return;
         });
     })
     .catch(async err => {
 
+        await LogError(err);
         await interaction.editReply({ content: localize(interaction.locale, 'SETUP_SAVE_ERROR_GENERIC'), embeds: [], components: [] });
         return;
     });

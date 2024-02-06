@@ -161,7 +161,7 @@ module.exports = {
                             'en-GB': "Channel to feature",
                             'en-US': "Channel to feature"
                         },
-                        channelTypes: [ ChannelType.GuildText, ChannelType.GuildForum, ChannelType.GuildAnnouncement ],
+                        channelTypes: [ ChannelType.GuildText, ChannelType.GuildForum, ChannelType.GuildAnnouncement, ChannelType.GuildMedia ],
                         required: true
                     },
                     {
