@@ -1,9 +1,10 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData, Collection, GuildScheduledEvent } = require("discord.js");
 const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
-const { GuildConfig, FeaturedEvent } = require("../../../Mongoose/Models.js");
-const { calculateTimeUntil } = require("../../../BotModules/UtilityModule.js");
+const { GuildConfig, FeaturedEvent, TimerModel } = require("../../../Mongoose/Models.js");
+const { calculateIsoTimeUntil, calculateUnixTimeUntil, calculateTimeoutDuration } = require("../../../BotModules/UtilityModule.js");
 const { LogError } = require("../../../BotModules/LoggingModule.js");
+const { refreshEventsThreads, expireEvent } = require("../../../BotModules/HomeModule.js");
 
 // To ensure not hitting 3 second limit on autocomplete response timings
 /** @type {Collection<String, Collection<String, GuildScheduledEvent>>} */
@@ -226,13 +227,25 @@ module.exports = {
             if ( fetchedFeaturedEvents.find(tempDoc => tempDoc.eventId === InputEvent && tempDoc.featureType === "FEATURE") != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED') }); return; }
 
             // Add to database
-            await FeaturedEvent.create({ guildId: interaction.guildId, eventId: InputEvent, featureType: "FEATURE", featureUntil: calculateTimeUntil(InputDuration) })
+            await FeaturedEvent.create({ guildId: interaction.guildId, eventId: InputEvent, featureType: "FEATURE", featureUntil: calculateIsoTimeUntil(InputDuration) })
             .then(async (newDocument) => {
                 await newDocument.save()
                 .then(async () => {
 
+                    // Store callback to remove featured Event from Home Channel after duration (just in case)
+                    await TimerModel.create({ timerExpires: calculateUnixTimeUntil(InputDuration), callback: expireEvent.toString(), guildId: interaction.guildId, eventId: InputEvent, guildLocale: interaction.guildLocale })
+                    .then(async newDocument => { await newDocument.save(); })
+                    .catch(async err => { await LogError(err); });
+
                     // Call method to update Home Channel to reflect newly featured Event!
-                    await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_SUCCESS') });
+                    let refreshState = await refreshEventsThreads(interaction.guildId, interaction.guildLocale);
+
+                    // ACK User
+                    if ( refreshState === true ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_SUCCESS') }); } 
+                    else { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_GENERIC') }); }
+
+                    // Timeout for auto-removing the Event
+                    setTimeout(async () => { await expireEvent(interaction.guildId, InputEvent, interaction.guildLocale) }, calculateTimeoutDuration(InputDuration));
                     return;
 
                 })

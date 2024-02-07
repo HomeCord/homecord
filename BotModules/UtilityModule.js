@@ -5,7 +5,7 @@ module.exports = {
      * Calculates the ISO Timestamp based off the duration inputted via commands
      * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'SEVEN_DAYS'} durationInput 
      */
-    calculateTimeUntil(durationInput)
+    calculateIsoTimeUntil(durationInput)
     {
         const now = Date.now();
         /** ISO String
@@ -32,5 +32,77 @@ module.exports = {
         }
 
         return calculatedIsoTimestamp;
+    },
+
+
+
+
+    /**
+     * Calculates the Unix Timestamp in milliseconds based off the duration inputted via commands
+     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'SEVEN_DAYS'} durationInput 
+     */
+    calculateUnixTimeUntil(durationInput)
+    {
+        const now = Date.now();
+        /** ISO String
+         * @type {String} */
+        let calculatedUnixTimestamp;
+
+        switch (durationInput)
+        {
+            case "TWELVE_HOURS":
+                calculatedUnixTimestamp = new Date(now + 4.32e+7).getTime();
+                break;
+
+            case "ONE_DAY":
+                calculatedUnixTimestamp = new Date(now + 8.64e+7).getTime();
+                break;
+
+            case "THREE_DAYS":
+                calculatedUnixTimestamp = new Date(now + 2.592e+8).getTime();
+                break;
+
+            case "SEVEN_DAYS":
+                calculatedUnixTimestamp = new Date(now + 6.048e+8).getTime();
+                break;
+        }
+
+        return calculatedUnixTimestamp;
+    },
+    
+
+
+
+    /**
+     * Calculates the milliseconds based off the duration inputted via commands, for use in setTimeout()
+     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'SEVEN_DAYS'} durationInput 
+     */
+    calculateTimeoutDuration(durationInput)
+    {
+        const now = Date.now();
+        /** ISO String
+         * @type {Number} */
+        let calculatedDuration;
+
+        switch (durationInput)
+        {
+            case "TWELVE_HOURS":
+                calculatedDuration = 4.32e+7;
+                break;
+
+            case "ONE_DAY":
+                calculatedDuration = 8.64e+7;
+                break;
+
+            case "THREE_DAYS":
+                calculatedDuration = 2.592e+8;
+                break;
+
+            case "SEVEN_DAYS":
+                calculatedDuration = 6.048e+8;
+                break;
+        }
+
+        return calculatedDuration;
     }
 }

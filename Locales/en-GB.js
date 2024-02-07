@@ -99,21 +99,22 @@ module.exports = {
 
     // ******* FOR HOME CHANNEL ITSELF
     HOME_CHANNEL_NAME: `home`,
-    HOME_CHANNEL_DESCRIPTION: `See a summary of highlighted activity in this Home Channel, powered by the HomeCord Bot!`,
+    HOME_CHANNEL_DESCRIPTION: `See a summary of highlighted Server activity in this Home Channel, powered by the HomeCord Bot!`,
 
     HOME_TITLE: `# {{0}} - Home Channel`,
     HOME_EMPTY: `*There doesn't seem to be anything highlighted...*\n*Maybe you can help by starting a conversation in this Server's Channels!*`,
+    HOME_SUBHEADING: `*A summary and showcase of this Server's activity and events!*\n*Nothing displayed? Maybe you can help by starting a conversation in this Server's Channels!*`,
 
     HOME_FEATURED_CHANNELS_HEADER: `## Featured Channels\nChannels featured by this Server's Admins. You might want to check these out!\n*Note: Channels displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
     HOME_SCHEDULED_EVENTS_HEADER: `## Upcoming Scheduled Events\nHighlighted upcoming Events happening right here in this Server!\n*Note: You can see a full list of this Server's Scheduled Events in the Events Tab at the top of your Channel List.*`,
     HOME_ACTIVE_VOICE_HEADER: `## Active Voice Channels\nHighlighted active Voice Channels. Why not hop in and join the chaos?`,
-    HOME_ACTIVE_THREADS_HEADER: `## Active Threads & Forum Posts\nLooking for specific conversations? Maybe these active Threads or Forum Posts hold the answer!\n*Note: Threads/Posts displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
+    HOME_ACTIVE_THREADS_HEADER: `## Active Threads & Forum/Media Posts\nLooking for specific conversations? Maybe these active Threads or Forum/Media Posts hold the answer!\n*Note: Threads/Posts displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
     HOME_FEATURED_MESSAGES_HEADER: `## Highlighted Messages\nNoteworthy Messages a lot of Server Members seem to like!`,
 
-    HOME_FEATURED_EVENT_TAG: `**Featured Event!**`,
-    HOME_FEATURED_POST_TAG: `**Featured Post!**`,
-    HOME_FEATURED_THREAD_TAG: `**Featured Thread!**`,
-    HOME_FEATURED_MESSAGE_TAG: `**Featured Message**`,
+    HOME_FEATURED_EVENT_TAG: `Featured Event!`,
+    HOME_FEATURED_POST_TAG: `Featured Post!`,
+    HOME_FEATURED_THREAD_TAG: `Featured Thread!`,
+    HOME_FEATURED_MESSAGE_TAG: `Featured Message`,
     HOME_ORIGINAL_MESSAGE_TAG: `Original Message`,
 
     HOME_ACTIVE_VOICE_MEMBERS: `{{0}} Active Members`,
