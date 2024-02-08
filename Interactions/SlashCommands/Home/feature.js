@@ -288,7 +288,7 @@ module.exports = {
                 .then(async () => {
 
                     // Call method to update Home Channel to reflect newly featured Channel!
-                    let refreshState = await refreshHeader(interaction.guildId, interaction.guildLocale);
+                    let refreshState = await refreshHeader(interaction.guildId, interaction.guildLocale, interaction.guild.name);
 
                     // ACK User
                     if ( refreshState === true ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_SUCCESS', `<#${InputChannel.id}>`) }); } 

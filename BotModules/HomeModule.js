@@ -11,10 +11,11 @@ module.exports = {
      * 
      * @param {String} guildId 
      * @param {Locale} locale Guild's Locale!
+     * @param {String} guildName The Guild's Name
      * 
      * @returns {Promise<Boolean|String>} True for successful refresh, or a String Key Reason for why refreshing failed
      */
-    async refreshHeader(guildId, locale)
+    async refreshHeader(guildId, locale, guildName)
     {
         // Fetch Database entries and ensure they exist (just in case!)
         const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
@@ -33,7 +34,7 @@ module.exports = {
         // If no Channels are featured, just default message
         if ( FeaturedChannelEntries.length === 0 )
         {
-            await fetchedHomeWebhook.editMessage(headerMessageId, { content: localize(locale, 'HOME_SUBHEADING') });
+            await fetchedHomeWebhook.editMessage(headerMessageId, { content: `${localize(locale, 'HOME_TITLE', guildName)}\n${localize(locale, 'HOME_SUBHEADING')}` });
             return true;
         }
 
@@ -50,7 +51,7 @@ module.exports = {
             });
 
             // Set into Home Channel
-            await fetchedHomeWebhook.editMessage(headerMessageId, { content: `${localize(locale, 'HOME_SUBHEADING')}\n\n${localize(locale, 'HOME_FEATURED_CHANNELS_HEADER')}\n\n${readableChannels.join(`\n`)}` });
+            await fetchedHomeWebhook.editMessage(headerMessageId, { content: `${localize(locale, 'HOME_TITLE', guildName)}\n${localize(locale, 'HOME_SUBHEADING')}\n\n${localize(locale, 'HOME_FEATURED_CHANNELS_HEADER')}\n\n${readableChannels.join(`\n`)}` });
             return true;
         }
     },
