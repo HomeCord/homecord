@@ -1,10 +1,10 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData, Collection, GuildScheduledEvent } = require("discord.js");
 const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
-const { GuildConfig, FeaturedEvent, TimerModel } = require("../../../Mongoose/Models.js");
+const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel } = require("../../../Mongoose/Models.js");
 const { calculateIsoTimeUntil, calculateUnixTimeUntil, calculateTimeoutDuration } = require("../../../BotModules/UtilityModule.js");
 const { LogError } = require("../../../BotModules/LoggingModule.js");
-const { refreshEventsThreads, expireEvent } = require("../../../BotModules/HomeModule.js");
+const { refreshEventsThreads, expireEvent, refreshHeader } = require("../../../BotModules/HomeModule.js");
 
 // To ensure not hitting 3 second limit on autocomplete response timings
 /** @type {Collection<String, Collection<String, GuildScheduledEvent>>} */
@@ -258,6 +258,53 @@ module.exports = {
             .catch(async err => {
                 await LogError(err);
                 await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_GENERIC') });
+                return;
+            });
+
+
+            return;
+        }
+        // CHANNELS SUBCOMMAND
+        else if ( SubcommandInput === "channel" )
+        {
+            // Ensure we haven't hit the maximum number of Channels featured on Home
+            let fetchedFeaturedChannels = await FeaturedChannel.find({ guildId: interaction.guildId });
+            if ( fetchedFeaturedChannels.length === 6 ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_MAX_FEATURED_CHANNELS') }); return; }
+
+            // Grab Inputs
+            const InputChannel = interaction.options.getChannel("channel", true, [ ChannelType.GuildText, ChannelType.GuildForum, ChannelType.GuildAnnouncement, ChannelType.GuildMedia ]);
+            const InputDescription = interaction.options.getString("description");
+
+            // Validate user input is a real Channel in that Server (Discord's validation will do post of this for me)
+            if ( InputChannel == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_INVALID_INPUT') }); return; }
+
+            // Ensure that Channel isn't already being featured
+            if ( fetchedFeaturedChannels.find(tempDoc => tempDoc.channelId === InputChannel.id) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED') }); return; }
+
+            // Add to database
+            await FeaturedChannel.create({ guildId: interaction.guildId, channelId: InputChannel.id, description: InputDescription != null ? InputDescription : undefined })
+            .then(async (newDocument) => {
+                await newDocument.save()
+                .then(async () => {
+
+                    // Call method to update Home Channel to reflect newly featured Channel!
+                    let refreshState = await refreshHeader(interaction.guildId, interaction.guildLocale);
+
+                    // ACK User
+                    if ( refreshState === true ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_SUCCESS', `<#${InputChannel.id}>`) }); } 
+                    else { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_GENERIC', `<#${InputChannel.id}>`) }); }
+                    return;
+
+                })
+                .catch(async err => {
+                    await LogError(err);
+                    await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_GENERIC', `<#${InputChannel.id}>`) });
+                    return;
+                })
+            })
+            .catch(async err => {
+                await LogError(err);
+                await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_GENERIC', `<#${InputChannel.id}>`) });
                 return;
             });
 

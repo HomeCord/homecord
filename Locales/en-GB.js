@@ -289,4 +289,14 @@ module.exports = {
     FEATURE_COMMAND_EVENT_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Event in this Server.\nPlease try again, ensuring you select an existing Event in this Server.",
     FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED: "That Event is already being featured on your Home Channel!",
     FEATURE_COMMAND_EVENT_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Event to your Home Channel.",
+
+
+
+    // ******* FEATURE COMMAND - CHANNELS   
+    FEATURE_COMMAND_CHANNEL_SUCCESS: "Successfully featured {{0}} to your Home Channel!",
+    
+    FEATURE_COMMAND_CHANNEL_ERROR_MAX_FEATURED_CHANNELS: "Sorry, you cannot have more than 6 Channels featured to your Home Channel.",
+    FEATURE_COMMAND_CHANNEL_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Channel in this Server.\nPlease try again, ensuring you select an existing Channel in this Server that HomeCord has \"View Permissions\" access to.",
+    FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED: "That Channel is already featured on your Home Channel!",
+    FEATURE_COMMAND_CHANNEL_ERROR_GENERIC: "Sorry, an error occurred while trying to feature {{0}} to your Home Channel.",
 };

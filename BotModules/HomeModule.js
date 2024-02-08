@@ -1,4 +1,4 @@
-const { GuildConfig, FeaturedEvent, FeaturedThread, TimerModel } = require("../Mongoose/Models");
+const { GuildConfig, FeaturedEvent, FeaturedThread, TimerModel, FeaturedChannel } = require("../Mongoose/Models");
 const { Locale } = require("discord.js");
 const { DiscordClient } = require("../constants");
 const { localize } = require("./LocalizationModule");
@@ -6,6 +6,59 @@ const { localize } = require("./LocalizationModule");
 
 
 module.exports = {
+    /**
+     * Refreshes the Header section of the Server's Home Channel, to reflect newly featured, or unfeatured, Channels
+     * 
+     * @param {String} guildId 
+     * @param {Locale} locale Guild's Locale!
+     * 
+     * @returns {Promise<Boolean|String>} True for successful refresh, or a String Key Reason for why refreshing failed
+     */
+    async refreshHeader(guildId, locale)
+    {
+        // Fetch Database entries and ensure they exist (just in case!)
+        const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
+        const FeaturedChannelEntries = await FeaturedChannel.find({ guildId: guildId });
+
+        if ( ConfigEntry == null ) { return "CONFIG_NOT_FOUND"; }
+
+        // Fetch Webhook and make specific Message ID into its own variable for ease
+        let headerMessageId = ConfigEntry.headerMessageId;
+        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId);
+        let fetchedGuild = await DiscordClient.guilds.fetch(guildId);
+
+        // Just to make sure Discord Outages don't break things
+        if ( !fetchedGuild.available ) { return "GUILD_OUTAGE"; }
+
+        // If no Channels are featured, just default message
+        if ( FeaturedChannelEntries.length === 0 )
+        {
+            await fetchedHomeWebhook.editMessage(headerMessageId, { content: localize(locale, 'HOME_SUBHEADING') });
+            return true;
+        }
+
+        // If there are Channels featured
+        if ( FeaturedChannelEntries.length > 0 )
+        {
+            // Convert Entries into UX-friendly strings
+            /** @type {Array<String>} */
+            let readableChannels = [];
+
+            FeaturedChannelEntries.forEach(async channelDocument => {
+                // Format & add to array
+                readableChannels.push(`- <#${channelDocument.channelId}>${channelDocument.description != undefined ? `\n  - *${channelDocument.description}*` : ""}`);
+            });
+
+            // Set into Home Channel
+            await fetchedHomeWebhook.editMessage(headerMessageId, { content: `${localize(locale, 'HOME_SUBHEADING')}\n\n${localize(locale, 'HOME_FEATURED_CHANNELS_HEADER')}\n\n${readableChannels.join(`\n`)}` });
+            return true;
+        }
+    },
+
+
+
+
+
     /**
      * Refreshes the Events & Threads section of the Server's Home Channel, to reflect newly featured or expired Events/Threads/Posts
      * 
