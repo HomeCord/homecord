@@ -299,4 +299,14 @@ module.exports = {
     FEATURE_COMMAND_CHANNEL_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Channel in this Server.\nPlease try again, ensuring you select an existing Channel in this Server that HomeCord has \"View Permissions\" access to.",
     FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED: "That Channel is already featured on your Home Channel!",
     FEATURE_COMMAND_CHANNEL_ERROR_GENERIC: "Sorry, an error occurred while trying to feature {{0}} to your Home Channel.",
+
+
+
+    // ******* FEATURE COMMAND - THREADS
+    FEATURE_COMMAND_THREAD_SUCCESS: "Successfully featured that Thread/Post on your Home Channel!",
+    
+    FEATURE_COMMAND_THREAD_ERROR_MAX_FEATURED_THREADS: "Sorry, you cannot have more than 5 Threads/Posts highlighted or featured on your Home Channel.",
+    FEATURE_COMMAND_THREAD_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Thread/Post in this Server.\nPlease try again, ensuring you select an existing Thread/Post in this Server.",
+    FEATURE_COMMAND_THREAD_ERROR_THREAD_ALREADY_FEATURED: "That Thread/Post is already being featured on your Home Channel!",
+    FEATURE_COMMAND_THREAD_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Thread/Post to your Home Channel.",
 };

@@ -1,10 +1,10 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData, Collection, GuildScheduledEvent } = require("discord.js");
 const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
-const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel } = require("../../../Mongoose/Models.js");
+const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel, FeaturedThread } = require("../../../Mongoose/Models.js");
 const { calculateIsoTimeUntil, calculateUnixTimeUntil, calculateTimeoutDuration } = require("../../../BotModules/UtilityModule.js");
 const { LogError } = require("../../../BotModules/LoggingModule.js");
-const { refreshEventsThreads, expireEvent, refreshHeader } = require("../../../BotModules/HomeModule.js");
+const { refreshEventsThreads, expireEvent, refreshHeader, expireThread } = require("../../../BotModules/HomeModule.js");
 
 // To ensure not hitting 3 second limit on autocomplete response timings
 /** @type {Collection<String, Collection<String, GuildScheduledEvent>>} */
@@ -16,12 +16,12 @@ module.exports = {
     Name: "feature",
 
     // Command's Description
-    Description: `Feature a Channel, Event, or Thread to your Home Channel`,
+    Description: `Feature a Channel, Event, or Thread/Post to your Home Channel`,
 
     // Command's Localised Descriptions
     LocalisedDescriptions: {
-        'en-GB': `Feature a Channel, Event, or Thread to your Home Channel`,
-        'en-US': `Feature a Channel, Event, or Thread to your Home Channel`
+        'en-GB': `Feature a Channel, Event, or Thread/Post to your Home Channel`,
+        'en-US': `Feature a Channel, Event, or Thread/Post to your Home Channel`
     },
 
     // Command's Category
@@ -113,19 +113,19 @@ module.exports = {
             {
                 type: ApplicationCommandOptionType.Subcommand,
                 name: "thread",
-                description: "Feature a Thread or Forum Post on your Home Channel",
+                description: "Feature a Thread or Forum/Media Post on your Home Channel",
                 descriptionLocalizations: {
-                    'en-GB': "Feature a Thread or Forum Post on your Home Channel",
-                    'en-US': "Feature a Thread or Forum Post on your Home Channel"
+                    'en-GB': "Feature a Thread or Forum/Media Post on your Home Channel",
+                    'en-US': "Feature a Thread or Forum/Media Post on your Home Channel"
                 },
                 options: [
                     {
                         type: ApplicationCommandOptionType.Channel,
                         name: "thread",
-                        description: "Thread or Forum Post to feature",
+                        description: "Thread or Forum/Media Post to feature",
                         descriptionLocalizations: {
-                            'en-GB': "Thread or Forum Post to feature",
-                            'en-US': "Thread or Forum Post to feature"
+                            'en-GB': "Thread or Forum/Media Post to feature",
+                            'en-US': "Thread or Forum/Media Post to feature"
                         },
                         channelTypes: [ ChannelType.PublicThread ],
                         required: true
@@ -224,10 +224,15 @@ module.exports = {
             if ( interaction.guild.scheduledEvents.resolve(InputEvent) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_INVALID_INPUT') }); return; }
 
             // Ensure that Event isn't already being featured
-            if ( fetchedFeaturedEvents.find(tempDoc => tempDoc.eventId === InputEvent && tempDoc.featureType === "FEATURE") != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED') }); return; }
+            if ( fetchedFeaturedEvents.find(tempDoc => tempDoc.eventId === InputEvent) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED') }); return; }
 
             // Add to database
-            await FeaturedEvent.create({ guildId: interaction.guildId, eventId: InputEvent, featureType: "FEATURE", featureUntil: calculateIsoTimeUntil(InputDuration) })
+            await FeaturedEvent.create({
+                guildId: interaction.guildId,
+                eventId: InputEvent,
+                featureType: "FEATURE",
+                featureUntil: calculateIsoTimeUntil(InputDuration)
+            })
             .then(async (newDocument) => {
                 await newDocument.save()
                 .then(async () => {
@@ -264,7 +269,7 @@ module.exports = {
 
             return;
         }
-        // CHANNELS SUBCOMMAND
+        // ******* CHANNELS SUBCOMMAND
         else if ( SubcommandInput === "channel" )
         {
             // Ensure we haven't hit the maximum number of Channels featured on Home
@@ -282,7 +287,11 @@ module.exports = {
             if ( fetchedFeaturedChannels.find(tempDoc => tempDoc.channelId === InputChannel.id) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED') }); return; }
 
             // Add to database
-            await FeaturedChannel.create({ guildId: interaction.guildId, channelId: InputChannel.id, description: InputDescription != null ? InputDescription : undefined })
+            await FeaturedChannel.create({
+                guildId: interaction.guildId,
+                channelId: InputChannel.id,
+                description: InputDescription != null ? InputDescription : undefined
+            })
             .then(async (newDocument) => {
                 await newDocument.save()
                 .then(async () => {
@@ -305,6 +314,67 @@ module.exports = {
             .catch(async err => {
                 await LogError(err);
                 await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_GENERIC', `<#${InputChannel.id}>`) });
+                return;
+            });
+
+
+            return;
+        }
+        // ******* THREADS SUBCOMMAND
+        if ( SubcommandInput === "thread" )
+        {
+            // Ensure we haven't hit the maximum number of Threads featured on Home
+            let fetchedFeaturedThreads = await FeaturedThread.find({ guildId: interaction.guildId });
+            if ( fetchedFeaturedThreads.length === 5 ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_MAX_FEATURED_THREADS') }); return; }
+
+            // Grab Inputs
+            const InputThread = interaction.options.getChannel("thread", true, [ ChannelType.PublicThread ]);
+            const InputDuration = interaction.options.getString("duration", true);
+
+            // Validate user input is a real Thread in that Server
+            if ( interaction.guild.channels.resolve(InputThread.id) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_INVALID_INPUT') }); return; }
+
+            // Ensure that Thread isn't already being featured
+            if ( fetchedFeaturedThreads.find(tempDoc => tempDoc.threadId === InputThread.id) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_THREAD_ALREADY_FEATURED') }); return; }
+
+            // Add to database
+            await FeaturedThread.create({
+                guildId: interaction.guildId,
+                threadId: InputThread.id,
+                threadType: InputThread.parent.type === ChannelType.GuildAnnouncement || InputThread.parent.type === ChannelType.GuildText ? "THREAD" : "POST",
+                featureType: "FEATURE",
+                featureUntil: calculateIsoTimeUntil(InputDuration)
+            })
+            .then(async (newDocument) => {
+                await newDocument.save()
+                .then(async () => {
+
+                    // Store callback to remove featured Thread from Home Channel after duration (just in case)
+                    await TimerModel.create({ timerExpires: calculateUnixTimeUntil(InputDuration), callback: expireEvent.toString(), guildId: interaction.guildId, threadId: InputThread.id, guildLocale: interaction.guildLocale })
+                    .then(async newDocument => { await newDocument.save(); })
+                    .catch(async err => { await LogError(err); });
+
+                    // Call method to update Home Channel to reflect newly featured Thread!
+                    let refreshState = await refreshEventsThreads(interaction.guildId, interaction.guildLocale);
+
+                    // ACK User
+                    if ( refreshState === true ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_SUCCESS') }); } 
+                    else { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_GENERIC') }); }
+
+                    // Timeout for auto-removing the Thread
+                    setTimeout(async () => { await expireThread(interaction.guildId, InputThread.id, interaction.guildLocale) }, calculateTimeoutDuration(InputDuration));
+                    return;
+
+                })
+                .catch(async err => {
+                    await LogError(err);
+                    await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_GENERIC') });
+                    return;
+                })
+            })
+            .catch(async err => {
+                await LogError(err);
+                await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_GENERIC') });
                 return;
             });
 
