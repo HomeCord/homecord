@@ -164,7 +164,7 @@ module.exports = {
     SETUP_SELECT_TOGGLE_EVENTS: `Toggle if Scheduled Events can be highlighted`,
     SETUP_SELECT_TOGGLE_VOICE: `Toggle if active Voice Channels can be highlighted`,
     SETUP_SELECT_TOGGLE_STAGES: `Toggle if live Stages can be highlighted`,
-    SETUP_SELECT_TOGGLE_THREADS: `Toggle if Threads and Forum Posts can be highlighted`,
+    SETUP_SELECT_TOGGLE_THREADS: `Toggle if Threads and Forum/Media Posts can be highlighted`,
     SETUP_SELECT_SAVE: `Save the settings and proceeds to Step 2`,
     SETUP_SELECT_CANCEL: `Cancel setup of your Home Channel`,
 
@@ -188,19 +188,19 @@ module.exports = {
 
     // ******* SETUP - TOGGLE HIGHLIGHTING STUFF
     SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Messages`,
-    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Messages being highlighted on your Home Channel.\n\nPlease note: Disabling Message Highlights will also prevent you from manually featuring Messages onto your Home Channel.`,
+    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Messages being automatically highlighted on your Home Channel.\n\nPlease note: Disabling Message Highlights will **not** prevent you from manually featuring Messages onto your Home Channel.`,
 
     SETUP_TOGGLE_EVENT_HIGHLIGHTS_TITLE: `Toggle Highlighting Events`,
-    SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Scheduled Events being highlighted on your Home Channel.\n\nPlease note: Disabling Event Highlights will also prevent you from manually featuring Scheduled Events onto your Home Channel.`,
+    SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Scheduled Events being automatically highlighted on your Home Channel.\n\nPlease note: Disabling Event Highlights will **not** prevent you from manually featuring Scheduled Events onto your Home Channel.`,
 
     SETUP_TOGGLE_VOICE_HIGHLIGHTS_TITLE: `Toggle Highlighting Voice`,
-    SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Voice Channels being highlighted on your Home Channel.`,
+    SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Voice Channels being automatically highlighted on your Home Channel.`,
 
     SETUP_TOGGLE_STAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Stages`,
-    SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable live Stages being highlighted on your Home Channel.`,
+    SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable live Stages being automatically highlighted on your Home Channel.`,
 
     SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE: `Toggle Highlighting Threads/Posts`,
-    SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Threads & Forum Posts being highlighted on your Home Channel.\n\nPlease note: Disabling Thread/Post Highlights will also prevent you from manually featuring Threads & Forum Posts onto your Home Channel.`,
+    SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Threads & Forum/Media Posts being automatically highlighted on your Home Channel.\n\nPlease note: Disabling Thread/Post Highlights will **not** prevent you from manually featuring Threads & Forum/Media Posts onto your Home Channel.`,
 
 
 
@@ -267,7 +267,7 @@ module.exports = {
     SETTINGS_VIEW_EMBED_EVENTS: `Scheduled Events Highlightable?`,
     SETTINGS_VIEW_EMBED_VOICE: `Active Voice Highlightable?`,
     SETTINGS_VIEW_EMBED_STAGES: `Live Stages Highlightable?`,
-    SETTINGS_VIEW_EMBED_THREADS: `Threads & Forum Posts Highlightable?`,
+    SETTINGS_VIEW_EMBED_THREADS: `Threads & Forum/Media Posts Highlightable?`,
 
     SETTINGS_EDIT_EMBED_TITLE: `Updated Home Settings for {{0}}`,
     SETTINGS_EDIT_EMBED_DESCRIPTION: `- *To view your current settings without changing them, use the {{0}} Command without including any of provided options.*`,
