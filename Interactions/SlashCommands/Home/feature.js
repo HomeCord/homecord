@@ -1,7 +1,7 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType,ApplicationCommandOptionChoiceData, Collection, GuildScheduledEvent } = require("discord.js");
 const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
-const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel, FeaturedThread } = require("../../../Mongoose/Models.js");
+const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel, FeaturedThread, GuildBlocklist } = require("../../../Mongoose/Models.js");
 const { calculateIsoTimeUntil, calculateUnixTimeUntil, calculateTimeoutDuration } = require("../../../BotModules/UtilityModule.js");
 const { LogError } = require("../../../BotModules/LoggingModule.js");
 const { refreshEventsThreads, expireEvent, refreshHeader, expireThread } = require("../../../BotModules/HomeModule.js");
@@ -286,6 +286,9 @@ module.exports = {
             // Ensure that Channel isn't already being featured
             if ( fetchedFeaturedChannels.find(tempDoc => tempDoc.channelId === InputChannel.id) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED') }); return; }
 
+            // Check against Block List
+            if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputChannel.id }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_BLOCKED') }); return; }
+
             // Add to database
             await FeaturedChannel.create({
                 guildId: interaction.guildId,
@@ -336,6 +339,9 @@ module.exports = {
 
             // Ensure that Thread isn't already being featured
             if ( fetchedFeaturedThreads.find(tempDoc => tempDoc.threadId === InputThread.id) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_THREAD_ALREADY_FEATURED') }); return; }
+
+            // Check against Block List
+            if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputThread.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_CHANNEL_BLOCKED') }); return; }
 
             // Add to database
             await FeaturedThread.create({
