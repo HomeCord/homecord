@@ -1,3 +1,5 @@
+const { ApplicationCommand, Collection } = require("discord.js");
+const { DiscordClient } = require("../constants");
 
 
 module.exports = {
@@ -104,5 +106,37 @@ module.exports = {
         }
 
         return calculatedDuration;
+    },
+    
+
+
+
+    /**
+     * Fetches the Command Mention (in "</name:id>" format) for the given Command Name
+     * 
+     * @param {String} commandName 
+     * @param {?String} guildId Only include if wanted Command is a guild-specific Command, not global Command
+     * 
+     * @returns {?String} String Command Mention, or NULL if not found
+     */
+    async fetchCommandMention(commandName, guildId)
+    {
+        // If subcommand and/or subcommand group was given, slice them out for ease in finding Commands
+        let rootCommandName = "";
+        if ( commandName.includes(" ") ) { rootCommandName = commandName.split(" ")[0]; }
+        else { rootCommandName = commandName; }
+
+        // Fetch Commands based off scope
+        /** @type {Collection<String, ApplicationCommand>} */
+        let fetchedCommands;
+
+        if ( guildId == null ) { fetchedCommands = await DiscordClient.application.commands.fetch(); }
+        else { fetchedCommands = await DiscordClient.application.commands.fetch({ guildId: guildId }); }
+
+        // Find Command with name
+        let filteredCommand = fetchedCommands.find(command => command.name === rootCommandName);
+        
+        if ( !filteredCommand ) { return null; }
+        else { return `</${commandName}:${filteredCommand.id}>`; }
     }
 }
