@@ -190,13 +190,11 @@ async function viewSettings(interaction)
 
     // Fetch Settings (and Settings Command for mentionable)
     let serverConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
-    let homeCordCommands = await DiscordClient.application.commands.fetch();
-    let settingCommand = homeCordCommands.find(command => command.name === "settings");
 
     // Put into Embed
     let settingsEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_TITLE', interaction.guild.name))
-    .setDescription(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_DESCRIPTION', settingCommand != undefined ? `</settings:${settingCommand.id}>` : '`/settings`'))
+    .setDescription(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_DESCRIPTION', `</settings:${interaction.commandId}>`))
     .addFields(
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_HOME_CHANNEL'), value: `<#${serverConfig.homeChannelId}>` },
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: localize(interaction.locale, serverConfig.activityThreshold === "VERY_LOW" ? 'VERY_LOW' : serverConfig.activityThreshold === "LOW" ? 'LOW' : serverConfig.activityThreshold === "MEDIUM" ? 'MEDIUM' : serverConfig.activityThreshold === "HIGH" ? 'HIGH' : 'VERY_HIGH') },
@@ -229,9 +227,6 @@ async function editSettings(interaction)
 {
     await interaction.deferReply({ ephemeral: true });
 
-    let homeCordCommands = await DiscordClient.application.commands.fetch();
-    let settingCommand = homeCordCommands.find(command => command.name === "settings");
-
     // Fetch all the options
     let activityOption = interaction.options.getString("activity_threshold");
     let messagesOption = interaction.options.getBoolean("highlight_messages");
@@ -246,7 +241,7 @@ async function editSettings(interaction)
     // Create Embed
     let updateEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_TITLE', interaction.guild.name))
-    .setDescription(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_DESCRIPTION', settingCommand != undefined ? `</settings:${settingCommand.id}>` : '`/settings`'));
+    .setDescription(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_DESCRIPTION', `</settings:${interaction.commandId}>`));
 
 
     // Now go through them, changing their values & adding to Embed

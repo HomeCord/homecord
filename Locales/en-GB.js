@@ -276,6 +276,16 @@ module.exports = {
 
 
 
+    // ******* PREFERENCES COMMAND
+    PREFERENCES_VIEW_EMBED_TITLE: `Your Preferences for HomeCord`,
+    PREFERENCES_VIEW_EMBED_DESCRIPTION: `- *To edit these preferences, use the {{0}} Command & include any of the provide options*`,
+    PREFERENCES_VIEW_EMBED_HIGHLIGHTABLE: `Messages can be featured in Home Channels?`,
+
+    PREFERENCES_EDIT_EMBED_TITLE: `Updated Preferences`,
+    PREFERENCES_EDIT_EMBED_TITLE: `- *To view your current preferences without changing them, use the {{0}} Command without including any of the provided options.*`,
+
+
+
     // ******* FEATURE COMMAND - AUTOCOMPLETE OPTION(S)
     FEATURE_COMMAND_AUTOCOMPLETE_NO_EVENTS_FOUND: `No Scheduled Events found`,
 
