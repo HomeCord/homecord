@@ -282,7 +282,7 @@ module.exports = {
     PREFERENCES_VIEW_EMBED_HIGHLIGHTABLE: `Messages can be featured in Home Channels?`,
 
     PREFERENCES_EDIT_EMBED_TITLE: `Updated Preferences`,
-    PREFERENCES_EDIT_EMBED_TITLE: `- *To view your current preferences without changing them, use the {{0}} Command without including any of the provided options.*`,
+    PREFERENCES_EDIT_EMBED_DESCRIPTION: `- *To view your current preferences without changing them, use the {{0}} Command without including any of the provided options.*`,
 
 
 

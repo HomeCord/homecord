@@ -155,5 +155,32 @@ async function viewPreferences(interaction)
  */
 async function editPreferences(interaction)
 {
-    //.
+    // Fetch all options
+    let featureableOption = interaction.options.getBoolean("featureable");
+
+    // Fetch current User preferences
+    let userPreferences = await UserConfig.findOne({ userId: interaction.user.id });
+    // If does not exist, create it
+    if ( userPreferences == null ) { userPreferences = await UserConfig.create({ userId: interaction.user.id }); }
+
+    // Create Embed
+    const UpdateEmbed = new EmbedBuilder().setColor('Grey')
+    .setTitle(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_TITLE'))
+    .setDescription(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_DESCRIPTION', `</preferences:${interaction.commandId}>`));
+
+    
+    // Now go through the options, changing their values & adding them to Embed
+    if ( featureableOption != null )
+    {
+        userPreferences.isHighlightable = featureableOption;
+        UpdateEmbed.addFields({ name: localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_HIGHLIGHTABLE'), value: localize(interaction.locale, featureableOption ? 'TRUE' : 'FALSE') });
+    }
+
+
+    // Save to DB
+    await userPreferences.save();
+
+    // ACK
+    await interaction.editReply({ embeds: [UpdateEmbed] });
+    return;
 }
