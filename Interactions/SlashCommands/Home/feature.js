@@ -288,6 +288,7 @@ module.exports = {
 
             // Check against Block List
             if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputChannel.id }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_BLOCKED') }); return; }
+            if ( InputChannel.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputChannel.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CATEGORY_BLOCKED') }); return; }
 
             // Add to database
             await FeaturedChannel.create({
@@ -342,6 +343,7 @@ module.exports = {
 
             // Check against Block List
             if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputThread.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_CHANNEL_BLOCKED') }); return; }
+            if ( InputThread.parent?.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputThread.parent.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_CATEGORY_BLOCKED') }); return; }
 
             // Add to database
             await FeaturedThread.create({

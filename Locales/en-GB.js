@@ -308,7 +308,8 @@ module.exports = {
     FEATURE_COMMAND_CHANNEL_ERROR_MAX_FEATURED_CHANNELS: "Sorry, you cannot have more than 6 Channels featured to your Home Channel.",
     FEATURE_COMMAND_CHANNEL_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Channel in this Server.\nPlease try again, ensuring you select an existing Channel in this Server that HomeCord has \"View Permissions\" access to.",
     FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED: "That Channel is already featured on your Home Channel!",
-    FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_BLOCKED: `Sorry, this Channel cannot be featured as you have added it to your Block List.`,
+    FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_BLOCKED: `Sorry, this Channel cannot be featured as it has been added to this Server's Block List.`,
+    FEATURE_COMMAND_CHANNEL_ERROR_CATEGORY_BLOCKED: `Sorry, this Channel cannot be featured as it's parent Category has been added to this Server's Block List.`,
     FEATURE_COMMAND_CHANNEL_ERROR_GENERIC: "Sorry, an error occurred while trying to feature {{0}} to your Home Channel.",
 
 
@@ -319,6 +320,7 @@ module.exports = {
     FEATURE_COMMAND_THREAD_ERROR_MAX_FEATURED_THREADS: "Sorry, you cannot have more than 5 Threads/Posts highlighted or featured on your Home Channel.",
     FEATURE_COMMAND_THREAD_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Thread/Post in this Server.\nPlease try again, ensuring you select an existing Thread/Post in this Server.",
     FEATURE_COMMAND_THREAD_ERROR_THREAD_ALREADY_FEATURED: "That Thread/Post is already being featured on your Home Channel!",
-    FEATURE_COMMAND_THREAD_ERROR_CHANNEL_BLOCKED: `Sorry, this Thread/Post cannot be featured as you have added its parent Channel to your Block List.`,
+    FEATURE_COMMAND_THREAD_ERROR_CHANNEL_BLOCKED: `Sorry, this Thread/Post cannot be featured as its parent Channel has been added to this Server's Block List.`,
+    FEATURE_COMMAND_THREAD_ERROR_CATEGORY_BLOCKED: `Sorry, this Thread/Post cannot be featured as its parent Category has been added to this Server's Block List.`,
     FEATURE_COMMAND_THREAD_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Thread/Post to your Home Channel.",
 };
