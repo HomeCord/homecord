@@ -127,7 +127,16 @@ module.exports = {
      */
     async execute(interaction)
     {
-        //.
+        await interaction.deferReply({ ephemeral: true });
+
+        // Fetch Subcommand used
+        const InputSubcommand = interaction.options.getSubcommand(true);
+
+        if ( InputSubcommand === "list" ) { await viewBlockList(interaction); }
+        else if ( InputSubcommand === "channel" ) { await addToChannelBlockList(interaction); }
+        else if ( InputSubcommand === "role" ) { await addToRoleBlockList(interaction); }
+
+        return;
     },
 
 
@@ -140,4 +149,49 @@ module.exports = {
     {
         //.
     }
+}
+
+
+
+
+
+
+/**
+ * Shows the User the Server's current Block List
+ * 
+ * @param {ChatInputCommandInteraction} interaction 
+ */
+async function viewBlockList(interaction)
+{
+    //.
+}
+
+
+
+
+
+
+/**
+ * Adds the specified Channel (or Category) to the Server's Block List
+ * 
+ * @param {ChatInputCommandInteraction} interaction 
+ */
+async function addToChannelBlockList(interaction)
+{
+    //.
+}
+
+
+
+
+
+
+/**
+ * Adds the specified Role to the Server's Block List
+ * 
+ * @param {ChatInputCommandInteraction} interaction 
+ */
+async function addToRoleBlockList(interaction)
+{
+    //.
 }
