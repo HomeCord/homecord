@@ -286,41 +286,72 @@ module.exports = {
 
 
 
-    // ******* FEATURE COMMAND - AUTOCOMPLETE OPTION(S)
+    // ******* FEATURE COMMAND - GENERAL
     FEATURE_COMMAND_AUTOCOMPLETE_NO_EVENTS_FOUND: `No Scheduled Events found`,
+    FEATURE_COMMAND_HOME_NOT_SETUP: `This Server doesn't have a Home Channel setup. Please use the {{0}} Command to setup Home Channel for this Server.`,
 
 
 
     // ******* FEATURE COMMAND - SCHEDULED EVENTS
-    FEATURE_COMMAND_EVENT_SUCCESS: "Successfully featured that Event on your Home Channel!",
+    FEATURE_COMMAND_EVENT_SUCCESS: "Successfully featured that Event on this Server's Home Channel!",
     
     FEATURE_COMMAND_EVENT_ERROR_NO_EVENTS_FOUND: "Either HomeCord isn't able to see any of your Scheduled Events, or you don't have any in this Server to be featured on your Home Channel!",
-    FEATURE_COMMAND_EVENT_ERROR_MAX_FEATURED_EVENTS: "Sorry, you cannot have more than 5 Events highlighted or featured on your Home Channel.",
+    FEATURE_COMMAND_EVENT_ERROR_MAX_FEATURED_EVENTS: "Sorry, you cannot have more than 5 Events highlighted or featured on this Server's Home Channel.",
     FEATURE_COMMAND_EVENT_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Event in this Server.\nPlease try again, ensuring you select an existing Event in this Server.",
-    FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED: "That Event is already being featured on your Home Channel!",
-    FEATURE_COMMAND_EVENT_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Event to your Home Channel.",
+    FEATURE_COMMAND_EVENT_ERROR_EVENT_ALREADY_FEATURED: "That Event is already being featured on this Server's Home Channel!",
+    FEATURE_COMMAND_EVENT_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Event to this Server's Home Channel.",
 
 
 
     // ******* FEATURE COMMAND - CHANNELS   
-    FEATURE_COMMAND_CHANNEL_SUCCESS: "Successfully featured {{0}} to your Home Channel!",
+    FEATURE_COMMAND_CHANNEL_SUCCESS: "Successfully featured {{0}} on this Server's Home Channel!",
     
-    FEATURE_COMMAND_CHANNEL_ERROR_MAX_FEATURED_CHANNELS: "Sorry, you cannot have more than 6 Channels featured to your Home Channel.",
+    FEATURE_COMMAND_CHANNEL_ERROR_MAX_FEATURED_CHANNELS: "Sorry, you cannot have more than 6 Channels featured to this Server's Home Channel.",
     FEATURE_COMMAND_CHANNEL_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Channel in this Server.\nPlease try again, ensuring you select an existing Channel in this Server that HomeCord has \"View Permissions\" access to.",
-    FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED: "That Channel is already featured on your Home Channel!",
+    FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED: "That Channel is already featured on this Server's Home Channel!",
     FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_BLOCKED: `Sorry, this Channel cannot be featured as it has been added to this Server's Block List.`,
     FEATURE_COMMAND_CHANNEL_ERROR_CATEGORY_BLOCKED: `Sorry, this Channel cannot be featured as it's parent Category has been added to this Server's Block List.`,
-    FEATURE_COMMAND_CHANNEL_ERROR_GENERIC: "Sorry, an error occurred while trying to feature {{0}} to your Home Channel.",
+    FEATURE_COMMAND_CHANNEL_ERROR_GENERIC: "Sorry, an error occurred while trying to feature {{0}} to this Server's Home Channel.",
 
 
 
     // ******* FEATURE COMMAND - THREADS
-    FEATURE_COMMAND_THREAD_SUCCESS: "Successfully featured that Thread/Post on your Home Channel!",
+    FEATURE_COMMAND_THREAD_SUCCESS: "Successfully featured that Thread/Post on this Server's Home Channel!",
     
-    FEATURE_COMMAND_THREAD_ERROR_MAX_FEATURED_THREADS: "Sorry, you cannot have more than 5 Threads/Posts highlighted or featured on your Home Channel.",
+    FEATURE_COMMAND_THREAD_ERROR_MAX_FEATURED_THREADS: "Sorry, you cannot have more than 5 Threads/Posts highlighted or featured on this Server's Home Channel.",
     FEATURE_COMMAND_THREAD_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Thread/Post in this Server.\nPlease try again, ensuring you select an existing Thread/Post in this Server.",
-    FEATURE_COMMAND_THREAD_ERROR_THREAD_ALREADY_FEATURED: "That Thread/Post is already being featured on your Home Channel!",
+    FEATURE_COMMAND_THREAD_ERROR_THREAD_ALREADY_FEATURED: "That Thread/Post is already being featured on this Server's Home Channel!",
     FEATURE_COMMAND_THREAD_ERROR_CHANNEL_BLOCKED: `Sorry, this Thread/Post cannot be featured as its parent Channel has been added to this Server's Block List.`,
     FEATURE_COMMAND_THREAD_ERROR_CATEGORY_BLOCKED: `Sorry, this Thread/Post cannot be featured as its parent Category has been added to this Server's Block List.`,
-    FEATURE_COMMAND_THREAD_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Thread/Post to your Home Channel.",
+    FEATURE_COMMAND_THREAD_ERROR_GENERIC: "Sorry, an error occurred while trying to feature that Thread/Post to this Server's Home Channel.",
+
+
+
+    // ******* UNFEATURE COMMAND - EVENTS
+    UNFEATURE_COMMAND_EVENT_SUCCESS: `Successfully removed that Event from this Server's Home Channel.`,
+
+    UNFEATURE_COMMAND_EVENT_ERROR_NO_FEATURED_EVENTS: `There are no Scheduled Events featured on this Server's Home Channel!`,
+    UNFEATURE_COMMAND_EVENT_ERROR_NO_EVENTS_FOUND: `Either HomeCord isn't able to see any of your Scheduled Events, or you don't have any in this Server!`,
+    UNFEATURE_COMMAND_EVENT_ERROR_EVENT_NOT_FEATURED: `That Event isn't currently being featured on this Server's Home Channel.`,
+    UNFEATURE_COMMAND_EVENT_ERROR_GENERIC: `Sorry, an error occurred while trying to remove that Event from this Server's Home Channel.`,
+
+
+
+    // ******* UNFEATURE COMMAND - CHANNELS   
+    UNFEATURE_COMMAND_CHANNEL_SUCCESS: "Successfully removed {{0}} from this Server's Home Channel.",
+    
+    UNFEATURE_COMMAND_CHANNEL_ERROR_NO_FEATURED_CHANNELS: "There are no Channels featured on this Server's Home Channel!",
+    UNFEATURE_COMMAND_CHANNEL_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Channel in this Server.\nPlease try again, ensuring you select an existing Channel in this Server that HomeCord has \"View Permissions\" access to, and is being featured to this Server's Home Channel.",
+    UNFEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_NOT_FEATURED: "That Channel isn't currently being featured on this Server's Home Channel.",
+    UNFEATURE_COMMAND_CHANNEL_ERROR_GENERIC: "Sorry, an error occurred while trying to remove {{0}} from this Server's Home Channel.",
+
+
+
+    // ******* UNFEATURE COMMAND - THREADS
+    UNFEATURE_COMMAND_THREAD_SUCCESS: "Successfully removed that Thread/Post from this Server's Home Channel.",
+    
+    UNFEATURE_COMMAND_THREAD_ERROR_NO_FEATURED_THREADS: "There are no Threads/Posts featured on this Server's Home Channel!",
+    UNFEATURE_COMMAND_THREAD_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Thread/Post in this Server.\nPlease try again, ensuring you select an existing Thread/Post in this Server, and it's being featured on this Server's Home Channel.",
+    UNFEATURE_COMMAND_THREAD_ERROR_THREAD_NOT_FEATURED: "That Thread/Post isn't currently being featured on this Server's Home Channel.",
+    UNFEATURE_COMMAND_THREAD_ERROR_GENERIC: "Sorry, an error occurred while trying to remove that Thread/Post from this Server's Home Channel.",
 };
