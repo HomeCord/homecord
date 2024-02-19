@@ -188,8 +188,7 @@ module.exports = {
                 eventId: InputEvent
             })
             .then(async (oldDocument) => {
-                await oldDocument.save()
-                .then(async () => {
+                try {
 
                     // Call method to update Home Channel to reflect removed featured Event
                     let refreshState = await refreshEventsThreads(interaction.guildId, interaction.guildLocale);
@@ -200,12 +199,12 @@ module.exports = {
 
                     return;
 
-                })
-                .catch(async err => {
+                }
+                catch (err) {
                     await LogError(err);
                     await interaction.editReply({ content: localize(interaction.locale, 'UNFEATURE_COMMAND_EVENT_ERROR_GENERIC') });
                     return;
-                })
+                }
             })
             .catch(async err => {
                 await LogError(err);

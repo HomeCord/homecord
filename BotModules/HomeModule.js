@@ -155,7 +155,7 @@ module.exports = {
             });
 
             // Set into Home Channel
-            await fetchedHomeWebhook.editMessage(eventThreadsMessageId, { content: `${localize(locale, 'HOME_SCHEDULED_EVENTS_HEADER')}\n\n${readableEvents.join(`\n`)}\n\n${readableThreads.join(`\n`)}` });
+            await fetchedHomeWebhook.editMessage(eventThreadsMessageId, { content: `${localize(locale, 'HOME_SCHEDULED_EVENTS_HEADER')}\n\n${readableEvents.join(`\n`)}\n\n${localize(locale, 'HOME_ACTIVE_THREADS_HEADER')}\n\n${readableThreads.join(`\n`)}` });
             return true;
         }
     },
