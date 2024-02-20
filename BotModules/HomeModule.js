@@ -1,4 +1,4 @@
-const { GuildConfig, FeaturedEvent, FeaturedThread, TimerModel, FeaturedChannel } = require("../Mongoose/Models");
+const { GuildConfig, FeaturedEvent, FeaturedThread, TimerModel, FeaturedChannel, FeaturedMessage } = require("../Mongoose/Models");
 const { Locale } = require("discord.js");
 const { DiscordClient } = require("../constants");
 const { localize } = require("./LocalizationModule");
@@ -158,6 +158,96 @@ module.exports = {
             await fetchedHomeWebhook.editMessage(eventThreadsMessageId, { content: `${localize(locale, 'HOME_SCHEDULED_EVENTS_HEADER')}\n\n${readableEvents.join(`\n`)}\n\n${localize(locale, 'HOME_ACTIVE_THREADS_HEADER')}\n\n${readableThreads.join(`\n`)}` });
             return true;
         }
+    },
+    
+
+
+
+
+    /**
+     * Refreshes the Stages, Voice, and Messages section of the Server's Home Channel
+     * 
+     * @param {String} guildId 
+     * @param {Locale} locale Guild's Locale!
+     * 
+     * @returns {Promise<Boolean|String>} True for successful refresh, or a String Key Reason for why refreshing failed
+     */
+    async refreshMessagesAudio(guildId, locale)
+    {
+        // Fetch Database entries and ensure they exist (just in case!)
+        const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
+        const FeaturedMessages = await FeaturedMessage.find({ guildId: guildId });
+
+        if ( ConfigEntry == null ) { return "CONFIG_NOT_FOUND"; }
+
+        // Fetch Webhook and make specific Message ID into its own variable for ease
+        let audioMessageId = ConfigEntry.audioMessageId;
+        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId);
+        let fetchedGuild = await DiscordClient.guilds.fetch(guildId);
+
+        // Just to make sure Discord Outages don't break things
+        if ( !fetchedGuild.available ) { return "GUILD_OUTAGE"; }
+
+        // Now fetch any live Stage instances, and active Voice Channels
+        //   TO BE ADDED AT A LATER DATE - WHEN I CAN FIGURE OUT A DECENT WAY TO FETCH ALL LIVE STAGE INSTANCES AND ALL ACTIVE VOICE CHANNELS
+        //   ...WITHOUT HAVING TO DO TOO MUCH .filter() OR WHATEVER AHHHHHHH
+
+
+        // If no Messages featured, remove header. Otherwise, add Header
+        if ( FeaturedMessages.length === 0 )
+        {
+            await fetchedHomeWebhook.editMessage(audioMessageId, { content: `\u200B` });
+            return true;
+        }
+
+
+        if ( FeaturedMessages.length > 0 )
+        {
+            await fetchedHomeWebhook.editMessage(audioMessageId, { content: `${localize(locale, 'HOME_FEATURED_MESSAGES_HEADER')}` });
+            return true;
+        }
+    },
+    
+
+
+
+
+    /**
+     * Removes a featured or highlighted Message from Home Channel after its duration is up
+     * 
+     * @param {String} guildId 
+     * @param {String} messageId 
+     * @param {Locale} locale Guild's Locale
+     */
+    async expireMessage(guildId, messageId, locale)
+    {
+        // WHY DOES USING "this." NOT WORK ITS LITERALLY ABOVE YOU IN THE SAME MODULE EXPORTS
+        // WHY DO I HAVE TO IMPORT INTO ITSELF
+        const { refreshMessagesAudio } = require("./HomeModule.js");
+
+        // Edge-case: Ensure message hasn't already been removed
+        let homeConfig = await GuildConfig.findOne({ guildId: guildId });
+        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(homeConfig.homeWebhookId);
+        let messageEntry = await FeaturedMessage.findOne({ guildId: guildId, originalMessageId: messageId });
+
+        if ( messageEntry == null ) { return; }
+
+        // Edge-case: Ensure Config exists
+        if ( homeConfig == null ) { return; }
+
+        // Remove Message from Home Channel
+        await fetchedHomeWebhook.deleteMessage(messageEntry.featuredMessageId);
+
+        // Remove Message from DB
+        await messageEntry.deleteOne();
+
+        // Just in case, remove Message from Timer Table
+        await TimerModel.deleteOne({ messageId: messageId });
+        
+        // Refresh Home Channel to reflect changes
+        await refreshMessagesAudio(guildId, locale);
+
+        return;
     },
 
 

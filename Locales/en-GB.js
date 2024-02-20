@@ -7,7 +7,7 @@ module.exports = {
 
     // ******* FOR HOMECORD DESCRIPTIONS, ETC
     HOMECORD_DESCRIPTION_SHORT: `HomeCord shows your Server's current activity in a custom-made Home Channel! You can also feature Channels, Events, Messages, and more with HomeCord.`,
-    HOMECORD_DESCRIPTION_LONG: `HomeCord allows you to feature activity from your Server in a custom-made Home Channel! Supports featuring or highlighting Channels, Events, Messages, Threads, Forum/Media Posts, Voice, and Stages. Use {{0}} for more information, or {{1}} to begin setting up HomeCord in your Server!`,
+    HOMECORD_DESCRIPTION_LONG: `HomeCord allows you to feature activity from your Server in a custom-made Home Channel! Supports featuring or highlighting Channels, Events, Messages, Threads, and Forum/Media Posts. Use {{0}} for more information, or {{1}} to begin setting up HomeCord in your Server!`,
 
 
 
@@ -93,7 +93,13 @@ module.exports = {
     HIGH: `High`,
     VERY_HIGH: `Very High`,
 
+    TWELVE_HOURS: `12 Hours`,
+    ONE_DAY: `1 Day`,
+    THREE_DAYS: `3 Days`,
+    SEVEN_DAYS: `7 Days`,
+
     PLEASE_SELECT_AN_OPTION: `Please select an option`,
+    PLEASE_SELECT_A_DURATION: `Please select a duration`,
 
 
 
@@ -354,4 +360,24 @@ module.exports = {
     UNFEATURE_COMMAND_THREAD_ERROR_INVALID_INPUT: "Sorry, that doesn't seem to be a valid Thread/Post in this Server.\nPlease try again, ensuring you select an existing Thread/Post in this Server, and it's being featured on this Server's Home Channel.",
     UNFEATURE_COMMAND_THREAD_ERROR_THREAD_NOT_FEATURED: "That Thread/Post isn't currently being featured on this Server's Home Channel.",
     UNFEATURE_COMMAND_THREAD_ERROR_GENERIC: "Sorry, an error occurred while trying to remove that Thread/Post from this Server's Home Channel.",
+
+
+
+    // ******* FEATURE MESSAGE COMMAND
+    FEATURE_MESSAGE_COMMAND_SELECT_DURATION: `How long would you like to feature [that Message](<{{0}}>) for?`,
+    FEATURE_MESSAGE_COMMAND_PROCESSING: `\`\`\`Featuring that Message to this Server's Home Channel, please wait...\`\`\``,
+    FEATURE_MESSAGE_COMMAND_SUCCESS: `Successfully featured [that Message](<{{0}}>) to this Server's Home Channel.`,
+
+    FEATURE_MESSAGE_COMMAND_ERROR_HOME_NOT_SETUP: `Whoops! You cannot feature Messages when this Server has not got a Home Channel setup yet!`,
+    FEATURE_MESSAGE_COMMAND_ERROR_MAX_MESSAGES_FEATURED: `Sorry, Servers cannot have more than 10 Messages featured or highlighted in their Home Channel.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_ALREADY_FEATURED: `[That Message](<{{0}}>) is already being featured on this Server's Home Channel!`,
+    FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_LONG: `Sorry, you cannot feature Messages that have more than 1800 characters in its content.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_BOT_MESSAGE: `Sorry, you cannot feature Messages sent by Bots on this Server's Home Channel.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_SYSTEM_MESSAGE: `Sorry, you cannot feature Discord System Messages on this Server's Home Channel.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_VOICE_MESSAGE: `Sorry, HomeCord does not support featuring Voice Messages to Home Channels.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_AUTHOR_PREFERENCES_DISABLED: `Sorry, the User who sent [that Message](<{{0}}>) has disallowed HomeCord from featuring or highlighting their Messages to Servers' Home Channels.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_CHANNEL_BLOCKED: `Sorry, you cannot feature Messages sent in blocked Channels.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_CATEGORY_BLOCKED: `Sorry, you cannot feature Messages sent within blocked Categories.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_AUTHOR_ROLE_BLOCKED: `Sorry, the User who sent [that Message](<{{0}}>) has a Role which has been blocked from being featured in this Server's Home Channel.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to feature [that Message](<{{0}}>) to this Server's Home Channel.`,
 };

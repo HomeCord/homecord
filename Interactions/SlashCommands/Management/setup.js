@@ -90,8 +90,8 @@ module.exports = {
             { name: localize(interaction.locale, 'SETUP_EMBED_ACTIVITY_THRESHOLD'), value: localize(interaction.locale, 'MEDIUM') },
             { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_MESSAGES'), value: localize(interaction.locale, 'TRUE') },
             { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_SCHEDULED_EVENTS'), value: localize(interaction.locale, 'TRUE') },
-            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_VOICE_ACTIVITY'), value: localize(interaction.locale, 'TRUE') },
-            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_LIVE_STAGES'), value: localize(interaction.locale, 'TRUE') },
+            //{ name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_VOICE_ACTIVITY'), value: localize(interaction.locale, 'TRUE') },
+            //{ name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_LIVE_STAGES'), value: localize(interaction.locale, 'TRUE') },
             { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_ACTIVE_THREADS'), value: localize(interaction.locale, 'TRUE') },
         )
         .setFooter({ text: localize(interaction.locale, 'SETUP_EMBED_FOOTER_STEP_ONE') });
@@ -109,8 +109,8 @@ module.exports = {
                 new StringSelectMenuOptionBuilder().setValue('ACTIVITY_THRESHOLD').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_ACTIVITY')).setDescription(localize(interaction.locale, 'SETUP_SELECT_EDIT_ACTIVITY_THRESHOLD')).setEmoji(`📊`),
                 new StringSelectMenuOptionBuilder().setValue('HIGHLIGHT_MESSAGES').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_MESSAGES')).setDescription(localize(interaction.locale, 'SETUP_SELECT_TOGGLE_MESSAGES')).setEmoji(`<:ChannelText:997752062500671590>`),
                 new StringSelectMenuOptionBuilder().setValue('HIGHLIGHT_EVENTS').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_EVENTS')).setDescription(localize(interaction.locale, 'SETUP_SELECT_TOGGLE_EVENTS')).setEmoji(`<:ScheduledEvent:1009372447503552514>`),
-                new StringSelectMenuOptionBuilder().setValue('HIGHLIGHT_VOICE').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_VOICE')).setDescription(localize(interaction.locale, 'SETUP_SELECT_TOGGLE_VOICE')).setEmoji(`<:ChannelVoice:997752063612162138>`),
-                new StringSelectMenuOptionBuilder().setValue('HIGHLIGHT_STAGES').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_STAGES')).setDescription(localize(interaction.locale, 'SETUP_SELECT_TOGGLE_STAGES')).setEmoji(`<:ChannelStage:997752061330464818>`),
+                //new StringSelectMenuOptionBuilder().setValue('HIGHLIGHT_VOICE').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_VOICE')).setDescription(localize(interaction.locale, 'SETUP_SELECT_TOGGLE_VOICE')).setEmoji(`<:ChannelVoice:997752063612162138>`),
+                //new StringSelectMenuOptionBuilder().setValue('HIGHLIGHT_STAGES').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_STAGES')).setDescription(localize(interaction.locale, 'SETUP_SELECT_TOGGLE_STAGES')).setEmoji(`<:ChannelStage:997752061330464818>`),
                 new StringSelectMenuOptionBuilder().setValue('HIGHLIGHT_THREADS').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_THREADS')).setDescription(localize(interaction.locale, 'SETUP_SELECT_TOGGLE_THREADS')).setEmoji(`<:ChannelForum:1029012363048914967>`),
                 new StringSelectMenuOptionBuilder().setValue('SAVE_AND_CREATE').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_SAVE_AND_CREATE')).setDescription(localize(interaction.locale, 'SETUP_SELECT_SAVE')).setEmoji(`✅`),
                 new StringSelectMenuOptionBuilder().setValue('CANCEL').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_CANCEL')).setDescription(localize(interaction.locale, 'SETUP_SELECT_CANCEL')).setEmoji(`❌`),

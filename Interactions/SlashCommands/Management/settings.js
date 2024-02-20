@@ -98,7 +98,7 @@ module.exports = {
                 type: ApplicationCommandOptionType.Boolean,
                 required: false
             },
-            {
+            /* {
                 name: `highlight_voice`,
                 description: `Set if active Voice Channels can be highlighted or not`,
                 descriptionLocalizations: {
@@ -117,7 +117,7 @@ module.exports = {
                 },
                 type: ApplicationCommandOptionType.Boolean,
                 required: false
-            },
+            }, */
             {
                 name: `highlight_threads`,
                 description: `Set if Threads and Forum Posts can be highlighted or not`,
@@ -200,8 +200,8 @@ async function viewSettings(interaction)
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: localize(interaction.locale, serverConfig.activityThreshold === "VERY_LOW" ? 'VERY_LOW' : serverConfig.activityThreshold === "LOW" ? 'LOW' : serverConfig.activityThreshold === "MEDIUM" ? 'MEDIUM' : serverConfig.activityThreshold === "HIGH" ? 'HIGH' : 'VERY_HIGH') },
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES'), value: localize(interaction.locale, serverConfig.highlightMessages ? 'TRUE' : 'FALSE') },
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS'), value: localize(interaction.locale, serverConfig.highlightEvents ? 'TRUE' : 'FALSE') },
-        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_VOICE'), value: localize(interaction.locale, serverConfig.highlightVoice ? 'TRUE' : 'FALSE') },
-        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAGES'), value: localize(interaction.locale, serverConfig.highlightStages ? 'TRUE' : 'FALSE') },
+        //{ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_VOICE'), value: localize(interaction.locale, serverConfig.highlightVoice ? 'TRUE' : 'FALSE') },
+        //{ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAGES'), value: localize(interaction.locale, serverConfig.highlightStages ? 'TRUE' : 'FALSE') },
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS'), value: localize(interaction.locale, serverConfig.highlightThreads ? 'TRUE' : 'FALSE') }
     );
 
@@ -231,8 +231,8 @@ async function editSettings(interaction)
     let activityOption = interaction.options.getString("activity_threshold");
     let messagesOption = interaction.options.getBoolean("highlight_messages");
     let eventsOption = interaction.options.getBoolean("highlight_events");
-    let voiceOption = interaction.options.getBoolean("highlight_voice");
-    let stageOption = interaction.options.getBoolean("highlight_stages");
+    //let voiceOption = interaction.options.getBoolean("highlight_voice");
+    //let stageOption = interaction.options.getBoolean("highlight_stages");
     let threadsOption = interaction.options.getBoolean("highlight_threads");
 
     // Fetch current config
@@ -265,7 +265,7 @@ async function editSettings(interaction)
         updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS'), value: localize(interaction.locale, eventsOption ? 'TRUE' : 'FALSE') });
     }
 
-    if ( voiceOption != null )
+    /* if ( voiceOption != null )
     {
         serverConfig.highlightVoice = voiceOption;
         updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_VOICE'), value: localize(interaction.locale, voiceOption ? 'TRUE' : 'FALSE') });
@@ -275,7 +275,7 @@ async function editSettings(interaction)
     {
         serverConfig.highlightStages = stageOption;
         updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAGES'), value: localize(interaction.locale, stageOption ? 'TRUE' : 'FALSE') });
-    }
+    } */
 
     if ( threadsOption != null )
     {
