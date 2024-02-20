@@ -76,7 +76,7 @@ module.exports = {
                     else { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_GENERIC', OriginalMessage.url) }); }
 
                     // Timeout for auto-removing the Message
-                    setTimeout(async () => { await expireMessage(interaction.guildId, OriginalMessageId, interaction.guildLocale) }, 10000 /* calculateTimeoutDuration(InputDuration) */);
+                    setTimeout(async () => { await expireMessage(interaction.guildId, OriginalMessageId, interaction.guildLocale) }, calculateTimeoutDuration(InputDuration));
                     return;
                     
                 })
