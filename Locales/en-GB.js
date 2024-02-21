@@ -188,25 +188,25 @@ module.exports = {
 
     // ******* SETUP - SET ACTIVITY THRESHOLD
     SETUP_SET_ACTIVITY_EMBED_TITLE: `Set Activity Threshold`,
-    SETUP_SET_ACTIVITY_EMBED_DESCRIPTION: `Please select which Activity Threshold you would like for your Home Channel.\n\nThe Activity Threshold is the minimum amount of activity any Message, Event, Voice Channel, Forum Post, or Thread should reach before it can be highlighted (if enabled) in your Home Channel.\n\n- For smaller or less active Servers, "Very Low" or "Low" may be best for you.\n- For large public Servers, it may be best to select "Medium" or "High", depending on how much daily activity you see.`,
+    SETUP_SET_ACTIVITY_EMBED_DESCRIPTION: `Please select which Activity Threshold you would like for your Home Channel.\n\nThe Activity Threshold is the minimum amount of activity any Message, Event, Forum Post, or Thread should reach before it can be highlighted (if enabled) in your Home Channel.\n\n- For smaller or less active Servers, "Very Low" or "Low" may be best for you.\n- For large public Servers, it may be best to select "Medium" or "High", depending on how much daily activity you see.`,
 
 
 
     // ******* SETUP - TOGGLE HIGHLIGHTING STUFF
     SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Messages`,
-    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Messages being automatically highlighted on your Home Channel.\n\nPlease note: Disabling Message Highlights will **not** prevent you from manually featuring Messages onto your Home Channel.`,
+    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Messages being automatically highlighted on your Home Channel.\nIf enabled, Messages will be highlighted based off the number of Emoji Reactions and/or direct Replies they receive.\n\nPlease note: Disabling Message Highlights will **not** prevent you from manually featuring Messages onto your Home Channel.`,
 
     SETUP_TOGGLE_EVENT_HIGHLIGHTS_TITLE: `Toggle Highlighting Events`,
-    SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Scheduled Events being automatically highlighted on your Home Channel.\n\nPlease note: Disabling Event Highlights will **not** prevent you from manually featuring Scheduled Events onto your Home Channel.`,
+    SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Scheduled Events being automatically highlighted on your Home Channel.\nIf enabled, Events will be highlighted based off the number of Members registering their interest for the Event.\n\nPlease note: Disabling Event Highlights will **not** prevent you from manually featuring Scheduled Events onto your Home Channel.`,
 
     SETUP_TOGGLE_VOICE_HIGHLIGHTS_TITLE: `Toggle Highlighting Voice`,
-    SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Voice Channels being automatically highlighted on your Home Channel.`,
+    SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Voice Channels being automatically highlighted on your Home Channel.\nIf enabled, Voice Channels will be highlighted based off the number of Members connected to the Voice Channel at that time.`,
 
     SETUP_TOGGLE_STAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Stages`,
     SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable live Stages being automatically highlighted on your Home Channel.`,
 
     SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE: `Toggle Highlighting Threads/Posts`,
-    SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Threads & Forum/Media Posts being automatically highlighted on your Home Channel.\n\nPlease note: Disabling Thread/Post Highlights will **not** prevent you from manually featuring Threads & Forum/Media Posts onto your Home Channel.`,
+    SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Threads & Forum/Media Posts being automatically highlighted on your Home Channel.\nIf enabled, Threads & Posts will be highlighted based off the number of Messages recently sent in them.\n\nPlease note: Disabling Thread/Post Highlights will **not** prevent you from manually featuring Threads & Forum/Media Posts onto your Home Channel.`,
 
 
 
