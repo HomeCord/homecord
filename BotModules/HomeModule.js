@@ -242,7 +242,7 @@ module.exports = {
         await messageEntry.deleteOne();
 
         // Just in case, remove Message from Timer Table
-        await TimerModel.deleteOne({ messageId: messageId });
+        await TimerModel.deleteOne({ originalMessageId: messageId });
         
         // Refresh Home Channel to reflect changes
         await refreshMessagesAudio(guildId, locale);

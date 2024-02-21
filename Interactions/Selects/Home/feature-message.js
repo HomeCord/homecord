@@ -64,7 +64,7 @@ module.exports = {
                 .then(async () => {
 
                     // Store callback to remove featured Message from Home Channel after duration (just in case)
-                    await TimerModel.create({ timerExpires: calculateUnixTimeUntil(InputDuration), callback: expireMessage.toString(), guildId: interaction.guildId, messageId: OriginalMessageId, channelId: interaction.channelId, guildLocale: interaction.guildLocale })
+                    await TimerModel.create({ timerExpires: calculateUnixTimeUntil(InputDuration), callback: expireMessage.toString(), guildId: interaction.guildId, originalMessageId: OriginalMessageId, featuredMessageId: sentMessage.id, channelId: interaction.channelId, guildLocale: interaction.guildLocale })
                     .then(async newDocument => { await newDocument.save(); })
                     .catch(async err => { await LogError(err); });
 

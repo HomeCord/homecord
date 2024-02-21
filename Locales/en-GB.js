@@ -380,4 +380,13 @@ module.exports = {
     FEATURE_MESSAGE_COMMAND_ERROR_CATEGORY_BLOCKED: `Sorry, you cannot feature Messages sent within blocked Categories.`,
     FEATURE_MESSAGE_COMMAND_ERROR_AUTHOR_ROLE_BLOCKED: `Sorry, the User who sent [that Message](<{{0}}>) has a Role which has been blocked from being featured in this Server's Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to feature [that Message](<{{0}}>) to this Server's Home Channel.`,
+
+
+
+    // ******* UNFEATURE MESSAGE COMMAND
+    UNFEATURE_MESSAGE_COMMAND_SUCCESS: `Successfully unfeatured that Message from this Server's Home Channel.`,
+
+    UNFEATURE_MESSAGE_COMMAND_ERROR_HOME_NOT_SETUP: `Whoops! This Command cannot be used as this Server has not got a Home Channel setup with HomeCord!`,
+    UNFEATURE_MESSAGE_COMMAND_ERROR_NOT_A_FEATURED_MESSAGE: `Sorry, that Message is not a featured/highlighted Message in this Server's Home Channel.`,
+    UNFEATURE_MESSAGE_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to remove that featured/highlighted Message from this Server's Home Channel.`,
 };
