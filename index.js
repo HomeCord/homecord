@@ -5,6 +5,7 @@ const path = require("node:path");
 const { DiscordClient, Collections, checkPomelo } = require("./constants.js");
 const Config = require("./config.js");
 const { LogWarn, LogError, LogInfo } = require("./BotModules/LoggingModule.js");
+const { restartTimersOnStartup } = require("./BotModules/TimerModule.js");
 
 
 
@@ -122,8 +123,12 @@ for ( const Folder of ModalFolders )
 
 /******************************************************************************* */
 // DISCORD - READY EVENT
-DiscordClient.once('ready', () => {
+DiscordClient.once('ready', async () => {
     DiscordClient.user.setPresence({ status: 'online' });
+
+    // Restart Timers
+    await restartTimersOnStartup();
+
     console.log(`${checkPomelo(DiscordClient.user) ? `${DiscordClient.user.username}` : `${DiscordClient.user.username}#${DiscordClient.user.discriminator}`} is online and ready!`);
     return;
 });
