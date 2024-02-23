@@ -332,7 +332,7 @@ module.exports = {
 
 
     /**
-     * Resets Home Channel due to deleted Message or Webhook!
+     * Resets Home Channel due to deleted Message!
      * 
      * @param {String} guildId 
      */
@@ -350,7 +350,7 @@ module.exports = {
         if ( !fetchedGuild.available ) { return; }
 
         // Send Message
-        await fetchedHomeWebhook.send({ allowedMentions: { parse: [] }, content: `:warning: **Notice: This Home Channel has been broken due to deletion of either one of its core 3 Messages, or of its Webhook, in this Channel.**\n\nPlease reset this Home Channel by using the \`/setup\` Command. Your Home's Block List will not be affected by this reset.` });
+        await fetchedHomeWebhook.send({ allowedMentions: { parse: [] }, content: `:warning: **Notice: This Home Channel has been broken due to deletion of one of its core 3 Messages in this Channel.**\n\nPlease reset this Home Channel by using the \`/setup\` Command. This Server's Home Block List will not be affected by this reset.` });
 
         
         // Now, purge DB ;-;
