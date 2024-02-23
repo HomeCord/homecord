@@ -2,6 +2,7 @@ const { GuildConfig, FeaturedEvent, FeaturedThread, TimerModel, FeaturedChannel,
 const { Locale } = require("discord.js");
 const { DiscordClient } = require("../constants");
 const { localize } = require("./LocalizationModule");
+const { removeGuild } = require("./DatabaseModule.js");
 
 
 
@@ -322,6 +323,38 @@ module.exports = {
         
         // Refresh Home Channel to reflect changes
         await refreshEventsThreads(guildId, locale);
+
+        return;
+    },
+
+
+
+
+
+    /**
+     * Resets Home Channel due to deleted Message or Webhook!
+     * 
+     * @param {String} guildId 
+     */
+    async resetHome(guildId)
+    {
+        // JUST IN CASE
+        if ( guildId == null ) { return; }
+
+        // First grab webhook so that the notice can be sent!
+        const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
+        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId);
+        let fetchedGuild = await DiscordClient.guilds.fetch(guildId);
+
+        // Just to make sure Discord Outages don't break things further
+        if ( !fetchedGuild.available ) { return; }
+
+        // Send Message
+        await fetchedHomeWebhook.send({ allowedMentions: { parse: [] }, content: `:warning: **Notice: This Home Channel has been broken due to deletion of either one of its core 3 Messages, or of its Webhook, in this Channel.**\n\nPlease reset this Home Channel by using the \`/setup\` Command. Your Home's Block List will not be affected by this reset.` });
+
+        
+        // Now, purge DB ;-;
+        await removeGuild(guildId, true);
 
         return;
     }

@@ -273,16 +273,41 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 
-
+// Needed for the next set of Events
+const { removeGuild, removeMessage } = require("./BotModules/DatabaseModule.js");
+const { GuildConfig } = require("./Mongoose/Models.js");
+const { resetHome } = require("./BotModules/HomeModule.js");
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT
-const { removeGuild } = require("./BotModules/DatabaseModule.js");
 
 DiscordClient.on('guildDelete', async (guild) => {
     
     // Purge all data relating to that Guild
     await removeGuild(guild.id);
+
+    return;
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - MESSAGE DELETE EVENT
+
+DiscordClient.on('messageDelete', async (message) => {
+
+    // Check if Message is needed for core function of Home Channel
+    let isMessageNeeded = await GuildConfig.exists({ $or: [ { headerMessageId: message.id }, { eventThreadsMessageId: message.id }, { audioMessageId: message.id } ] });
+
+    // Deleted Message is needed - reset Home & post message in Home Channel stating so
+    if ( isMessageNeeded != null ) { resetHome(message.guildId); }
+    // Deleted Message is not needed for core function of Home Channel, thus treat it as featured message and delete from DB
+    else { await removeMessage(message.id); }
 
     return;
 });
