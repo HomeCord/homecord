@@ -276,6 +276,25 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 /******************************************************************************* */
+// DISCORD - GUILD DELETE EVENT
+const { removeGuild } = require("./BotModules/DatabaseModule.js");
+
+DiscordClient.on('guildDelete', async (guild) => {
+    
+    // Purge all data relating to that Guild
+    await removeGuild(guild.id);
+
+    return;
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
 
 DiscordClient.login(Config.TOKEN).catch(console.error); // Login to and start the Discord Bot Client
 Mongoose.connect(Config.MongoString).catch(console.error);
