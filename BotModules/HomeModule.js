@@ -357,5 +357,25 @@ module.exports = {
         await removeGuild(guildId, true);
 
         return;
+    },
+    
+
+
+
+
+    /**
+     * Resets Home Channel due to deleted Webhook! (and thus cannot send message)
+     * 
+     * @param {String} guildId 
+     */
+    async resetHomeSliently(guildId)
+    {
+        // JUST IN CASE
+        if ( guildId == null ) { return; }
+        
+        // Now, purge DB ;-;
+        await removeGuild(guildId, true);
+
+        return;
     }
 }

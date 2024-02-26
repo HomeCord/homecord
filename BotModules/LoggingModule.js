@@ -159,6 +159,7 @@ module.exports = {
         {
             // ACK to User
             if ( interaction.deferred ) { await interaction.followUp({ ephemeral: true, content: message }); }
+            else if ( interaction.replied ) { await interaction.followUp({ ephemeral: true, content: message }); }
             else { await interaction.reply({ ephemeral: true, content: message }); }
         }
         // Raw Error was provided
@@ -166,6 +167,7 @@ module.exports = {
         {
             // ACK to User
             if ( interaction.deferred ) { await interaction.followUp({ ephemeral: true, content: localize(interaction.locale, 'ERROR_WITH_PREVIEW', `${error.name}: ${error.message}`) }); }
+            else if ( interaction.replied ) { await interaction.followUp({ ephemeral: true, content: localize(interaction.locale, 'ERROR_WITH_PREVIEW', `${error.name}: ${error.message}`) }); }
             else { await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'ERROR_WITH_PREVIEW', `${error.name}: ${error.message}`) }); }
         }
 

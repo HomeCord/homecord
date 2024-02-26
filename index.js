@@ -301,6 +301,9 @@ DiscordClient.on('guildDelete', async (guild) => {
 
 DiscordClient.on('messageDelete', async (message) => {
 
+    // Ignore any other messages that have NOT been sent under HomeCord's Webhook(s)
+    if ( message.webhookId == null ) { return; }
+
     // Check if Message is needed for core function of Home Channel
     let isMessageNeeded = await GuildConfig.exists({ $or: [ { headerMessageId: message.id }, { eventThreadsMessageId: message.id }, { audioMessageId: message.id } ] });
 
