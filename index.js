@@ -275,8 +275,8 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 // Needed for the next set of Events
 const { removeGuild, removeMessage } = require("./BotModules/DatabaseModule.js");
-const { GuildConfig } = require("./Mongoose/Models.js");
-const { resetHome } = require("./BotModules/HomeModule.js");
+const { GuildConfig, GuildBlocklist, FeaturedChannel } = require("./Mongoose/Models.js");
+const { resetHome, resetHomeSliently } = require("./BotModules/HomeModule.js");
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT
@@ -313,6 +313,35 @@ DiscordClient.on('messageDelete', async (message) => {
     else { await removeMessage(message.id); }
 
     return;
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - CHANNEL DELETE EVENT
+
+DiscordClient.on('channelDelete', async (oldChannel) => {
+    
+    // Ignore DMs
+    if ( oldChannel instanceof DMChannel ) { return; }
+
+
+    // Check against Block List
+    if ( await GuildBlocklist.exists({ blockedId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await GuildBlocklist.deleteMany({ blockedId: oldChannel.id, guildId: oldChannel.guildId }); return; }
+
+    // Check against Featured Channels
+    if ( await FeaturedChannel.exists({ channelId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await FeaturedChannel.deleteMany({ channelId: oldChannel.id, guildId: oldChannel.guildId }); return; }
+
+    // Check if Home Channel was deleted
+    if ( await GuildConfig.exists({ homeChannelId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await resetHomeSliently(oldChannel.guildId); return; }
+
+    return;
+
 });
 
 

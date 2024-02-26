@@ -419,7 +419,7 @@ module.exports = {
 
 
     /**
-     * Resets Home Channel due to deleted Webhook! (and thus cannot send message)
+     * Resets Home Channel due to deleted Webhook/Channel! (and thus cannot send message)
      * 
      * @param {String} guildId 
      */
