@@ -2,7 +2,7 @@ const { ApplicationCommandType, ApplicationCommandData, ContextMenuCommandIntera
 const { localize } = require("../../../BotModules/LocalizationModule");
 const { GuildConfig, FeaturedMessage, TimerModel } = require("../../../Mongoose/Models");
 const { DiscordClient } = require("../../../constants");
-const { refreshMessagesAudio } = require("../../../BotModules/HomeModule");
+const { refreshMessagesAudio, resetHomeSliently } = require("../../../BotModules/HomeModule");
 const { LogError } = require("../../../BotModules/LoggingModule");
 
 module.exports = {
@@ -76,7 +76,22 @@ module.exports = {
 
                 // Grab variables
                 let homeConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
-                let fetchedHomeWebhook = await DiscordClient.fetchWebhook(homeConfig.homeWebhookId);
+                let fetchedHomeWebhook;
+                try { fetchedHomeWebhook = await DiscordClient.fetchWebhook(homeConfig.homeWebhookId); }
+                catch (err) {
+                    await LogError(err);
+                    if ( err.name.includes("10015") || err.name.toLowerCase().includes("unknown webhook") )
+                    { 
+                        await resetHomeSliently(interaction.guildId);
+                        await interaction.editReply({ content: localize(interaction.locale, 'ERROR_WEBHOOK_MISSING') });
+                        return;
+                    }
+                    else
+                    {
+                        await interaction.editReply({ content: localize(interaction.locale, 'UNFEATURE_MESSAGE_COMMAND_ERROR_GENERIC', InputMessage.url) });
+                        return;
+                    }
+                }
 
                 // Remove from Home Channel
                 await fetchedHomeWebhook.deleteMessage(InputMessage.id);

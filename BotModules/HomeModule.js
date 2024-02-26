@@ -3,6 +3,7 @@ const { Locale } = require("discord.js");
 const { DiscordClient } = require("../constants");
 const { localize } = require("./LocalizationModule");
 const { removeGuild } = require("./DatabaseModule.js");
+const { LogError } = require("./LoggingModule.js");
 
 
 
@@ -19,6 +20,8 @@ module.exports = {
      */
     async refreshHeader(guildId, locale, guildName, guildDescription)
     {
+        const { resetHomeSliently } = require("./HomeModule.js");
+
         // Fetch Database entries and ensure they exist (just in case!)
         const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
         const FeaturedChannelEntries = await FeaturedChannel.find({ guildId: guildId });
@@ -27,11 +30,23 @@ module.exports = {
 
         // Fetch Webhook and make specific Message ID into its own variable for ease
         let headerMessageId = ConfigEntry.headerMessageId;
-        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId);
         let fetchedGuild = await DiscordClient.guilds.fetch(guildId);
+        let fetchedHomeWebhook;
 
         // Just to make sure Discord Outages don't break things
         if ( !fetchedGuild.available ) { return "GUILD_OUTAGE"; }
+
+        try { fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId); }
+        catch (err)
+        {
+            await LogError(err);
+            if ( err.name.includes("10015") || err.name.toLowerCase().includes("unknown webhook") )
+            {
+                await resetHomeSliently(guildId);
+                return "WEBHOOK_MISSING";
+            }
+            else { return "WEBHOOK_NOT_FETCHED"; }
+        }
 
         // If no Channels are featured, just default message
         if ( FeaturedChannelEntries.length === 0 )
@@ -72,6 +87,8 @@ module.exports = {
      */
     async refreshEventsThreads(guildId, locale)
     {
+        const { resetHomeSliently } = require("./HomeModule.js");
+
         // Fetch Database entries and ensure they exist (just in case!)
         const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
         const FeaturedEventEntries = await FeaturedEvent.find({ guildId: guildId });
@@ -81,11 +98,23 @@ module.exports = {
 
         // Fetch Webhook and make specific Message ID into its own variable for ease
         let eventThreadsMessageId = ConfigEntry.eventThreadsMessageId;
-        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId);
         let fetchedGuild = await DiscordClient.guilds.fetch(guildId);
+        let fetchedHomeWebhook;
 
         // Just to make sure Discord Outages don't break things
         if ( !fetchedGuild.available ) { return "GUILD_OUTAGE"; }
+
+        try { fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId); }
+        catch (err)
+        {
+            await LogError(err);
+            if ( err.name.includes("10015") || err.name.toLowerCase().includes("unknown webhook") )
+            {
+                await resetHomeSliently(guildId);
+                return "WEBHOOK_MISSING";
+            }
+            else { return "WEBHOOK_NOT_FETCHED"; }
+        }
 
         // If no Events or Threads are featured, just empty message
         if ( FeaturedEventEntries.length === 0 && FeaturedThreadEntries.length === 0 )
@@ -175,6 +204,8 @@ module.exports = {
      */
     async refreshMessagesAudio(guildId, locale)
     {
+        const { resetHomeSliently } = require("./HomeModule.js");
+
         // Fetch Database entries and ensure they exist (just in case!)
         const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
         const FeaturedMessages = await FeaturedMessage.find({ guildId: guildId });
@@ -183,11 +214,23 @@ module.exports = {
 
         // Fetch Webhook and make specific Message ID into its own variable for ease
         let audioMessageId = ConfigEntry.audioMessageId;
-        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId);
         let fetchedGuild = await DiscordClient.guilds.fetch(guildId);
+        let fetchedHomeWebhook;
 
         // Just to make sure Discord Outages don't break things
         if ( !fetchedGuild.available ) { return "GUILD_OUTAGE"; }
+
+        try { fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId); }
+        catch (err)
+        {
+            await LogError(err);
+            if ( err.name.includes("10015") || err.name.toLowerCase().includes("unknown webhook") )
+            {
+                await resetHomeSliently(guildId);
+                return "WEBHOOK_MISSING";
+            }
+            else { return "WEBHOOK_NOT_FETCHED"; }
+        }
 
         // Now fetch any live Stage instances, and active Voice Channels
         //   TO BE ADDED AT A LATER DATE - WHEN I CAN FIGURE OUT A DECENT WAY TO FETCH ALL LIVE STAGE INSTANCES AND ALL ACTIVE VOICE CHANNELS
@@ -224,17 +267,29 @@ module.exports = {
     {
         // WHY DOES USING "this." NOT WORK ITS LITERALLY ABOVE YOU IN THE SAME MODULE EXPORTS
         // WHY DO I HAVE TO IMPORT INTO ITSELF
-        const { refreshMessagesAudio } = require("./HomeModule.js");
+        const { refreshMessagesAudio, resetHomeSliently } = require("./HomeModule.js");
 
         // Edge-case: Ensure message hasn't already been removed
         let homeConfig = await GuildConfig.findOne({ guildId: guildId });
-        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(homeConfig.homeWebhookId);
         let messageEntry = await FeaturedMessage.findOne({ guildId: guildId, originalMessageId: messageId });
+        let fetchedHomeWebhook;
 
         if ( messageEntry == null ) { return; }
 
         // Edge-case: Ensure Config exists
         if ( homeConfig == null ) { return; }
+
+        try { fetchedHomeWebhook = await DiscordClient.fetchWebhook(homeConfig.homeWebhookId); }
+        catch (err)
+        {
+            await LogError(err);
+            if ( err.name.includes("10015") || err.name.toLowerCase().includes("unknown webhook") )
+            {
+                await resetHomeSliently(guildId);
+                return "WEBHOOK_MISSING";
+            }
+            else { return "WEBHOOK_NOT_FETCHED"; }
+        }
 
         // Remove Message from Home Channel
         await fetchedHomeWebhook.deleteMessage(messageEntry.featuredMessageId);

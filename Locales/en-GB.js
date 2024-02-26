@@ -2,6 +2,7 @@ module.exports = {
     // ******* GENERIC STUFF
     ERROR_GENERIC: `An error has occurred.`,
     ERROR_WITH_PREVIEW: `An error has occurred. A preview of the raw error is as follows:\n\`\`\`{{0}}\`\`\``,
+    ERROR_WEBHOOK_MISSING: `Whoops! My Webhook in this Server's Home Channel is missing or not able to be found.\nPlease reset this Server's Home Channel using \`/setup\``,
 
 
 

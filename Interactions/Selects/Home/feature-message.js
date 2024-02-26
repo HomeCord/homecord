@@ -4,7 +4,7 @@ const { GuildConfig, TimerModel, FeaturedMessage } = require("../../../Mongoose/
 const { DiscordClient } = require("../../../constants");
 const { LogError } = require("../../../BotModules/LoggingModule");
 const { calculateUnixTimeUntil, calculateTimeoutDuration, calculateIsoTimeUntil } = require("../../../BotModules/UtilityModule");
-const { refreshMessagesAudio, expireMessage } = require("../../../BotModules/HomeModule");
+const { refreshMessagesAudio, expireMessage, resetHomeSliently } = require("../../../BotModules/HomeModule");
 
 module.exports = {
     // Select's Name
@@ -36,7 +36,22 @@ module.exports = {
 
         // Fetch Home Channel's Webhook
         const ServerConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
-        const HomeWebhook = await DiscordClient.fetchWebhook(ServerConfig.homeWebhookId);
+        let HomeWebhook;
+        try { HomeWebhook = await DiscordClient.fetchWebhook(ServerConfig.homeWebhookId); }
+        catch (err) {
+            await LogError(err);
+            if ( err.name.includes("10015") || err.name.toLowerCase().includes("unknown webhook") )
+            { 
+                await resetHomeSliently(interaction.guildId);
+                await interaction.editReply({ content: localize(interaction.locale, 'ERROR_WEBHOOK_MISSING') });
+                return;
+            }
+            else
+            {
+                await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_GENERIC', OriginalMessage.url) });
+                return;
+            }
+        }
 
 
         // Cross-post Message to Home Channel now that it's being featured
