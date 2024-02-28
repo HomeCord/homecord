@@ -1,4 +1,4 @@
-const { RateLimitError, DMChannel, PartialGroupDMChannel } = require("discord.js");
+const { RateLimitError, DMChannel, PartialGroupDMChannel, MessageType, ChannelType } = require("discord.js");
 const Mongoose = require("mongoose");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -192,7 +192,27 @@ DiscordClient.on('messageCreate', async (message) => {
     let textCommandStatus = await TextCommandHandler.Main(message);
     if ( textCommandStatus === false )
     {
-        // No Command detected
+        // No Command detected, thus standard Message
+
+        // Ignore if in Home Channel
+        if ( await GuildConfig.exists({ homeChannelId: message.channelId }) != null ) { return; }
+
+        
+        // If a direct reply, check for highlighting! (if enabled)
+        let homeConfig = await GuildConfig.findOne({ guildId: message.guildId });
+
+        if ( homeConfig?.highlightMessages === true && message.type === MessageType.Reply )
+        {
+            await processMessageReply(message);
+        }
+
+
+        // If sent in Public Thread Channel check for highlighting! (if enabled)
+        if ( homeConfig?.highlightThreads === true && (message.channel.type === ChannelType.PublicThread || message.channel.type === ChannelType.AnnouncementThread) )
+        {
+            //.
+        }
+
         return;
     }
     else if ( textCommandStatus === null )
@@ -275,8 +295,9 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 // Needed for the next set of Events
 const { removeGuild, removeMessage } = require("./BotModules/DatabaseModule.js");
-const { GuildConfig, GuildBlocklist, FeaturedChannel } = require("./Mongoose/Models.js");
+const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread } = require("./Mongoose/Models.js");
 const { resetHome, resetHomeSliently } = require("./BotModules/HomeModule.js");
+const { processMessageReply } = require("./BotModules/Events/MessageEvents.js");
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT
@@ -337,12 +358,25 @@ DiscordClient.on('channelDelete', async (oldChannel) => {
     // Check against Featured Channels
     if ( await FeaturedChannel.exists({ channelId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await FeaturedChannel.deleteMany({ channelId: oldChannel.id, guildId: oldChannel.guildId }); return; }
 
+    // Check against Featured Threads
+    if ( await FeaturedThread.exists({ threadId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await FeaturedThread.deleteMany({ threadId: oldChannel.id, guildId: oldChannel.guildId }); return; }
+
     // Check if Home Channel was deleted
     if ( await GuildConfig.exists({ homeChannelId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await resetHomeSliently(oldChannel.guildId); return; }
 
     return;
 
 });
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - X EVENT
 
 
 
