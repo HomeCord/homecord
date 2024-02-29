@@ -297,7 +297,7 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 const { removeGuild, removeMessage } = require("./BotModules/DatabaseModule.js");
 const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread } = require("./Mongoose/Models.js");
 const { resetHome, resetHomeSliently } = require("./BotModules/HomeModule.js");
-const { processMessageReply } = require("./BotModules/Events/MessageEvents.js");
+const { processMessageReply, processMessageReaction } = require("./BotModules/Events/MessageEvents.js");
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT
@@ -376,7 +376,30 @@ DiscordClient.on('channelDelete', async (oldChannel) => {
 
 
 /******************************************************************************* */
-// DISCORD - X EVENT
+// DISCORD - MESSAGE REACTION ADD EVENT
+
+DiscordClient.on('messageReactionAdd', async (reaction, user) => {
+
+    // Just in case, ignore DMs
+    if ( reaction.message?.channel?.type === ChannelType.DM ) { return; }
+
+    // Catch for partials
+    if ( reaction.partial ) { await reaction.fetch(); }
+
+    // Ignore if in Home Channel
+    if ( await GuildConfig.exists({ homeChannelId: reaction.message.channelId }) != null ) { return; }
+
+    // Check for highlighting! (if enabled)
+    let guildConfig = await GuildConfig.findOne({ guildId: reaction.message.guildId });
+
+    if ( guildConfig?.highlightMessages === true )
+    {
+        await processMessageReaction(reaction, user);
+    }
+
+    return;
+
+});
 
 
 

@@ -86,7 +86,7 @@ module.exports = {
 
         // Check if Channel or Category is blocked
         if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: interaction.channelId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_CHANNEL_BLOCKED') }); return; }
-        if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: interaction.channel.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_CATEGORY_BLOCKED') }); return; }
+        if ( interaction.channel.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: interaction.channel.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_CATEGORY_BLOCKED') }); return; }
 
         // Finally, check if Message Author has a blocked Role
         let authorRoles = InputMessage.member.roles.cache;

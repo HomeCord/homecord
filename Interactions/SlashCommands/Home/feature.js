@@ -342,7 +342,7 @@ module.exports = {
             if ( fetchedFeaturedThreads.find(tempDoc => tempDoc.threadId === InputThread.id) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_THREAD_ALREADY_FEATURED') }); return; }
 
             // Check against Block List
-            if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputThread.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_CHANNEL_BLOCKED') }); return; }
+            if ( InputThread.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputThread.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_CHANNEL_BLOCKED') }); return; }
             if ( InputThread.parent?.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputThread.parent.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_CATEGORY_BLOCKED') }); return; }
 
             // Add to database
