@@ -22,6 +22,9 @@ module.exports = {
     {
         const { resetHomeSliently } = require("./HomeModule.js");
 
+        // Just in case
+        if ( !locale || locale == null ) { locale = 'en-GB'; }
+
         // Fetch Database entries and ensure they exist (just in case!)
         const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
         const FeaturedChannelEntries = await FeaturedChannel.find({ guildId: guildId });
@@ -88,6 +91,9 @@ module.exports = {
     async refreshEventsThreads(guildId, locale)
     {
         const { resetHomeSliently } = require("./HomeModule.js");
+
+        // Just in case
+        if ( !locale || locale == null ) { locale = 'en-GB'; }
 
         // Fetch Database entries and ensure they exist (just in case!)
         const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
@@ -205,6 +211,9 @@ module.exports = {
     async refreshMessagesAudio(guildId, locale)
     {
         const { resetHomeSliently } = require("./HomeModule.js");
+
+        // Just in case
+        if ( !locale || locale == null ) { locale = 'en-GB'; }
 
         // Fetch Database entries and ensure they exist (just in case!)
         const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });

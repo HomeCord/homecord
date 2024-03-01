@@ -295,8 +295,8 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 // Needed for the next set of Events
 const { removeGuild, removeMessage, bulkRemoveMessages } = require("./BotModules/DatabaseModule.js");
-const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread } = require("./Mongoose/Models.js");
-const { resetHome, resetHomeSliently } = require("./BotModules/HomeModule.js");
+const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
+const { resetHome, resetHomeSliently, refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
 const { processMessageReply, processMessageReaction } = require("./BotModules/Events/MessageEvents.js");
 
 /******************************************************************************* */
@@ -334,7 +334,7 @@ DiscordClient.on('messageDelete', async (message) => {
     // Deleted Message is needed - reset Home & post message in Home Channel stating so
     if ( isMessageNeeded != null ) { await resetHome(message.guildId); }
     // Deleted Message is not needed for core function of Home Channel, thus treat it as featured message and delete from DB
-    else { await removeMessage(message.id); }
+    else { await removeMessage(message); }
 
     return;
 });
@@ -359,10 +359,20 @@ DiscordClient.on('channelDelete', async (oldChannel) => {
     if ( await GuildBlocklist.exists({ blockedId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await GuildBlocklist.deleteMany({ blockedId: oldChannel.id, guildId: oldChannel.guildId }); return; }
 
     // Check against Featured Channels
-    if ( await FeaturedChannel.exists({ channelId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await FeaturedChannel.deleteMany({ channelId: oldChannel.id, guildId: oldChannel.guildId }); return; }
+    if ( await FeaturedChannel.exists({ channelId: oldChannel.id, guildId: oldChannel.guildId }) != null )
+    {
+        await FeaturedChannel.deleteMany({ channelId: oldChannel.id, guildId: oldChannel.guildId });
+        await refreshHeader(oldChannel.guildId, oldChannel.guild.preferredLocale, oldChannel.guild.name, oldChannel.guild.description);
+        return;
+    }
 
     // Check against Featured Threads
-    if ( await FeaturedThread.exists({ threadId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await FeaturedThread.deleteMany({ threadId: oldChannel.id, guildId: oldChannel.guildId }); return; }
+    if ( await FeaturedThread.exists({ threadId: oldChannel.id, guildId: oldChannel.guildId }) != null )
+    {
+        await FeaturedThread.deleteMany({ threadId: oldChannel.id, guildId: oldChannel.guildId });
+        await refreshEventsThreads(oldChannel.guildId, oldChannel.guild.preferredLocale);
+        return;
+    }
 
     // Check if Home Channel was deleted
     if ( await GuildConfig.exists({ homeChannelId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await resetHomeSliently(oldChannel.guildId); return; }
@@ -458,6 +468,54 @@ DiscordClient.on('roleDelete', async (oldRole) => {
 
     // Check Block List
     if ( await GuildBlocklist.exists({ blockedId: oldRole.id, guildId: oldRole.guild.id }) != null ) { await GuildBlocklist.deleteMany({ blockedId: oldRole.id, guildId: oldRole.guild.id }); return; }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - GUILD SCHEDULED EVENT DELETE EVENT
+
+DiscordClient.on('guildScheduledEventDelete', async (oldEvent) => {
+
+    // Check against Featured Events
+    if ( await FeaturedEvent.exists({ guildId: oldEvent.guildId, eventId: oldEvent.id }) != null )
+    {
+        await FeaturedEvent.deleteMany({ guildId: oldEvent.guildId, eventId: oldEvent.id });
+        await refreshEventsThreads(oldEvent.guildId, oldEvent?.guild?.preferredLocale);
+        return;
+    }
+    
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - THREAD DELETE EVENT
+
+DiscordClient.on('threadDelete', async (oldThread) => {
+
+    // Check against Featured Threads
+    if ( await FeaturedThread.exists({ threadId: oldThread.id, guildId: oldThread.guildId }) != null )
+    {
+        await FeaturedThread.deleteMany({ threadId: oldThread.id, guildId: oldThread.guildId });
+        await refreshEventsThreads(oldThread.guildId, oldThread.guild.preferredLocale);
+        return;
+    }
 
     return;
 
