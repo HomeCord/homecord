@@ -452,6 +452,25 @@ DiscordClient.on('messageDeleteBulk', async (messageCollection, channel) => {
 
 
 /******************************************************************************* */
+// DISCORD - ROLE DELETE EVENT
+
+DiscordClient.on('roleDelete', async (oldRole) => {
+
+    // Check Block List
+    if ( await GuildBlocklist.exists({ blockedId: oldRole.id, guildId: oldRole.guild.id }) != null ) { await GuildBlocklist.deleteMany({ blockedId: oldRole.id, guildId: oldRole.guild.id }); return; }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
 
 DiscordClient.login(Config.TOKEN).catch(console.error); // Login to and start the Discord Bot Client
 Mongoose.connect(Config.MongoString).catch(console.error);
