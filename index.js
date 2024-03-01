@@ -294,7 +294,7 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 // Needed for the next set of Events
-const { removeGuild, removeMessage } = require("./BotModules/DatabaseModule.js");
+const { removeGuild, removeMessage, bulkRemoveMessages } = require("./BotModules/DatabaseModule.js");
 const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread } = require("./Mongoose/Models.js");
 const { resetHome, resetHomeSliently } = require("./BotModules/HomeModule.js");
 const { processMessageReply, processMessageReaction } = require("./BotModules/Events/MessageEvents.js");
@@ -325,11 +325,14 @@ DiscordClient.on('messageDelete', async (message) => {
     // Ignore any other messages that have NOT been sent under HomeCord's Webhook(s)
     if ( message.webhookId == null ) { return; }
 
+    // Ignore anything NOT from Home Channel
+    if ( await GuildConfig.exists({ homeChannelId: message.channelId }) == null ) { return; }
+
     // Check if Message is needed for core function of Home Channel
     let isMessageNeeded = await GuildConfig.exists({ $or: [ { headerMessageId: message.id }, { eventThreadsMessageId: message.id }, { audioMessageId: message.id } ] });
 
     // Deleted Message is needed - reset Home & post message in Home Channel stating so
-    if ( isMessageNeeded != null ) { resetHome(message.guildId); }
+    if ( isMessageNeeded != null ) { await resetHome(message.guildId); }
     // Deleted Message is not needed for core function of Home Channel, thus treat it as featured message and delete from DB
     else { await removeMessage(message.id); }
 
@@ -400,6 +403,42 @@ DiscordClient.on('messageReactionAdd', async (reaction, user) => {
     {
         await processMessageReaction(reaction, user);
     }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - MESSAGE DELETE BULK EVENT
+
+DiscordClient.on('messageDeleteBulk', async (messageCollection, channel) => {
+
+    // Filter out messages NOT sent by a webhook
+    messageCollection = messageCollection.filter(message => message.webhookId != null);
+    if ( messageCollection.size < 1 ) { return; }
+
+    // Ignore if NOT in Home Channel
+    if ( await GuildConfig.exists({ homeChannelId: channel.id }) == null ) { return; }
+
+    // Check if one or more of the messages are needed for core function of Home Channel
+    let filterArray = [];
+    messageCollection.forEach(message => {
+        filterArray.push({ headerMessageId: message.id });
+        filterArray.push({ eventThreadsMessageId: message.id });
+        filterArray.push({ audioMessageId: message.id });
+    });
+
+    // One or more of the deleted message(s) are needed - so reset Home
+    if ( await GuildConfig.exists({ $or: filterArray }) != null ) { await resetHome(channel.guildId); }
+    // None of the deleted Messages are needed, so pass onto processer
+    else { await bulkRemoveMessages(messageCollection, channel); }
 
     return;
 

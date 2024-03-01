@@ -1,3 +1,4 @@
+const { Collection, Message, PartialMessage } = require("discord.js");
 const { TimerModel, GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedEvent, FeaturedThread, FeaturedMessage } = require("../Mongoose/Models")
 
 module.exports = {
@@ -52,6 +53,39 @@ module.exports = {
         // Purge if true
         if ( hasTimers != null ) { await TimerModel.deleteMany({ $or: [ { originalMessageId: messageId }, { featuredMessageId: messageId } ] }); }
         if ( hasMessage != null ) { await FeaturedMessage.deleteMany({ $or: [ { originalMessageId: messageId }, { featuredMessageId: messageId } ] }); }
+
+        return;
+    },
+
+
+
+
+
+
+    /**
+     * Removes anything connected to the bulk deleted Messages from the DB
+     * 
+     * @param {Collection<String, Message<Boolean>|PartialMessage>} messageCollection 
+     */
+    async bulkRemoveMessages(messageCollection)
+    {
+
+        // Make Filter Array from Collection
+        let filterArray = [];
+        messageCollection.forEach(message => {
+            filterArray.push({ originalMessageId: message.id });
+            filterArray.push({ featuredMessageId: message.id });
+        });
+
+        
+        // Check for entries
+        let hasTimers = await TimerModel.exists({ $or: filterArray });
+        let hasMessage = await FeaturedMessage.exists({ $or: filterArray });
+
+        
+        // Purge if true
+        if ( hasTimers != null ) { await TimerModel.deleteMany({ $or: filterArray }); }
+        if ( hasMessage != null ) { await FeaturedMessage.deleteMany({ $or: filterArray }); }
 
         return;
     }
