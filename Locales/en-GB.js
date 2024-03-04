@@ -390,4 +390,19 @@ module.exports = {
     UNFEATURE_MESSAGE_COMMAND_ERROR_HOME_NOT_SETUP: `Whoops! This Command cannot be used as this Server has not got a Home Channel setup with HomeCord!`,
     UNFEATURE_MESSAGE_COMMAND_ERROR_NOT_A_FEATURED_MESSAGE: `Sorry, that Message is not a featured/highlighted Message in this Server's Home Channel.`,
     UNFEATURE_MESSAGE_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to remove that featured/highlighted Message from this Server's Home Channel.`,
+
+
+
+    // ******* BLOCK COMMAND
+    BLOCK_COMMAND_CHANNEL_INSTRUCTIONS: `Please use the Channel Select below to pick which Channels to add to this Server's Home Block List.`,
+    BLOCK_COMMAND_CATEGORY_INSTRUCTIONS: `Please use the Category Select below to pick which Categories to add to this Server's Home Block List.`,
+    BLOCK_COMMAND_ROLE_INSTRUCTIONS: `Please use the Role Select below to pick which Roles to add to this Server's Home Block List.`,
+
+    BLOCK_COMMAND_SELECT_PLACEHOLDER_CHANNEL: `Select up to {{0}} Channels`,
+    BLOCK_COMMAND_SELECT_PLACEHOLDER_CATEGORY: `Select up to {{0}} Categories`,
+    BLOCK_COMMAND_SELECT_PLACEHOLDER_ROLE: `Select up to {{0}} Roles`,
+
+    BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_CHANNELS_REACHED: `Sorry, but this Server has reached the maximum number of Channels that can be blocked (25).\nYou can use {{0}} to remove Channels from this Server's Block List.`,
+    BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_CATEGORIES_REACHED: `Sorry, but this Server has reached the maximum number of Categories that can be blocked (25).\nYou can use {{0}} to remove Categories from this Server's Block List.`,
+    BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_ROLES_REACHED: `Sorry, but this Server has reached the maximum number of Roles that can be blocked (25).\nYou can use {{0}} to remove Roles from this Server's Block List.`,
 };

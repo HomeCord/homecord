@@ -1,9 +1,9 @@
-const { GuildConfig, FeaturedEvent, FeaturedThread, TimerModel, FeaturedChannel, FeaturedMessage } = require("../Mongoose/Models");
+const { GuildConfig, FeaturedEvent, FeaturedThread, FeaturedChannel, FeaturedMessage } = require("../Mongoose/Models");
 const { Locale } = require("discord.js");
 const { DiscordClient } = require("../constants");
 const { localize } = require("./LocalizationModule");
-const { removeGuild } = require("./DatabaseModule.js");
 const { LogError } = require("./LoggingModule.js");
+const { resetHomeSliently } = require("./ResetHomeModule.js");
 
 
 
@@ -20,8 +20,6 @@ module.exports = {
      */
     async refreshHeader(guildId, locale, guildName, guildDescription)
     {
-        const { resetHomeSliently } = require("./HomeModule.js");
-
         // Just in case
         if ( !locale || locale == null ) { locale = 'en-GB'; }
 
@@ -90,8 +88,6 @@ module.exports = {
      */
     async refreshEventsThreads(guildId, locale)
     {
-        const { resetHomeSliently } = require("./HomeModule.js");
-
         // Just in case
         if ( !locale || locale == null ) { locale = 'en-GB'; }
 
@@ -210,8 +206,6 @@ module.exports = {
      */
     async refreshMessagesAudio(guildId, locale)
     {
-        const { resetHomeSliently } = require("./HomeModule.js");
-
         // Just in case
         if ( !locale || locale == null ) { locale = 'en-GB'; }
 
@@ -259,187 +253,5 @@ module.exports = {
             await fetchedHomeWebhook.editMessage(audioMessageId, { content: `${localize(locale, 'HOME_FEATURED_MESSAGES_HEADER')}` });
             return true;
         }
-    },
-    
-
-
-
-
-    /**
-     * Removes a featured or highlighted Message from Home Channel after its duration is up
-     * 
-     * @param {String} guildId 
-     * @param {String} messageId 
-     * @param {Locale} locale Guild's Locale
-     */
-    async expireMessage(guildId, messageId, locale)
-    {
-        // WHY DOES USING "this." NOT WORK ITS LITERALLY ABOVE YOU IN THE SAME MODULE EXPORTS
-        // WHY DO I HAVE TO IMPORT INTO ITSELF
-        const { refreshMessagesAudio, resetHomeSliently } = require("./HomeModule.js");
-
-        // Edge-case: Ensure message hasn't already been removed
-        let homeConfig = await GuildConfig.findOne({ guildId: guildId });
-        let messageEntry = await FeaturedMessage.findOne({ guildId: guildId, originalMessageId: messageId });
-        let fetchedHomeWebhook;
-
-        if ( messageEntry == null ) { return; }
-
-        // Edge-case: Ensure Config exists
-        if ( homeConfig == null ) { return; }
-
-        try { fetchedHomeWebhook = await DiscordClient.fetchWebhook(homeConfig.homeWebhookId); }
-        catch (err)
-        {
-            await LogError(err);
-            if ( err.name.includes("10015") || err.name.toLowerCase().includes("unknown webhook") )
-            {
-                await resetHomeSliently(guildId);
-                return "WEBHOOK_MISSING";
-            }
-            else { return "WEBHOOK_NOT_FETCHED"; }
-        }
-
-        // Remove Message from Home Channel
-        await fetchedHomeWebhook.deleteMessage(messageEntry.featuredMessageId);
-
-        // Remove Message from DB
-        await messageEntry.deleteOne();
-
-        // Just in case, remove Message from Timer Table
-        await TimerModel.deleteOne({ originalMessageId: messageId });
-        
-        // Refresh Home Channel to reflect changes
-        await refreshMessagesAudio(guildId, locale);
-
-        return;
-    },
-
-
-
-
-
-    /**
-     * Removes a featured or highlighted Event from Home Channel after its duration is up
-     * 
-     * @param {String} guildId 
-     * @param {String} eventId 
-     * @param {Locale} locale Guild's Locale
-     */
-    async expireEvent(guildId, eventId, locale)
-    {
-        // WHY DOES USING "this." NOT WORK ITS LITERALLY ABOVE YOU IN THE SAME MODULE EXPORTS
-        // WHY DO I HAVE TO IMPORT INTO ITSELF
-        const { refreshEventsThreads } = require("./HomeModule.js");
-
-        // Edge-case: Ensure event hasn't already been removed
-        let homeConfig = await GuildConfig.findOne({ guildId: guildId });
-        let eventEntry = await FeaturedEvent.findOne({ guildId: guildId, eventId: eventId });
-
-        if ( eventEntry == null ) { return; }
-
-        // Edge-case: Ensure Config exists
-        if ( homeConfig == null ) { return; }
-
-        // Remove Event from DB
-        await eventEntry.deleteOne();
-
-        // Just in case, remove Event from Timer Table
-        await TimerModel.deleteOne({ eventId: eventId });
-        
-        // Refresh Home Channel to reflect changes
-        await refreshEventsThreads(guildId, locale);
-
-        return;
-    },
-    
-
-
-
-
-    /**
-     * Removes a featured or highlighted Thread from Home Channel after its duration is up
-     * 
-     * @param {String} guildId 
-     * @param {String} threadId 
-     * @param {Locale} locale Guild's Locale
-     */
-    async expireThread(guildId, threadId, locale)
-    {
-        // WHY DOES USING "this." NOT WORK ITS LITERALLY ABOVE YOU IN THE SAME MODULE EXPORTS
-        // WHY DO I HAVE TO IMPORT INTO ITSELF
-        const { refreshEventsThreads } = require("./HomeModule.js");
-
-        // Edge-case: Ensure thread hasn't already been removed
-        let homeConfig = await GuildConfig.findOne({ guildId: guildId });
-        let threadEntry = await FeaturedThread.findOne({ guildId: guildId, threadId: threadId });
-
-        if ( threadEntry == null ) { return; }
-
-        // Edge-case: Ensure Config exists
-        if ( homeConfig == null ) { return; }
-
-        // Remove Event from DB
-        await threadEntry.deleteOne();
-
-        // Just in case, remove Event from Timer Table
-        await TimerModel.deleteOne({ threadId: threadId });
-        
-        // Refresh Home Channel to reflect changes
-        await refreshEventsThreads(guildId, locale);
-
-        return;
-    },
-
-
-
-
-
-    /**
-     * Resets Home Channel due to deleted Message!
-     * 
-     * @param {String} guildId 
-     */
-    async resetHome(guildId)
-    {
-        // JUST IN CASE
-        if ( guildId == null ) { return; }
-
-        // First grab webhook so that the notice can be sent!
-        const ConfigEntry = await GuildConfig.findOne({ guildId: guildId });
-        let fetchedHomeWebhook = await DiscordClient.fetchWebhook(ConfigEntry.homeWebhookId);
-        let fetchedGuild = await DiscordClient.guilds.fetch(guildId);
-
-        // Just to make sure Discord Outages don't break things further
-        if ( !fetchedGuild.available ) { return; }
-
-        // Send Message
-        await fetchedHomeWebhook.send({ allowedMentions: { parse: [] }, content: `:warning: **Notice: This Home Channel has been broken due to deletion of one of its core 3 Messages in this Channel.**\n\nPlease reset this Home Channel by using the \`/setup\` Command. This Server's Home Block List will not be affected by this reset.` });
-
-        
-        // Now, purge DB ;-;
-        await removeGuild(guildId, true);
-
-        return;
-    },
-    
-
-
-
-
-    /**
-     * Resets Home Channel due to deleted Webhook/Channel! (and thus cannot send message)
-     * 
-     * @param {String} guildId 
-     */
-    async resetHomeSliently(guildId)
-    {
-        // JUST IN CASE
-        if ( guildId == null ) { return; }
-        
-        // Now, purge DB ;-;
-        await removeGuild(guildId, true);
-
-        return;
     }
 }
