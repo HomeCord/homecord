@@ -1,6 +1,4 @@
-const { Collection, Message, PartialMessage, GuildTextBasedChannel } = require("discord.js");
 const { TimerModel, GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedEvent, FeaturedThread, FeaturedMessage } = require("../Mongoose/Models");
-const { refreshMessagesAudio } = require("./HomeModule");
 
 module.exports = {
 
