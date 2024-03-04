@@ -294,10 +294,12 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 // Needed for the next set of Events
-const { removeGuild, removeMessage, bulkRemoveMessages } = require("./BotModules/DatabaseModule.js");
+const { removeGuild } = require("./BotModules/DatabaseModule.js");
 const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
-const { resetHome, resetHomeSliently, refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
+const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
 const { processMessageReply, processMessageReaction } = require("./BotModules/Events/MessageEvents.js");
+const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
+const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT

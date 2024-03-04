@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, ActionRowBuilder, ChannelSelectMenuBuilder } = require("discord.js");
+const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, ActionRowBuilder, ChannelSelectMenuBuilder, RoleSelectMenuBuilder } = require("discord.js");
 const { GuildBlocklist } = require("../../../Mongoose/Models");
 const { localize } = require("../../../BotModules/LocalizationModule");
 
@@ -174,7 +174,26 @@ async function addToChannelBlockList(interaction)
  */
 async function addToCategoryBlockList(interaction)
 {
-    //.
+    // Check if max Category blocking has been reached
+    let fetchedCategoryBlocklist = await GuildBlocklist.find({ guildId: interaction.guildId, blockType: "CATEGORY" });
+    if ( fetchedCategoryBlocklist.length === 25 ) { await interaction.editReply({ content: localize(interaction.locale, 'BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_CATEGORIES_REACHED', `\`/unblock category\``) }); return; }
+
+    // Figure out how many slots are left
+    let blockSlotsLeft = 25 - fetchedCategoryBlocklist.length;
+
+    // ACK with Select
+    const ChannelSelect = new ActionRowBuilder().addComponents([
+        new ChannelSelectMenuBuilder()
+            .setCustomId(`block-category`)
+            .setPlaceholder(localize(interaction.locale, 'BLOCK_COMMAND_SELECT_PLACEHOLDER_CATEGORY', blockSlotsLeft))
+            .setMinValues(1)
+            .setMaxValues(blockSlotsLeft)
+            .addChannelTypes([ ChannelType.GuildCategory ])
+    ]);
+
+    await interaction.editReply({ components: [ChannelSelect], content: localize(interaction.locale, 'BLOCK_COMMAND_CATEGORY_INSTRUCTIONS') });
+
+    return;
 }
 
 
@@ -189,5 +208,23 @@ async function addToCategoryBlockList(interaction)
  */
 async function addToRoleBlockList(interaction)
 {
-    //.
+    // Check if max Role blocking has been reached
+    let fetchedRoleBlocklist = await GuildBlocklist.find({ guildId: interaction.guildId, blockType: "ROLE" });
+    if ( fetchedRoleBlocklist.length === 25 ) { await interaction.editReply({ content: localize(interaction.locale, 'BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_ROLES_REACHED', `\`/unblock role\``) }); return; }
+
+    // Figure out how many slots are left
+    let blockSlotsLeft = 25 - fetchedRoleBlocklist.length;
+
+    // ACK with Select
+    const RoleSelect = new ActionRowBuilder().addComponents([
+        new RoleSelectMenuBuilder()
+            .setCustomId(`block-role`)
+            .setPlaceholder(localize(interaction.locale, 'BLOCK_COMMAND_SELECT_PLACEHOLDER_ROLE', blockSlotsLeft))
+            .setMinValues(1)
+            .setMaxValues(blockSlotsLeft)
+    ]);
+
+    await interaction.editReply({ components: [RoleSelect], content: localize(interaction.locale, 'BLOCK_COMMAND_ROLE_INSTRUCTIONS') });
+
+    return;
 }
