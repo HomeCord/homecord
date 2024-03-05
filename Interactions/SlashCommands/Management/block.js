@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, ActionRowBuilder, ChannelSelectMenuBuilder, RoleSelectMenuBuilder } = require("discord.js");
+const { ChatInputCommandInteraction, ChatInputApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, ActionRowBuilder, ChannelSelectMenuBuilder, RoleSelectMenuBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { GuildBlocklist } = require("../../../Mongoose/Models");
 const { localize } = require("../../../BotModules/LocalizationModule");
 
@@ -157,7 +157,11 @@ async function addToChannelBlockList(interaction)
             .addChannelTypes([ ChannelType.GuildAnnouncement, ChannelType.GuildForum, ChannelType.GuildMedia, ChannelType.GuildStageVoice, ChannelType.GuildText, ChannelType.GuildVoice ])
     ]);
 
-    await interaction.editReply({ components: [ChannelSelect], content: localize(interaction.locale, 'BLOCK_COMMAND_CHANNEL_INSTRUCTIONS') });
+    const DismissButton = new ActionRowBuilder().addComponents([
+        new ButtonBuilder().setCustomId('dismiss').setLabel(localize(interaction.locale, 'BUTTON_CANCEL_GENERIC')).setStyle(ButtonStyle.Secondary)
+    ]);
+
+    await interaction.editReply({ components: [ChannelSelect, DismissButton], content: localize(interaction.locale, 'BLOCK_COMMAND_CHANNEL_INSTRUCTIONS', `${blockSlotsLeft}`) });
 
     return;
 }
@@ -191,7 +195,11 @@ async function addToCategoryBlockList(interaction)
             .addChannelTypes([ ChannelType.GuildCategory ])
     ]);
 
-    await interaction.editReply({ components: [ChannelSelect], content: localize(interaction.locale, 'BLOCK_COMMAND_CATEGORY_INSTRUCTIONS') });
+    const DismissButton = new ActionRowBuilder().addComponents([
+        new ButtonBuilder().setCustomId('dismiss').setLabel(localize(interaction.locale, 'BUTTON_CANCEL_GENERIC')).setStyle(ButtonStyle.Secondary)
+    ]);
+
+    await interaction.editReply({ components: [ChannelSelect, DismissButton], content: localize(interaction.locale, 'BLOCK_COMMAND_CATEGORY_INSTRUCTIONS', `${blockSlotsLeft}`) });
 
     return;
 }
@@ -224,7 +232,11 @@ async function addToRoleBlockList(interaction)
             .setMaxValues(blockSlotsLeft)
     ]);
 
-    await interaction.editReply({ components: [RoleSelect], content: localize(interaction.locale, 'BLOCK_COMMAND_ROLE_INSTRUCTIONS') });
+    const DismissButton = new ActionRowBuilder().addComponents([
+        new ButtonBuilder().setCustomId('dismiss').setLabel(localize(interaction.locale, 'BUTTON_CANCEL_GENERIC')).setStyle(ButtonStyle.Secondary)
+    ]);
+
+    await interaction.editReply({ components: [RoleSelect, DismissButton], content: localize(interaction.locale, 'BLOCK_COMMAND_ROLE_INSTRUCTIONS', `${blockSlotsLeft}`) });
 
     return;
 }

@@ -102,6 +102,8 @@ module.exports = {
     PLEASE_SELECT_AN_OPTION: `Please select an option`,
     PLEASE_SELECT_A_DURATION: `Please select a duration`,
 
+    BUTTON_CANCEL_GENERIC: `Cancel`,
+
 
 
     // ******* FOR HOME CHANNEL ITSELF
@@ -394,15 +396,31 @@ module.exports = {
 
 
     // ******* BLOCK COMMAND
-    BLOCK_COMMAND_CHANNEL_INSTRUCTIONS: `Please use the Channel Select below to pick which Channels to add to this Server's Home Block List.`,
-    BLOCK_COMMAND_CATEGORY_INSTRUCTIONS: `Please use the Category Select below to pick which Categories to add to this Server's Home Block List.`,
-    BLOCK_COMMAND_ROLE_INSTRUCTIONS: `Please use the Role Select below to pick which Roles to add to this Server's Home Block List.`,
+    BLOCK_COMMAND_CHANNEL_INSTRUCTIONS: `Please use the Channel Select below to pick which Channels to add to this Server's Home Block List.\nYou have {{0}} slots left in this Server's Channel Block List.\n\n:information_source: *Note: While HomeCord offers the ability to add Channels & Categories to its Block List, it is preferred for Server Admins to revoke "**View Channel**" Permission for HomeCord in all Channels and Categories that Servers don't want HomeCord to feature Messages/etc from.*`,
+    BLOCK_COMMAND_CATEGORY_INSTRUCTIONS: `Please use the Category Select below to pick which Categories to add to this Server's Home Block List.\nYou have {{0}} slots left in this Server's Category Block List.\n\n:information_source: *Note: While HomeCord offers the ability to add Channels & Categories to its Block List, it is preferred for Server Admins to revoke "**View Channel**" Permission for HomeCord in all Channels and Categories that Servers don't want HomeCord to feature Messages/etc from.*`,
+    BLOCK_COMMAND_ROLE_INSTRUCTIONS: `Please use the Role Select below to pick which Roles to add to this Server's Home Block List.\nYou have {{0}} slots left in this Server's Role Block List.`,
 
-    BLOCK_COMMAND_SELECT_PLACEHOLDER_CHANNEL: `Select up to {{0}} Channels`,
-    BLOCK_COMMAND_SELECT_PLACEHOLDER_CATEGORY: `Select up to {{0}} Categories`,
-    BLOCK_COMMAND_SELECT_PLACEHOLDER_ROLE: `Select up to {{0}} Roles`,
+    BLOCK_COMMAND_SELECT_PLACEHOLDER_CHANNEL: `Search & select up to {{0}} Channels`,
+    BLOCK_COMMAND_SELECT_PLACEHOLDER_CATEGORY: `Search & select up to {{0}} Categories`,
+    BLOCK_COMMAND_SELECT_PLACEHOLDER_ROLE: `Search & select up to {{0}} Roles`,
+
+    BLOCK_COMMAND_CHANNEL_SUCCESSFUL: `Successfully added the following Channels to this Server's Home Block List: {{0}}`,
+    BLOCK_COMMAND_CATEGORY_SUCCESSFUL: `Successfully added the following Categories to this Server's Home Block List: {{0}}`,
+    BLOCK_COMMAND_ROLE_SUCCESSFUL: `Successfully added the following Roles to this Server's Home Block List: {{0}}`,
+
+    BLOCK_COMMAND_SOME_CHANNELS_ALREADY_ADDED: `The following Channels were already on this Server's Home Block List: {{0}}`,
+    BLOCK_COMMAND_SOME_CATEGORIES_ALREADY_ADDED: `The following Categories were already on this Server's Home Block List: {{0}}`,
+    BLOCK_COMMAND_SOME_ROLES_ALREADY_ADDED: `The following Roles were already on this Server's Home Block List: {{0}}`,
+
+    BLOCK_COMMAND_ALL_CHANNELS_ALREADY_ADDED: `All of those selected Channels have already been added to this Server's Home Block List.`,
+    BLOCK_COMMAND_ALL_CATEGORIES_ALREADY_ADDED: `All of those selected Categories have already been added to this Server's Home Block List.`,
+    BLOCK_COMMAND_ALL_ROLES_ALREADY_ADDED: `All of those selected Roles have already been added to this Server's Home Block List.`,
 
     BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_CHANNELS_REACHED: `Sorry, but this Server has reached the maximum number of Channels that can be blocked (25).\nYou can use {{0}} to remove Channels from this Server's Block List.`,
     BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_CATEGORIES_REACHED: `Sorry, but this Server has reached the maximum number of Categories that can be blocked (25).\nYou can use {{0}} to remove Categories from this Server's Block List.`,
     BLOCK_COMMAND_ERROR_MAXIMUM_BLOCKED_ROLES_REACHED: `Sorry, but this Server has reached the maximum number of Roles that can be blocked (25).\nYou can use {{0}} to remove Roles from this Server's Block List.`,
+
+    BLOCK_COMMAND_ERROR_GENERIC_CHANNELS: `An error has occurred while trying to add those selected Channels to this Server's Home Block List.`,
+    BLOCK_COMMAND_ERROR_GENERIC_CATEGORIES: `An error has occurred while trying to add those selected Categories to this Server's Home Block List.`,
+    BLOCK_COMMAND_ERROR_GENERIC_ROLES: `An error has occurred while trying to add those selected Roles to this Server's Home Block List.`,
 };
