@@ -439,4 +439,35 @@ module.exports = {
     BLOCKLIST_COMMAND_ROLES_EMPTY: `*No Roles Blocked*`,
     BLOCKLIST_COMMAND_CHANNELS_EMPTY: `*No Channels Blocked*`,
     BLOCKLIST_COMMAND_CATEGORIES_EMPTY: `*No Categories Blocked*`,
+
+
+
+    // ******* UNBLOCK COMMAND
+    UNBLOCK_COMMAND_ROLE_INSTRUCTIONS: `Please use the Role Select below to pick which blocked Roles you wish to remove from this Server's Home Block List.`,
+    UNBLOCK_COMMAND_CHANNEL_INSTRUCTIONS: `Please use the Channel Select below to pick which blocked Channels you wish to remove from this Server's Home Block List.`,
+    UNBLOCK_COMMAND_CATEGORY_INSTRUCTIONS: `Please use the Category Select below to pick which blocked Categories you wish to remove from this Server's Home Block List.`,
+
+    UNBLOCK_COMMAND_SELECT_ROLE_PLACEHOLDER: `Search & select Roles`,
+    UNBLOCK_COMMAND_SELECT_CHANNEL_PLACEHOLDER: `Search & select Channels`,
+    UNBLOCK_COMMAND_SELECT_CATEGORY_PLACEHOLDER: `Search & select Categories`,
+
+    UNBLOCK_COMMAND_ROLE_SUCCESSFUL: `Successfully removed the following Roles from this Server's Home Block List: {{0}}`,
+    UNBLOCK_COMMAND_CHANNEL_SUCCESSFUL: `Successfully removed the following Channels from this Server's Home Block List: {{0}}`,
+    UNBLOCK_COMMAND_CATEGORY_SUCCESSFUL: `Successfully removed the following Categories from this Server's Home Block List: {{0}}`,
+
+    UNBLOCK_COMMAND_ROLE_NOT_BLOCKED: `The following Roles were *not* found in this Server's Home Block List: {{0}}`,
+    UNBLOCK_COMMAND_CHANNEL_NOT_BLOCKED: `The following Channels were *not* found in this Server's Home Block List: {{0}}`,
+    UNBLOCK_COMMAND_CATEGORY_NOT_BLOCKED: `The following Categories were *not* found in this Server's Home Block List: {{0}}`,
+
+    UNBLOCK_COMMAND_ALL_ROLES_NOT_BLOCKED: `All of the selected Roles were *not* found in this Server's Home Block List.`,
+    UNBLOCK_COMMAND_ALL_CHANNELS_NOT_BLOCKED: `All of the selected Channels were *not* found in this Server's Home Block List.`,
+    UNBLOCK_COMMAND_ALL_CATEGORIES_NOT_BLOCKED: `All of the selected Categories were *not* found in this Server's Home Block List.`,
+
+    UNBLOCK_COMMAND_ERROR_BLOCKLIST_EMPTY_ROLE: `There are no Roles to remove on this Server's Home Block List.\nYou can use {{0}} to add some to this Server's Block List.`,
+    UNBLOCK_COMMAND_ERROR_BLOCKLIST_EMPTY_CHANNEL: `There are no Channels to remove on this Server's Home Block List.\nYou can use {{0}} to add some to this Server's Block List.`,
+    UNBLOCK_COMMAND_ERROR_BLOCKLIST_EMPTY_CATEGORY: `There are no Categories to remove on this Server's Home Block List.\nYou can use {{0}} to add some to this Server's Block List.`,
+
+    UNBLOCK_COMMAND_ERROR_ROLE_GENERIC: `Sorry, there was an error trying to remove the selected Roles from this Server's Home Block List.`,
+    UNBLOCK_COMMAND_ERROR_CHANNEL_GENERIC: `Sorry, there was an error trying to remove the selected Channels from this Server's Home Block List.`,
+    UNBLOCK_COMMAND_ERROR_CATEGORY_GENERIC: `Sorry, there was an error trying to remove the selected Categories from this Server's Home Block List.`,
 };
