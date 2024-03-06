@@ -1,7 +1,7 @@
 const { RoleSelectMenuInteraction } = require("discord.js");
 const { GuildBlocklist } = require("../../../Mongoose/Models");
 const { localize } = require("../../../BotModules/LocalizationModule");
-const { LogToUserInteraction, LogError } = require("../../../BotModules/LoggingModule");
+const { LogError } = require("../../../BotModules/LoggingModule");
 
 module.exports = {
     // Select's Name
