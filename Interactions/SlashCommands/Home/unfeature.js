@@ -2,7 +2,6 @@ const { ChatInputCommandInteraction, ChatInputApplicationCommandData, Applicatio
 const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
 const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel, FeaturedThread } = require("../../../Mongoose/Models.js");
-const { fetchCommandMention } = require("../../../BotModules/UtilityModule.js");
 const { LogError } = require("../../../BotModules/LoggingModule.js");
 const { refreshEventsThreads, expireEvent, refreshHeader, expireThread } = require("../../../BotModules/HomeModule.js");
 
@@ -155,7 +154,7 @@ module.exports = {
 
         // Ensure Home Channel has been setup
         let fetchedHomeSettings = await GuildConfig.findOne({ guildId: interaction.guildId });
-        if ( !fetchedHomeSettings || fetchedHomeSettings == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_HOME_NOT_SETUP', fetchCommandMention("setup")) }); return; }
+        if ( !fetchedHomeSettings || fetchedHomeSettings == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_HOME_NOT_SETUP', `\`/setup\``) }); return; }
 
         // Now fetch subcommand used
         const SubcommandInput = interaction.options.getSubcommand(true);

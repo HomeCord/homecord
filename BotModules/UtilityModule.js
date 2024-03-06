@@ -112,7 +112,7 @@ module.exports = {
 
 
     /**
-     * Fetches the Command Mention (in "</name:id>" format) for the given Command Name
+     * Fetches the Command Mention for the given Command Name
      * 
      * @param {String} commandName 
      * @param {?String} guildId Only include if wanted Command is a guild-specific Command, not global Command

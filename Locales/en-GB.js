@@ -423,4 +423,20 @@ module.exports = {
     BLOCK_COMMAND_ERROR_GENERIC_CHANNELS: `An error has occurred while trying to add those selected Channels to this Server's Home Block List.`,
     BLOCK_COMMAND_ERROR_GENERIC_CATEGORIES: `An error has occurred while trying to add those selected Categories to this Server's Home Block List.`,
     BLOCK_COMMAND_ERROR_GENERIC_ROLES: `An error has occurred while trying to add those selected Roles to this Server's Home Block List.`,
+
+
+
+    // ******* BLOCKLIST COMMAND
+    BLOCKLIST_COMMAND_EMPTY: `There is currently nothing in this Server's Home Block List!`,
+
+    BLOCKLIST_COMMAND_EMBED_TITLE: `{{0}} - Home Block List`,
+    BLOCKLIST_COMMAND_EMBED_DESCRIPTION: `*Below is all the Roles, Channels, and Categories blocked from being featured/highlighted onto this Server's Home Channel.*\n\n- *To add to the Block List, use {{0}} .*\n- *To remove from the Block List, use {{1}} .*`,
+    
+    BLOCKLIST_COMMAND_HEADER_ROLES: `{{0}} Blocked Roles`,
+    BLOCKLIST_COMMAND_HEADER_CHANNELS: `{{0}} Blocked Channels`,
+    BLOCKLIST_COMMAND_HEADER_CATEGORIES: `{{0}} Blocked Categories`,
+    
+    BLOCKLIST_COMMAND_ROLES_EMPTY: `*No Roles Blocked*`,
+    BLOCKLIST_COMMAND_CHANNELS_EMPTY: `*No Channels Blocked*`,
+    BLOCKLIST_COMMAND_CATEGORIES_EMPTY: `*No Categories Blocked*`,
 };
