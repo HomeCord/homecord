@@ -99,8 +99,8 @@ module.exports = {
         .setDescription(localize(interaction.locale, 'BLOCKLIST_COMMAND_EMBED_DESCRIPTION', `\`/block\``, `\`/unblock\``))
         .addFields(
             { name: localize(interaction.locale, 'BLOCKLIST_COMMAND_HEADER_ROLES', `${blockedRoles.length}`), value: blockedRoles.length < 1 ? localize(interaction.locale, 'BLOCKLIST_COMMAND_ROLES_EMPTY') : blockedRoles.join(', ') },
-            { name: localize(interaction.locale, 'BLOCKLIST_COMMAND_HEADER_CHANNELS', `${blockedChannels.length}`), value: blockedChannels.length < 1 ? localize(interaction.locale, 'BLOCKLIST_COMMAND_CHANNELS_EMPTY') : blockedRoles.join(', ') },
-            { name: localize(interaction.locale, 'BLOCKLIST_COMMAND_HEADER_CATEGORIES', `${blockedCategories.length}`), value: blockedCategories.length < 1 ? localize(interaction.locale, 'BLOCKLIST_COMMAND_CATEGORIES_EMPTY') : blockedRoles.join(', ') }
+            { name: localize(interaction.locale, 'BLOCKLIST_COMMAND_HEADER_CHANNELS', `${blockedChannels.length}`), value: blockedChannels.length < 1 ? localize(interaction.locale, 'BLOCKLIST_COMMAND_CHANNELS_EMPTY') : blockedChannels.join(', ') },
+            { name: localize(interaction.locale, 'BLOCKLIST_COMMAND_HEADER_CATEGORIES', `${blockedCategories.length}`), value: blockedCategories.length < 1 ? localize(interaction.locale, 'BLOCKLIST_COMMAND_CATEGORIES_EMPTY') : blockedCategories.join(', ') }
         );
 
 

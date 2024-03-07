@@ -396,9 +396,9 @@ module.exports = {
 
 
     // ******* BLOCK COMMAND
-    BLOCK_COMMAND_CHANNEL_INSTRUCTIONS: `Please use the Channel Select below to pick which Channels to add to this Server's Home Block List.\nYou have {{0}} slots left in this Server's Channel Block List.\n\n:information_source: *Note: While HomeCord offers the ability to add Channels & Categories to its Block List, it is preferred for Server Admins to revoke "**View Channel**" Permission for HomeCord in all Channels and Categories that Servers don't want HomeCord to feature Messages/etc from.*`,
-    BLOCK_COMMAND_CATEGORY_INSTRUCTIONS: `Please use the Category Select below to pick which Categories to add to this Server's Home Block List.\nYou have {{0}} slots left in this Server's Category Block List.\n\n:information_source: *Note: While HomeCord offers the ability to add Channels & Categories to its Block List, it is preferred for Server Admins to revoke "**View Channel**" Permission for HomeCord in all Channels and Categories that Servers don't want HomeCord to feature Messages/etc from.*`,
-    BLOCK_COMMAND_ROLE_INSTRUCTIONS: `Please use the Role Select below to pick which Roles to add to this Server's Home Block List.\nYou have {{0}} slots left in this Server's Role Block List.`,
+    BLOCK_COMMAND_CHANNEL_INSTRUCTIONS: `Please use the Channel Select below to pick which Channels to add to this Server's Home Block List.\n\nYou have {{0}} slots left in this Server's Channel Block List.`,
+    BLOCK_COMMAND_CATEGORY_INSTRUCTIONS: `Please use the Category Select below to pick which Categories to add to this Server's Home Block List.\n\nYou have {{0}} slots left in this Server's Category Block List.`,
+    BLOCK_COMMAND_ROLE_INSTRUCTIONS: `Please use the Role Select below to pick which Roles to add to this Server's Home Block List.\n\nYou have {{0}} slots left in this Server's Role Block List.`,
 
     BLOCK_COMMAND_SELECT_PLACEHOLDER_CHANNEL: `Search & select up to {{0}} Channels`,
     BLOCK_COMMAND_SELECT_PLACEHOLDER_CATEGORY: `Search & select up to {{0}} Categories`,
