@@ -227,7 +227,7 @@ async function setupExistingChannel(interaction, settingValues)
     .then(async createdWebhook => {
 
         // Create the header Message
-        await createdWebhook.send({ allowedMentions: { parse: [] }, content: `${localize(interaction.guildLocale, 'HOME_TITLE', interaction.guild.name)}\n${localize(interaction.guildLocale, 'HOME_SUBHEADING')}` })
+        await createdWebhook.send({ allowedMentions: { parse: [] }, content: `${localize(interaction.guildLocale, 'HOME_TITLE', interaction.guild.name)}\n${interaction.guild.description != null ? `\`\`\`${interaction.guild.description}\`\`\`\n\n${localize(interaction.guildLocale, 'HOME_SUBHEADING')}` : localize(interaction.guildLocale, 'HOME_SUBHEADING')}` })
         .then(async headerMessage => {
 
             // Create Message for Events & Threads
