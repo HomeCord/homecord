@@ -3,9 +3,11 @@ const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel } = require("..
 const { replyThreshold, reactionThreshold } = require("../../Resources/activityThresholds");
 const { DiscordClient } = require("../../constants");
 const { LogError } = require("../LoggingModule");
-const { resetHomeSliently, expireMessage, refreshMessagesAudio } = require("../HomeModule");
+const { refreshMessagesAudio } = require("../HomeModule");
 const { calculateIsoTimeUntil, calculateUnixTimeUntil, calculateTimeoutDuration } = require("../UtilityModule");
 const { localize } = require("../LocalizationModule");
+const { expireMessage } = require("../ExpiryModule");
+const { resetHomeSliently } = require("../ResetHomeModule");
 
 // Caches
 /** Cache of Messages & how many Replies they've had in the past 3 days

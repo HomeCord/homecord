@@ -4,7 +4,8 @@ const { localize } = require("../../../BotModules/LocalizationModule.js");
 const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel, FeaturedThread, GuildBlocklist } = require("../../../Mongoose/Models.js");
 const { calculateIsoTimeUntil, calculateUnixTimeUntil, calculateTimeoutDuration } = require("../../../BotModules/UtilityModule.js");
 const { LogError } = require("../../../BotModules/LoggingModule.js");
-const { refreshEventsThreads, expireEvent, refreshHeader, expireThread } = require("../../../BotModules/HomeModule.js");
+const { refreshEventsThreads, refreshHeader } = require("../../../BotModules/HomeModule.js");
+const { expireEvent, expireThread } = require("../../../BotModules/ExpiryModule.js");
 
 // To ensure not hitting 3 second limit on autocomplete response timings
 /** @type {Collection<String, Collection<String, GuildScheduledEvent>>} */
@@ -358,7 +359,7 @@ module.exports = {
                 .then(async () => {
 
                     // Store callback to remove featured Thread from Home Channel after duration (just in case)
-                    await TimerModel.create({ timerExpires: calculateUnixTimeUntil(InputDuration), callback: expireEvent.toString(), guildId: interaction.guildId, threadId: InputThread.id, guildLocale: interaction.guildLocale })
+                    await TimerModel.create({ timerExpires: calculateUnixTimeUntil(InputDuration), callback: expireThread.toString(), guildId: interaction.guildId, threadId: InputThread.id, guildLocale: interaction.guildLocale })
                     .then(async newDocument => { await newDocument.save(); })
                     .catch(async err => { await LogError(err); });
 

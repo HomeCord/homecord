@@ -4,7 +4,9 @@ const { GuildConfig, TimerModel, FeaturedMessage } = require("../../../Mongoose/
 const { DiscordClient } = require("../../../constants");
 const { LogError } = require("../../../BotModules/LoggingModule");
 const { calculateUnixTimeUntil, calculateTimeoutDuration, calculateIsoTimeUntil } = require("../../../BotModules/UtilityModule");
-const { refreshMessagesAudio, expireMessage, resetHomeSliently } = require("../../../BotModules/HomeModule");
+const { refreshMessagesAudio } = require("../../../BotModules/HomeModule");
+const { resetHomeSliently } = require("../../../BotModules/ResetHomeModule");
+const { expireMessage } = require("../../../BotModules/ExpiryModule");
 
 module.exports = {
     // Select's Name

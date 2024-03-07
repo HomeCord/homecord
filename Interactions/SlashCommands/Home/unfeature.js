@@ -3,7 +3,7 @@ const { DiscordClient, Collections } = require("../../../constants.js");
 const { localize } = require("../../../BotModules/LocalizationModule.js");
 const { GuildConfig, FeaturedEvent, TimerModel, FeaturedChannel, FeaturedThread } = require("../../../Mongoose/Models.js");
 const { LogError } = require("../../../BotModules/LoggingModule.js");
-const { refreshEventsThreads, expireEvent, refreshHeader, expireThread } = require("../../../BotModules/HomeModule.js");
+const { refreshEventsThreads, refreshHeader } = require("../../../BotModules/HomeModule.js");
 
 // To ensure not hitting 3 second limit on autocomplete response timings
 /** @type {Collection<String, Collection<String, GuildScheduledEvent>>} */

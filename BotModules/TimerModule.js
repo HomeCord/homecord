@@ -1,5 +1,5 @@
 const { TimerModel } = require("../Mongoose/Models.js");
-const { expireMessage, expireEvent, expireThread } = require("./HomeModule");
+const { expireMessage, expireEvent, expireThread } = require("./ExpiryModule.js");
 const { LogError } = require("./LoggingModule");
 
 
