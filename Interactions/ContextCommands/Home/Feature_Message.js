@@ -100,8 +100,7 @@ module.exports = {
             }
 
             // ACK
-            await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_AUTHOR_ROLE_BLOCKED', InputMessage.url) });
-            return;
+            if ( hasBlockedRole ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_AUTHOR_ROLE_BLOCKED', InputMessage.url) }); return; }
         }
 
 
