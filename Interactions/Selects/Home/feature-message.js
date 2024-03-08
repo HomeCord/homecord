@@ -60,7 +60,7 @@ module.exports = {
         await HomeWebhook.send({
             username: (OriginalMessage.member?.displayName || OriginalMessage.author.displayName),
             avatarURL: (OriginalMessage.member?.avatarURL({ extension: 'png' }) || OriginalMessage.author.avatarURL({ extension: 'png' })),
-            embeds: OriginalMessage.embeds.length > 0 ? OriginalMessage.embeds : undefined,
+            //embeds: OriginalMessage.embeds.length > 0 ? OriginalMessage.embeds : undefined, // Link embeds broke with this. Whoops
             files: OriginalMessage.attachments.size > 0 ? Array.from(OriginalMessage.attachments.entries()) : undefined,
             allowedMentions: { parse: [] },
             // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
