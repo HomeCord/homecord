@@ -11,7 +11,7 @@ const { resetHomeSliently } = require("../ResetHomeModule");
 
 // Caches
 /** Cache of Messages & how many Replies they've had in the past 3 days
- * @type {Collection<String, {messageId: String, replyCount: Number}>}
+ * @type {Collection<String, {messageId: String, replyCount: Number, reactionCount: Number}>}
  */
 const MessageActivityCache = new Collection();
 /** Cache of Threads & how many Messages they've had in the past 3 days
@@ -64,7 +64,7 @@ module.exports = {
         if ( !messageCache )
         {
             // Message is NOT in cache, create object to add to Cache
-            messageCache = { messageId: RepliedMessage.id, replyCount: 1 };
+            messageCache = { messageId: RepliedMessage.id, replyCount: 1, reactionCount: 0 };
             
             // Save to cache
             MessageActivityCache.set(RepliedMessage.id, messageCache);
@@ -79,17 +79,10 @@ module.exports = {
             // Message IS in cache, add one to replyCount and check if met Activity Threshold
             messageCache.replyCount += 1;
 
-            // Grab Reactions on the message so we can use that, along with replyCount, to see if Threshold is met
-            let reactionCount = 0;
-            RepliedMessage.reactions.cache.forEach(reaction => { 
-                // Ignore Reactions added by the Message author
-                if ( !reaction.users.cache.has(RepliedMessage.author.id) ) { reactionCount += reaction.count; }
-            });
-
             let guildConfig = await GuildConfig.findOne({ guildId: message.guildId });
 
             // Total of both Replies and Reactions
-            let totalActivityCount = messageCache.replyCount + reactionCount;
+            let totalActivityCount = messageCache.replyCount + messageCache.reactionCount;
             let totalThreshold = (replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2;
 
             // Fetch which Activity Threshold Server uses
@@ -99,7 +92,7 @@ module.exports = {
             let setReactionThreshold = reactionThreshold[guildConfig.activityThreshold];
 
             // Check Threshold!
-            if ( messageCache.replyCount >= setReplyThreshold || reactionCount >= setReactionThreshold || totalActivityCount >= totalThreshold )
+            if ( messageCache.replyCount >= setReplyThreshold || messageCache.reactionCount >= setReactionThreshold || totalActivityCount >= totalThreshold )
             {
 
                 // Threshold met - Highlight Message!
@@ -120,7 +113,7 @@ module.exports = {
                 await HomeWebhook.send({
                     username: (RepliedMessage.member?.displayName || RepliedMessage.author.displayName),
                     avatarURL: (RepliedMessage.member?.avatarURL({ extension: 'png' }) || RepliedMessage.author.avatarURL({ extension: 'png' })),
-                    embeds: RepliedMessage.embeds.length > 0 ? RepliedMessage.embeds : undefined,
+                    //embeds: RepliedMessage.embeds.length > 0 ? RepliedMessage.embeds : undefined, // Link embeds break with this lol
                     files: RepliedMessage.attachments.size > 0 ? Array.from(RepliedMessage.attachments.entries()) : undefined,
                     allowedMentions: { parse: [] },
                     // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
@@ -242,7 +235,7 @@ module.exports = {
         if ( !messageCache )
         {
             // NOT in cache, create & add to cache
-            messageCache = { messageId: message.id, replyCount: 0 };
+            messageCache = { messageId: message.id, replyCount: 0, reactionCount: 1 };
 
             // Save to cache
             MessageActivityCache.set(message.id, messageCache);
@@ -254,19 +247,13 @@ module.exports = {
         }
         else
         {
-            // IS in cache, check if meeting Thresholds
-
-            // Grab all Reactions on the message so we can use that, along with replyCount, to see if Thresholds are met
-            let reactionCount = 0;
-            message.reactions.cache.forEach(reaction => {
-                // Ignore Reactions added by the Message author
-                if ( !reaction.users.cache.has(message.author.id) ) { reactionCount += reaction.count; }
-            });
+            // Message IS in cache, add one to reactionCount and check if met Activity Threshold
+            messageCache.reactionCount += 1;
 
             let guildConfig = await GuildConfig.findOne({ guildId: message.guildId });
 
             // Total of both Replies and Reactions
-            let totalActivityCount = messageCache.replyCount + reactionCount;
+            let totalActivityCount = messageCache.replyCount + messageCache.reactionCount;
             let totalThreshold = (replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2;
 
             // Fetch which Activity Threshold Server uses
@@ -277,7 +264,7 @@ module.exports = {
 
             
             // Check Threshold!
-            if ( messageCache.replyCount >= setReplyThreshold || reactionCount >= setReactionThreshold || totalActivityCount >= totalThreshold )
+            if ( messageCache.replyCount >= setReplyThreshold || messageCache.reactionCount >= setReactionThreshold || totalActivityCount >= totalThreshold )
             {
                 
                 // Threshold met - highlight Message!
@@ -299,7 +286,7 @@ module.exports = {
                 await HomeWebhook.send({
                     username: (message.member?.displayName || message.author.displayName),
                     avatarURL: (message.member?.avatarURL({ extension: 'png' }) || message.author.avatarURL({ extension: 'png' })),
-                    embeds: message.embeds.length > 0 ? message.embeds : undefined,
+                    //embeds: message.embeds.length > 0 ? message.embeds : undefined, // Link embeds broke
                     files: message.attachments.size > 0 ? Array.from(message.attachments.entries()) : undefined,
                     allowedMentions: { parse: [] },
                     // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
