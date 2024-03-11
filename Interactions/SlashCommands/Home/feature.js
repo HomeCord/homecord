@@ -288,8 +288,8 @@ module.exports = {
             if ( fetchedFeaturedChannels.find(tempDoc => tempDoc.channelId === InputChannel.id) != undefined ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_ALREADY_FEATURED') }); return; }
 
             // Check against Block List
-            if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputChannel.id }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_BLOCKED') }); return; }
-            if ( InputChannel.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputChannel.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CATEGORY_BLOCKED') }); return; }
+            //if ( await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputChannel.id }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CHANNEL_BLOCKED') }); return; }
+            //if ( InputChannel.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: InputChannel.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_CHANNEL_ERROR_CATEGORY_BLOCKED') }); return; }
 
             // Add to database
             await FeaturedChannel.create({
