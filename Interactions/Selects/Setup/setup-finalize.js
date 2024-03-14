@@ -88,7 +88,7 @@ async function setupNewChannel(interaction, settingValues)
         type: ChannelType.GuildText,
         topic: localize(interaction.guildLocale, 'HOME_CHANNEL_DESCRIPTION'),
         permissionOverwrites: [
-            { id: interaction.guildId, deny: PermissionFlagsBits.SendMessages, allow: PermissionFlagsBits.UseExternalEmojis, type: OverwriteType.Role }, // for atEveryone
+            { id: interaction.guildId, deny: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.CreatePublicThreads, PermissionFlagsBits.CreatePrivateThreads, PermissionFlagsBits.AddReactions, PermissionFlagsBits.UseEmbeddedActivities], allow: PermissionFlagsBits.UseExternalEmojis, type: OverwriteType.Role }, // for atEveryone
             { id: DiscordClient.user.id, allow: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageWebhooks], type: OverwriteType.Member } // for HomeCord
         ],
         reason: localize(interaction.guildLocale, 'HOMECORD_CHANNEL_CREATION_REASON', fetchDisplayName(interaction.user, true))
