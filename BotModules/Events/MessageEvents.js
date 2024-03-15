@@ -1,4 +1,4 @@
-const { Message, Collection, MessageReaction, User } = require("discord.js");
+const { Message, Collection, MessageReaction, User, AttachmentBuilder } = require("discord.js");
 const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel } = require("../../Mongoose/Models");
 const { replyThreshold, reactionThreshold } = require("../../Resources/activityThresholds");
 const { DiscordClient } = require("../../constants");
@@ -109,12 +109,23 @@ module.exports = {
                     else { return; }
                 }
 
+
+                // If attachments in original messages, do thing
+                let originalAttachments = [];
+                if ( message.attachments.size > 0 ) {
+                    message.attachments.forEach(attachment => {
+                        if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
+                        else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
+                    });
+                }
+
+
                 // Cross-post Message to Home Channel
                 await HomeWebhook.send({
                     username: (RepliedMessage.member?.displayName || RepliedMessage.author.displayName),
                     avatarURL: (RepliedMessage.member?.avatarURL({ extension: 'png' }) || RepliedMessage.author.avatarURL({ extension: 'png' })),
                     //embeds: RepliedMessage.embeds.length > 0 ? RepliedMessage.embeds : undefined, // Link embeds break with this lol
-                    files: RepliedMessage.attachments.size > 0 ? Array.from(RepliedMessage.attachments.entries()) : undefined,
+                    files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
                     // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
                     content: `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${RepliedMessage.url}>)**${RepliedMessage.content.length > 0 ? `\n\n${RepliedMessage.content.length > 1800 ? `${RepliedMessage.content.slice(0, 1801)}...` : RepliedMessage.content}` : ''}`
@@ -283,12 +294,22 @@ module.exports = {
                 }
 
 
+                // If attachments in original messages, do thing
+                let originalAttachments = [];
+                if ( message.attachments.size > 0 ) {
+                    message.attachments.forEach(attachment => {
+                        if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
+                        else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
+                    });
+                }
+
+
                 // Cross-post Message to Home Channel
                 await HomeWebhook.send({
-                    username: (messageAuthor?.displayName || messageAuthor.displayName),
-                    avatarURL: (messageAuthor?.avatarURL({ extension: 'png' }) || messageAuthor.avatarURL({ extension: 'png' })),
+                    username: (messageAuthor?.displayName || messageAuthor.user.displayName),
+                    avatarURL: (messageAuthor?.displayAvatarURL({ extension: 'png' }) || messageAuthor.user.displayAvatarURL({ extension: 'png' })),
                     //embeds: message.embeds.length > 0 ? message.embeds : undefined, // Link embeds broke
-                    files: message.attachments.size > 0 ? Array.from(message.attachments.entries()) : undefined,
+                    files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
                     // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
                     content: `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${message.url}>)**${message.content.length > 0 ? `\n\n${message.content.length > 1800 ? `${message.content.slice(0, 1801)}...` : message.content}` : ''}`
