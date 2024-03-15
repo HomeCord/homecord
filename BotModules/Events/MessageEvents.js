@@ -194,6 +194,7 @@ module.exports = {
     async processMessageReaction(reaction, user)
     {
         let message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
+        let messageAuthor = message.member == null ? await message.guild.members.fetch(message.author.id) : message.member.partial ? await message.member.fetch() : message.member;
 
         // Ignore Bots, System Messages
         if ( message.author.bot ) { return; }
@@ -220,7 +221,7 @@ module.exports = {
 
         // Check Message Author's Roles against Block List
         //    Using an Array as to do the check in one DB call
-        let messageMemberRoles = message.member?.roles?.cache;
+        let messageMemberRoles = messageAuthor.roles?.cache;
         let roleFilterArray = [];
         messageMemberRoles.forEach(role => {
             // Filter out atEveryone
@@ -284,8 +285,8 @@ module.exports = {
 
                 // Cross-post Message to Home Channel
                 await HomeWebhook.send({
-                    username: (message.member?.displayName || message.author.displayName),
-                    avatarURL: (message.member?.avatarURL({ extension: 'png' }) || message.author.avatarURL({ extension: 'png' })),
+                    username: (messageAuthor?.displayName || messageAuthor.displayName),
+                    avatarURL: (messageAuthor?.avatarURL({ extension: 'png' }) || messageAuthor.avatarURL({ extension: 'png' })),
                     //embeds: message.embeds.length > 0 ? message.embeds : undefined, // Link embeds broke
                     files: message.attachments.size > 0 ? Array.from(message.attachments.entries()) : undefined,
                     allowedMentions: { parse: [] },
