@@ -19,6 +19,10 @@ const MessageActivityCache = new Collection();
  */
 const ThreadActivityCache = new Collection();
 
+// Just for reducing spam caused by bulk-additions of Reactions to Messages!
+/** @type {Collection<String, {thresholdMet: Boolean}>} */
+const MessageCooldown = new Collection();
+
 module.exports = {
 
     /**
@@ -255,6 +259,14 @@ module.exports = {
             // Create timeout to delete after 3 days
             setTimeout(() => { MessageActivityCache.delete(message.id); }, 2.592e+8);
 
+
+            // Create cooldown to prevent highlighting for about an hour, to reduce chances of being spammed
+            if ( !MessageCooldown.has(message.id) )
+            {
+                MessageCooldown.set(message.id, { thresholdMet: false });
+                setTimeout(() => { MessageCooldown.delete(message.id); }, 3.6e+6);
+            }
+
             return;
         }
         else
@@ -279,7 +291,20 @@ module.exports = {
             if ( messageCache.replyCount >= setReplyThreshold || messageCache.reactionCount >= setReactionThreshold || totalActivityCount >= totalThreshold )
             {
                 
-                // Threshold met - highlight Message!
+                // ******* Threshold met
+
+                // If anti-spam cooldown is active, hold off
+                let fetchedMessageCooldown = MessageCooldown.get(message.id)
+                if ( fetchedMessageCooldown != undefined )
+                {
+                    if ( fetchedMessageCooldown.thresholdMet === true ) { return; }
+                    else
+                    {
+                        fetchedMessageCooldown.thresholdMet = true;
+                        MessageCooldown.set(message.id, fetchedMessageCooldown);
+                    }
+                }
+
                 // Grab Webhook
                 let HomeWebhook;
                 try { HomeWebhook = await DiscordClient.fetchWebhook(guildConfig.homeWebhookId); }
@@ -367,7 +392,8 @@ module.exports = {
             }
             else
             {
-                // Threshold not met
+                // ******* Threshold not met
+
                 // Save to cache
                 MessageActivityCache.set(message.id, messageCache);
 
