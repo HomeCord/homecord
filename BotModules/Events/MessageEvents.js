@@ -83,7 +83,7 @@ module.exports = {
 
             // Total of both Replies and Reactions
             let totalActivityCount = messageCache.replyCount + messageCache.reactionCount;
-            let totalThreshold = Math.floor((replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2);
+            let totalThreshold = Math.ceil((replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2);
 
             // Fetch which Activity Threshold Server uses
             /** @type {Number} */
@@ -266,7 +266,7 @@ module.exports = {
 
             // Total of both Replies and Reactions
             let totalActivityCount = messageCache.replyCount + messageCache.reactionCount;
-            let totalThreshold = Math.floor((replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2);
+            let totalThreshold = Math.ceil((replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2);
 
             // Fetch which Activity Threshold Server uses
             /** @type {Number} */
