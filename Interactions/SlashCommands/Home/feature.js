@@ -379,7 +379,7 @@ module.exports = {
                     await LogError(err);
                     await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_COMMAND_THREAD_ERROR_GENERIC') });
                     return;
-                })
+                });
             })
             .catch(async err => {
                 await LogError(err);

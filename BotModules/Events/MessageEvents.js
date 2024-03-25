@@ -1,12 +1,12 @@
-const { Message, Collection, MessageReaction, User, AttachmentBuilder } = require("discord.js");
-const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel } = require("../../Mongoose/Models");
-const { replyThreshold, reactionThreshold } = require("../../Resources/activityThresholds");
+const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType } = require("discord.js");
+const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel, FeaturedThread } = require("../../Mongoose/Models");
+const { replyThreshold, reactionThreshold, threadThreshold } = require("../../Resources/activityThresholds");
 const { DiscordClient } = require("../../constants");
 const { LogError } = require("../LoggingModule");
-const { refreshMessagesAudio } = require("../HomeModule");
+const { refreshMessagesAudio, refreshEventsThreads } = require("../HomeModule");
 const { calculateIsoTimeUntil, calculateUnixTimeUntil, calculateTimeoutDuration } = require("../UtilityModule");
 const { localize } = require("../LocalizationModule");
-const { expireMessage } = require("../ExpiryModule");
+const { expireMessage, expireThread } = require("../ExpiryModule");
 const { resetHomeSliently } = require("../ResetHomeModule");
 
 // Caches
@@ -396,6 +396,110 @@ module.exports = {
 
                 // Save to cache
                 MessageActivityCache.set(message.id, messageCache);
+
+                return;
+            }
+        }
+    },
+
+
+
+
+
+    /**
+     * Processes Messages that are in public Threads, for highlighting Threads!
+     * @param {Message} message 
+     */
+    async processMessageInThread(message)
+    {
+        // Check Channel/Category Block List
+        let blockListFilter = [ { blockedId: message.channelId } ];
+        if ( message.channel.parentId != null ) { blockListFilter.push({ blockedId: message.channel.parentId }); }
+        if ( message.channel.parent?.parentId != null ) { blockListFilter.push({ blockedId: message.channel.parent.parentId }); }
+        if ( await GuildBlocklist.exists({ guildId: message.guildId, $or: blockListFilter }) != null ) { return; }
+
+        // Check if max featured Threads has been reached
+        if ( (await FeaturedThread.find({ guildId: message.guildId })).length === 5 ) { return; }
+
+        // Check if Thread is already featured
+        if ( await FeaturedThread.exists({ guildId: message.guildId, threadId: message.channelId }) != null ) { return; }
+
+
+        // Check if Thread is in cache
+        let threadCache = ThreadActivityCache.get(message.channelId);
+        if ( !threadCache )
+        {
+            // Thread is NOT in cache, create object to add to cache
+            threadCache = { threadId: message.channelId, messageCount: 1 };
+
+            // Save to cache
+            ThreadActivityCache.set(message.channelId, threadCache);
+
+            // Create timeout to delete after 3 days
+            setTimeout(() => { ThreadActivityCache.delete(message.channelId) }, 2.592e+8);
+
+            return;
+        }
+        else
+        {
+            // Thread IS in cache, add one to count and check if met Activity Threshold
+            threadCache.messageCount += 1;
+
+            let guildConfig = await GuildConfig.findOne({ guildId: message.guildId });
+
+            // Fetch Activity Threshold Server uses
+            /** @type {Number} */
+            let setThreadThreshold = threadThreshold[guildConfig.activityThreshold];
+
+
+            // Check Threshold
+            if ( threadCache.messageCount >= setThreadThreshold )
+            {
+                // Threshold met - Highlight Thread!
+                
+                // Add to DB
+                await FeaturedThread.create({
+                    guildId: message.guildId,
+                    threadId: message.channelId,
+                    threadType: message.channel.parent?.type === ChannelType.GuildForum ? "POST" : message.channel.parent?.type === ChannelType.GuildMedia ? "POST" : "THREAD",
+                    featureType: "HIGHLIGHT",
+                    featureUntil: calculateIsoTimeUntil('THREE_DAYS')
+                })
+                .then(async (newDocument) => {
+                    await newDocument.save()
+                    .then(async () => {
+                        // Store callback to remove featured Thread from Home Channel after duration (just in case)
+                        await TimerModel.create({ timerExpires: calculateUnixTimeUntil('THREE_DAYS'), callback: expireThread.toString(), guildId: message.guildId, threadId: message.channelId, guildLocale: message.guild.preferredLocale })
+                        .then(async newDocument => { await newDocument.save(); })
+                        .catch(async err => { await LogError(err); });
+                    
+                        // Call method to update Home Channel
+                        await refreshEventsThreads(message.guildId, message.guild.preferredLocale);
+                    
+                        // Timeout for auto-removing the Thread
+                        setTimeout(async () => { await expireThread(message.guildId, message.channelId, message.guild.preferredLocale) }, calculateTimeoutDuration('THREE_DAYS'));
+                        
+                        ThreadActivityCache.delete(message.channelId); // Delete from cache now that its highlighted
+                        
+                        return;
+                    })
+                    .catch(async err => {
+                        await LogError(err);
+                        return;
+                    });
+                })
+                .catch(async err => {
+                    await LogError(err);
+                    return;
+                });
+
+                return;
+            }
+            else
+            {
+                // Threshold not met
+                // Save to cache
+                ThreadActivityCache.set(message.channelId, threadCache);
 
                 return;
             }
