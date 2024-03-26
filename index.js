@@ -1,4 +1,4 @@
-const { RateLimitError, DMChannel, PartialGroupDMChannel, MessageType, ChannelType } = require("discord.js");
+const { RateLimitError, DMChannel, PartialGroupDMChannel, MessageType, ChannelType, Message } = require("discord.js");
 const Mongoose = require("mongoose");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -169,9 +169,16 @@ Mongoose.connection.on('error', async err => { await LogError(err); });
 // DISCORD - MESSAGE CREATE EVENT
 const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js");
 
-DiscordClient.on('messageCreate', async (message) => {
-    // Partials
-    if ( message.partial ) { await message.fetch(); }
+DiscordClient.ws.on('MESSAGE_CREATE', async (rawMessage) => {
+    
+    // If Message has Poll, exit early
+    if ( rawMessage.poll ) { return; }
+    
+    // Fetch into DJS Message Object
+    const messageChannel = await DiscordClient.channels.fetch(rawMessage.channel_id);
+    /** @type {Message} */
+    const message = await messageChannel.messages.fetch({ message: rawMessage.id });
+
 
     // Bots
     if ( message.author.bot ) { return; }
