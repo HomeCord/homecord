@@ -6,6 +6,7 @@ const { DiscordClient, Collections, checkPomelo } = require("./constants.js");
 const Config = require("./config.js");
 const { LogWarn, LogError, LogInfo } = require("./BotModules/LoggingModule.js");
 const { restartTimersOnStartup } = require("./BotModules/TimerModule.js");
+const { processMessageReply, processMessageReaction, processMessageInThread } = require("./BotModules/Events/MessageEvents.js");
 
 
 
@@ -217,7 +218,7 @@ DiscordClient.ws.on('MESSAGE_CREATE', async (rawMessage) => {
         // If sent in Public Thread Channel check for highlighting! (if enabled)
         if ( homeConfig?.highlightThreads === true && (message.channel.type === ChannelType.PublicThread || message.channel.type === ChannelType.AnnouncementThread) )
         {
-            //.
+            await processMessageInThread(message);
         }
 
         return;
@@ -304,7 +305,6 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 const { removeGuild } = require("./BotModules/DatabaseModule.js");
 const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
 const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
-const { processMessageReply, processMessageReaction } = require("./BotModules/Events/MessageEvents.js");
 const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
 const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
 
