@@ -1,6 +1,15 @@
-const { ApplicationCommandType, ApplicationCommandData, ContextMenuCommandInteraction, PermissionFlagsBits, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, MessageFlags } = require("discord.js");
+const { ApplicationCommandType, ApplicationCommandData, ContextMenuCommandInteraction, PermissionFlagsBits, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, MessageFlags, MessageType } = require("discord.js");
 const { localize } = require("../../../BotModules/LocalizationModule");
 const { GuildConfig, FeaturedMessage, UserConfig, GuildBlocklist } = require("../../../Mongoose/Models");
+
+// Disallowed Message Types for highlighting
+const DisallowedMessageTypes = [ MessageType.AutoModerationAction, MessageType.Call, MessageType.ChannelFollowAdd, MessageType.ChannelIconChange,
+    MessageType.ChannelNameChange, MessageType.ChannelPinnedMessage, MessageType.ChatInputCommand, MessageType.ContextMenuCommand, MessageType.GuildApplicationPremiumSubscription,
+    MessageType.GuildBoost, MessageType.GuildBoostTier1, MessageType.GuildBoostTier2, MessageType.GuildBoostTier3, MessageType.GuildDiscoveryDisqualified,
+    MessageType.GuildDiscoveryGracePeriodFinalWarning, MessageType.GuildDiscoveryGracePeriodInitialWarning, MessageType.GuildDiscoveryRequalified,
+    MessageType.GuildInviteReminder, MessageType.InteractionPremiumUpsell, MessageType.RecipientAdd, MessageType.RecipientRemove, MessageType.RoleSubscriptionPurchase,
+    MessageType.StageEnd, MessageType.StageRaiseHand, MessageType.StageSpeaker, MessageType.StageStart, MessageType.StageTopic, MessageType.ThreadCreated,
+    MessageType.UserJoin ];
 
 module.exports = {
     // Command's Name
@@ -68,6 +77,12 @@ module.exports = {
 
         // Check if Voice Message
         if ( InputMessage.flags.has(MessageFlags.IsVoiceMessage) ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_VOICE_MESSAGE') }); return; }
+
+        // Check if invalid Message type
+        if ( DisallowedMessageTypes.includes(InputMessage.type) ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_GENERIC') }); return; }
+
+        // Check if Message is too old
+        if ( (Date.now() - InputMessage.createdAt.getTime()) > 6.048e+8 ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_OLD') }); return; }
 
         // Check if Message content is too long
         if ( InputMessage.content.length > 1800 ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_LONG') }); return; }

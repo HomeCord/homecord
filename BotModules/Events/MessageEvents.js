@@ -1,4 +1,4 @@
-const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType } = require("discord.js");
+const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType, MessageType } = require("discord.js");
 const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel, FeaturedThread } = require("../../Mongoose/Models");
 const { replyThreshold, reactionThreshold, threadThreshold } = require("../../Resources/activityThresholds");
 const { DiscordClient } = require("../../constants");
@@ -23,6 +23,15 @@ const ThreadActivityCache = new Collection();
 /** @type {Collection<String, {thresholdMet: Boolean}>} */
 const MessageCooldown = new Collection();
 
+// Disallowed Message Types for highlighting
+const DisallowedMessageTypes = [ MessageType.AutoModerationAction, MessageType.Call, MessageType.ChannelFollowAdd, MessageType.ChannelIconChange,
+    MessageType.ChannelNameChange, MessageType.ChannelPinnedMessage, MessageType.ChatInputCommand, MessageType.ContextMenuCommand, MessageType.GuildApplicationPremiumSubscription,
+    MessageType.GuildBoost, MessageType.GuildBoostTier1, MessageType.GuildBoostTier2, MessageType.GuildBoostTier3, MessageType.GuildDiscoveryDisqualified,
+    MessageType.GuildDiscoveryGracePeriodFinalWarning, MessageType.GuildDiscoveryGracePeriodInitialWarning, MessageType.GuildDiscoveryRequalified,
+    MessageType.GuildInviteReminder, MessageType.InteractionPremiumUpsell, MessageType.RecipientAdd, MessageType.RecipientRemove, MessageType.RoleSubscriptionPurchase,
+    MessageType.StageEnd, MessageType.StageRaiseHand, MessageType.StageSpeaker, MessageType.StageStart, MessageType.StageTopic, MessageType.ThreadCreated,
+    MessageType.UserJoin ];
+
 module.exports = {
 
     /**
@@ -31,6 +40,15 @@ module.exports = {
      */
     async processMessageReply(message)
     {
+        // Ignore Bots, System Messages, and other disallowed Message types
+        if ( message.author.bot ) { return; }
+        if ( message.system || message.author.system ) { return; }
+        if ( DisallowedMessageTypes.includes(message.type) ) { return; }
+
+        // Safe-guard against Discord outages
+        if ( !message.guild.available ) { return; }
+
+
         // Check Channel/Category Block List
         let blockListFilter = [ { blockedId: message.channelId } ];
         if ( message.channel.parentId != null ) { blockListFilter.push({ blockedId: message.channel.parentId }); }
@@ -50,6 +68,9 @@ module.exports = {
 
         // Ignore replies to own messages
         if ( message.author.id === RepliedMessage.author.id ) { return; }
+
+        // Ensure Replied Message is not too old
+        if ( (Date.now() - RepliedMessage.createdAt.getTime()) > 6.048e+8 ) { return; }
 
         // Check Replied Message Author's Roles against Block List
         //   Using an Array as to do the check in one DB call
@@ -208,15 +229,22 @@ module.exports = {
      */
     async processMessageReaction(reaction, user)
     {
+        // Ensure we have full(ish) Message object
         let message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
-        let messageAuthor = message.member == null ? await message.guild.members.fetch(message.author.id) : message.member.partial ? await message.member.fetch() : message.member;
 
-        // Ignore Bots, System Messages
+        // Ignore Bots, System Messages, and other disallowed Message types
         if ( message.author.bot ) { return; }
         if ( message.system || message.author.system ) { return; }
+        if ( DisallowedMessageTypes.includes(message.type) ) { return; }
 
         // Safe-guard against Discord outages
         if ( !message.guild.available ) { return; }
+
+        // Ensure Message is not too old
+        if ( (Date.now() - message.createdAt.getTime()) > 6.048e+8 ) { return; }
+
+        // Grab Author of Message
+        let messageAuthor = message.member == null ? await message.guild.members.fetch(message.author.id) : message.member.partial ? await message.member.fetch() : message.member;
 
 
         // Check against Block Lists
