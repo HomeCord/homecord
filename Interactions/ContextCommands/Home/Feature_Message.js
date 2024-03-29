@@ -104,8 +104,9 @@ module.exports = {
         if ( interaction.channel.parentId != null && await GuildBlocklist.exists({ guildId: interaction.guildId, blockedId: interaction.channel.parentId }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_CATEGORY_BLOCKED') }); return; }
 
         // Finally, check if Message Author has a blocked Role
-        let authorRoles = InputMessage.member.roles.cache;
+        let authorRoles = InputMessage.member == null ? (await InputMessage.guild.members.fetch(InputMessage.author.id)).roles.cache : InputMessage.member.roles.cache; //InputMessage.member.roles.cache;
         let fetchedBlockedRoles = await GuildBlocklist.find({ guildId: interaction.guildId, blockType: "ROLE" });
+        
         if ( fetchedBlockedRoles.length > 0 ) {
             let hasBlockedRole = false;
             // Using For Statement instead of forEach just so I can use the break statement

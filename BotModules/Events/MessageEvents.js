@@ -74,8 +74,9 @@ module.exports = {
 
         // Check Replied Message Author's Roles against Block List
         //   Using an Array as to do the check in one DB call
-        let repliedMemberRoles = RepliedMessage.member?.roles?.cache;
+        let repliedMemberRoles = RepliedMessage.member == null ? (await RepliedMessage.guild.members.fetch(RepliedMessage.author.id)).roles.cache : RepliedMessage.member.roles.cache;
         let roleFilterArray = [];
+        
         repliedMemberRoles.forEach(role => {
             // Filter out atEveryone
             if ( role.id !== message.guildId ) { roleFilterArray.push({ blockedId: role.id }); }
