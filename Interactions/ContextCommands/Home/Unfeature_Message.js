@@ -66,11 +66,21 @@ module.exports = {
         if ( await GuildConfig.exists({ guildId: interaction.guildId }) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'UNFEATURE_MESSAGE_COMMAND_ERROR_HOME_NOT_SETUP') }); return; }
 
         // Validate Message is a featured message
-        if ( await FeaturedMessage.exists({ guildId: interaction.guildId, featuredMessageId: InputMessage.id }) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'UNFEATURE_MESSAGE_COMMAND_ERROR_NOT_A_FEATURED_MESSAGE') }); return; }
+        if ( await FeaturedMessage.exists({ guildId: interaction.guildId, $or: [{ featuredMessageId: InputMessage.id }, { originalMessageId: InputMessage.id }] }) == null )
+        {
+            // NOT a featured Message!
+            await interaction.editReply({ content: localize(interaction.locale, 'UNFEATURE_MESSAGE_COMMAND_ERROR_NOT_A_FEATURED_MESSAGE') });
+            return;
+        }
+
+
+        // Fetch just so we have the IDs needed
+        let fetchedMessageData = await FeaturedMessage.findOne({ guildId: interaction.guildId, $or: [{ featuredMessageId: InputMessage.id }, { originalMessageId: InputMessage.id }] });
+        let messageIdInHome = fetchedMessageData.featuredMessageId;
         
         
         // Remove from Database
-        await FeaturedMessage.deleteOne({ guildId: interaction.guildId, featuredMessageId: InputMessage.id })
+        await FeaturedMessage.deleteOne({ guildId: interaction.guildId, $or: [{ featuredMessageId: InputMessage.id }, { originalMessageId: InputMessage.id }] })
         .then(async (oldDocument) => {
             try {
 
@@ -94,10 +104,10 @@ module.exports = {
                 }
 
                 // Remove from Home Channel
-                await fetchedHomeWebhook.deleteMessage(InputMessage.id);
+                await fetchedHomeWebhook.deleteMessage(messageIdInHome);
 
                 // Just in case, remove from Timer Table
-                await TimerModel.deleteOne({ featuredMessageId: InputMessage.id });
+                await TimerModel.deleteOne({ featuredMessageId: messageIdInHome });
 
                 // Refresh Home Channel's Header
                 let refreshState = await refreshMessagesAudio(interaction.guildId, interaction.guildLocale);
