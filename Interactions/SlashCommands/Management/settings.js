@@ -215,9 +215,9 @@ async function viewSettings(interaction)
     let serverConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
 
     // Put into Embed
-    let thresholdString = `- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES')} ${localize(interaction.locale, serverConfig.messageActivity === "VERY_LOW" ? 'VERY_LOW' : serverConfig.messageActivity === "LOW" ? 'LOW' : serverConfig.messageActivity === "MEDIUM" ? 'MEDIUM' : serverConfig.messageActivity === "HIGH" ? 'HIGH' : serverConfig.messageActivity === "VERY_HIGH" ? 'VERY_HIGH' : 'DISABLED')}
-- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS')} ${localize(interaction.locale, serverConfig.eventActivity === "VERY_LOW" ? 'VERY_LOW' : serverConfig.eventActivity === "LOW" ? 'LOW' : serverConfig.eventActivity === "MEDIUM" ? 'MEDIUM' : serverConfig.eventActivity === "HIGH" ? 'HIGH' : serverConfig.eventActivity === "VERY_HIGH" ? 'VERY_HIGH' : 'DISABLED')}
-- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS')} ${localize(interaction.locale, serverConfig.threadActivity === "VERY_LOW" ? 'VERY_LOW' : serverConfig.threadActivity === "LOW" ? 'LOW' : serverConfig.threadActivity === "MEDIUM" ? 'MEDIUM' : serverConfig.threadActivity === "HIGH" ? 'HIGH' : serverConfig.threadActivity === "VERY_HIGH" ? 'VERY_HIGH' : 'DISABLED')}`;
+    let thresholdString = `- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES')} ${localize(interaction.locale, serverConfig.messageActivity)}
+- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS')} ${localize(interaction.locale, serverConfig.eventActivity)}
+- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS')} ${localize(interaction.locale, serverConfig.threadActivity)}`;
 
     let settingsEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_TITLE', interaction.guild.name))
