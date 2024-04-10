@@ -109,13 +109,13 @@ module.exports = {
 
             // Total of both Replies and Reactions
             let totalActivityCount = messageCache.replyCount + messageCache.reactionCount;
-            let totalThreshold = Math.ceil((replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2);
+            let totalThreshold = Math.ceil((replyThreshold[guildConfig.messageActivity] + reactionThreshold[guildConfig.messageActivity]) / 2);
 
             // Fetch which Activity Threshold Server uses
             /** @type {Number} */
-            let setReplyThreshold = replyThreshold[guildConfig.activityThreshold];
+            let setReplyThreshold = replyThreshold[guildConfig.messageActivity];
             /** @type {Number} */
-            let setReactionThreshold = reactionThreshold[guildConfig.activityThreshold];
+            let setReactionThreshold = reactionThreshold[guildConfig.messageActivity];
 
             // Check Threshold!
             if ( messageCache.replyCount >= setReplyThreshold || messageCache.reactionCount >= setReactionThreshold || totalActivityCount >= totalThreshold )
@@ -307,13 +307,13 @@ module.exports = {
 
             // Total of both Replies and Reactions
             let totalActivityCount = messageCache.replyCount + messageCache.reactionCount;
-            let totalThreshold = Math.ceil((replyThreshold[guildConfig.activityThreshold] + reactionThreshold[guildConfig.activityThreshold]) / 2);
+            let totalThreshold = Math.ceil((replyThreshold[guildConfig.messageActivity] + reactionThreshold[guildConfig.messageActivity]) / 2);
 
             // Fetch which Activity Threshold Server uses
             /** @type {Number} */
-            let setReplyThreshold = replyThreshold[guildConfig.activityThreshold];
+            let setReplyThreshold = replyThreshold[guildConfig.messageActivity];
             /** @type {Number} */
-            let setReactionThreshold = reactionThreshold[guildConfig.activityThreshold];
+            let setReactionThreshold = reactionThreshold[guildConfig.messageActivity];
 
             
             // Check Threshold!
@@ -478,7 +478,7 @@ module.exports = {
 
             // Fetch Activity Threshold Server uses
             /** @type {Number} */
-            let setThreadThreshold = threadThreshold[guildConfig.activityThreshold];
+            let setThreadThreshold = threadThreshold[guildConfig.threadActivity];
 
 
             // Check Threshold

@@ -209,14 +209,14 @@ DiscordClient.ws.on('MESSAGE_CREATE', async (rawMessage) => {
         // If a direct reply, check for highlighting! (if enabled)
         let homeConfig = await GuildConfig.findOne({ guildId: message.guildId });
 
-        if ( homeConfig?.highlightMessages === true && message.type === MessageType.Reply )
+        if ( homeConfig?.messageActivity !== "DISABLED" && message.type === MessageType.Reply )
         {
             await processMessageReply(message);
         }
 
 
         // If sent in Public Thread Channel check for highlighting! (if enabled)
-        if ( homeConfig?.highlightThreads === true && (message.channel.type === ChannelType.PublicThread || message.channel.type === ChannelType.AnnouncementThread) )
+        if ( homeConfig?.threadActivity !== "DISABLED" && (message.channel.type === ChannelType.PublicThread || message.channel.type === ChannelType.AnnouncementThread) )
         {
             await processMessageInThread(message);
         }
@@ -418,7 +418,7 @@ DiscordClient.on('messageReactionAdd', async (reaction, user) => {
     // Check for highlighting! (if enabled)
     let guildConfig = await GuildConfig.findOne({ guildId: reaction.message.guildId });
 
-    if ( guildConfig?.highlightMessages === true )
+    if ( guildConfig?.messageActivity !== "DISABLED" )
     {
         await processMessageReaction(reaction, user);
     }

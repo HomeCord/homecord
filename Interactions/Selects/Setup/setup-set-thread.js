@@ -29,7 +29,7 @@ module.exports = {
         let settingValues = interaction.customId.split("_");
         settingValues.shift(); // Remove custom ID
         // Replace old value
-        settingValues[6] = SelectedOption === 'TRUE' ? 't' : 'f';
+        settingValues[5] = SelectedOption === 'VERY_LOW' ? 'vl' : SelectedOption === 'LOW' ? 'l' : SelectedOption === 'MEDIUM' ? 'm' : SelectedOption === 'HIGH' ? 'h' : SelectedOption === 'VERY_HIGH' ? 'vh' : 'd';
 
         // Return to main setup page
         await interaction.update(setupMainPage(interaction.locale, settingValues));

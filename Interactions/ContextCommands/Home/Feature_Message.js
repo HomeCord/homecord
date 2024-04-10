@@ -90,6 +90,9 @@ module.exports = {
         // Ensure Server has a Home Channel setup
         if ( await GuildConfig.exists({ guildId: interaction.guildId }) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_HOME_NOT_SETUP') }); return; }
 
+        // Make sure Server allows Messages to be featured
+        //if ( (await GuildConfig.findOne({ guildId: interaction.guildId })).messageActivity === "DISABLED" ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_DISABLED') }); return; }
+
         // Ensure Message isn't already being featured
         if ( await FeaturedMessage.exists({ guildId: interaction.guildId, originalMessageId: InputMessage.id }) != null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_ALREADY_FEATURED', InputMessage.url) }); return; }
 

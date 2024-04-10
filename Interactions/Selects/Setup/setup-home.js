@@ -48,32 +48,17 @@ module.exports = {
                 break;
 
 
-            // ACTIVITY THRESHOLD OPTION
-            case 'ACTIVITY_THRESHOLD':
-                // Create Activity Select
-                let activitySelect = new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder().setCustomId(`setup-set-activity_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
-                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
-                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
-                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(interaction.locale, 'HIGH')),
-                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(interaction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
-                    )
-                );
-                // Create Embed
-                let activityEmbed = new EmbedBuilder().setColor('Grey').setTitle(localize(interaction.locale, 'SETUP_SET_ACTIVITY_EMBED_TITLE')).setDescription(localize(interaction.locale, 'SETUP_SET_ACTIVITY_EMBED_DESCRIPTION'));
-                // ACK
-                await interaction.update({ content: null, embeds: [activityEmbed], components: [activitySelect] });
-                break;
-
-
             // HIGHLIGHT MESSAGES OPTION
             case 'HIGHLIGHT_MESSAGES':
                 // Create Select
                 let messageSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-message_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
+                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(interaction.locale, 'HIGH')),
+                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(interaction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
                     )
                 );
                 // Create Embed
@@ -88,8 +73,12 @@ module.exports = {
                 // Create Select
                 let eventSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-event_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
+                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(interaction.locale, 'HIGH')),
+                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(interaction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
                     )
                 );
                 // Create Embed
@@ -104,8 +93,12 @@ module.exports = {
                 // Create Select
                 let voiceSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-voice_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
+                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(interaction.locale, 'HIGH')),
+                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(interaction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
                     )
                 );
                 // Create Embed
@@ -120,8 +113,12 @@ module.exports = {
                 // Create Select
                 let stageSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-stage_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
+                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(interaction.locale, 'HIGH')),
+                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(interaction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
                     )
                 );
                 // Create Embed
@@ -136,8 +133,12 @@ module.exports = {
                 // Create Select
                 let threadSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-thread_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`TRUE`).setLabel(localize(interaction.locale, 'ENABLE')),
-                        new StringSelectMenuOptionBuilder().setValue(`FALSE`).setLabel(localize(interaction.locale, 'DISABLE'))
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
+                        new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
+                        new StringSelectMenuOptionBuilder().setValue(`HIGH`).setLabel(localize(interaction.locale, 'HIGH')),
+                        //new StringSelectMenuOptionBuilder().setValue(`VERY_HIGH`).setLabel(localize(interaction.locale, 'VERY_HIGH')) // Saving this option as a future premium option
                     )
                 );
                 // Create Embed

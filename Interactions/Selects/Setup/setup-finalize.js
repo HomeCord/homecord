@@ -128,12 +128,11 @@ async function setupNewChannel(interaction, settingValues)
                         fetchedConfig.headerMessageId = headerMessage.id;
                         fetchedConfig.eventThreadsMessageId = eventThreadMessage.id;
                         fetchedConfig.audioMessageId = audioMessage.id;
-                        fetchedConfig.activityThreshold = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : "VERY_LOW";
-                        fetchedConfig.highlightMessages = settingValues[2] === "t" ? true : false;
-                        fetchedConfig.highlightEvents = settingValues[3] === "t" ? true : false;
-                        fetchedConfig.highlightVoice = settingValues[4] === "t" ? true : false;
-                        fetchedConfig.highlightStages = settingValues[5] === "t" ? true : false;
-                        fetchedConfig.highlightThreads = settingValues[6] === "t" ? true : false;
+                        fetchedConfig.messageActivity = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : settingValues[1] === "vl" ? "VERY_LOW" : "DISABLED";
+                        fetchedConfig.eventActivity = settingValues[2] === "vh" ? "VERY_HIGH" : settingValues[2] === "h" ? "HIGH" : settingValues[2] === "m" ? "MEDIUM" : settingValues[2] === "l" ? "LOW" : settingValues[2] === "vl" ? "VERY_LOW" : "DISABLED";
+                        fetchedConfig.voiceActivity = settingValues[3] === "vh" ? "VERY_HIGH" : settingValues[3] === "h" ? "HIGH" : settingValues[3] === "m" ? "MEDIUM" : settingValues[3] === "l" ? "LOW" : settingValues[3] === "vl" ? "VERY_LOW" : "DISABLED";
+                        fetchedConfig.stageActivity = settingValues[4] === "vh" ? "VERY_HIGH" : settingValues[4] === "h" ? "HIGH" : settingValues[4] === "m" ? "MEDIUM" : settingValues[4] === "l" ? "LOW" : settingValues[4] === "vl" ? "VERY_LOW" : "DISABLED";
+                        fetchedConfig.threadActivity = settingValues[5] === "vh" ? "VERY_HIGH" : settingValues[5] === "h" ? "HIGH" : settingValues[5] === "m" ? "MEDIUM" : settingValues[5] === "l" ? "LOW" : settingValues[5] === "vl" ? "VERY_LOW" : "DISABLED";
 
                         await fetchedConfig.save()
                         .then(async () => {
@@ -251,12 +250,11 @@ async function setupExistingChannel(interaction, settingValues)
                     fetchedConfig.headerMessageId = headerMessage.id;
                     fetchedConfig.eventThreadsMessageId = eventThreadMessage.id;
                     fetchedConfig.audioMessageId = audioMessage.id;
-                    fetchedConfig.activityThreshold = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : "VERY_LOW";
-                    fetchedConfig.highlightMessages = settingValues[2] === "t" ? true : false;
-                    fetchedConfig.highlightEvents = settingValues[3] === "t" ? true : false;
-                    fetchedConfig.highlightVoice = settingValues[4] === "t" ? true : false;
-                    fetchedConfig.highlightStages = settingValues[5] === "t" ? true : false;
-                    fetchedConfig.highlightThreads = settingValues[6] === "t" ? true : false;
+                    fetchedConfig.messageActivity = settingValues[1] === "vh" ? "VERY_HIGH" : settingValues[1] === "h" ? "HIGH" : settingValues[1] === "m" ? "MEDIUM" : settingValues[1] === "l" ? "LOW" : settingValues[1] === "vl" ? "VERY_LOW" : "DISABLED";
+                    fetchedConfig.eventActivity = settingValues[2] === "vh" ? "VERY_HIGH" : settingValues[2] === "h" ? "HIGH" : settingValues[2] === "m" ? "MEDIUM" : settingValues[2] === "l" ? "LOW" : settingValues[2] === "vl" ? "VERY_LOW" : "DISABLED";
+                    fetchedConfig.voiceActivity = settingValues[3] === "vh" ? "VERY_HIGH" : settingValues[3] === "h" ? "HIGH" : settingValues[3] === "m" ? "MEDIUM" : settingValues[3] === "l" ? "LOW" : settingValues[3] === "vl" ? "VERY_LOW" : "DISABLED";
+                    fetchedConfig.stageActivity = settingValues[4] === "vh" ? "VERY_HIGH" : settingValues[4] === "h" ? "HIGH" : settingValues[4] === "m" ? "MEDIUM" : settingValues[4] === "l" ? "LOW" : settingValues[4] === "vl" ? "VERY_LOW" : "DISABLED";
+                    fetchedConfig.threadActivity = settingValues[5] === "vh" ? "VERY_HIGH" : settingValues[5] === "h" ? "HIGH" : settingValues[5] === "m" ? "MEDIUM" : settingValues[5] === "l" ? "LOW" : settingValues[5] === "vl" ? "VERY_LOW" : "DISABLED";
 
                     await fetchedConfig.save()
                     .then(async () => {

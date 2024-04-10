@@ -87,12 +87,11 @@ module.exports = {
         .setDescription(localize(interaction.locale, 'SETUP_EMBED_DESCRIPTION'))
         .addFields(
             { name: localize(interaction.locale, 'SETUP_EMBED_CHANNEL'), value: localize(interaction.locale, 'CREATE_CHANNEL_FOR_ME') },
-            { name: localize(interaction.locale, 'SETUP_EMBED_ACTIVITY_THRESHOLD'), value: localize(interaction.locale, 'MEDIUM') },
-            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_MESSAGES'), value: localize(interaction.locale, 'TRUE') },
-            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_SCHEDULED_EVENTS'), value: localize(interaction.locale, 'TRUE') },
-            //{ name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_VOICE_ACTIVITY'), value: localize(interaction.locale, 'TRUE') },
-            //{ name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_LIVE_STAGES'), value: localize(interaction.locale, 'TRUE') },
-            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_ACTIVE_THREADS'), value: localize(interaction.locale, 'TRUE') },
+            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_MESSAGES'), value: localize(interaction.locale, 'LOW') },
+            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_SCHEDULED_EVENTS'), value: localize(interaction.locale, 'LOW') },
+            //{ name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_VOICE_ACTIVITY'), value: localize(interaction.locale, 'LOW') },
+            //{ name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_LIVE_STAGES'), value: localize(interaction.locale, 'LOW') },
+            { name: localize(interaction.locale, 'SETUP_EMBED_HIGHLIGHT_ACTIVE_THREADS'), value: localize(interaction.locale, 'LOW') },
         )
         .setFooter({ text: localize(interaction.locale, 'SETUP_EMBED_FOOTER_STEP_ONE') });
 
@@ -101,9 +100,9 @@ module.exports = {
             // The bits after "setup-home_" are used to know what the set values are for each setting
             // In order:
             //   - Home Channel location ("c" = create for me; otherwise ID of Channel)
-            //   - Activity Threshold ("vl" = very low; "l" = low; "m" = medium; "h" = high; "vh" = very high)
-            //   - Highlight Messages, Events, Voice, Stages, Threads (in that order. "t" = true; "f" = false)
-            new StringSelectMenuBuilder().setCustomId('setup-home_c_m_t_t_t_t_t').setMaxValues(1).setMinValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION'))
+            //   - Activity Thresholds ("d" = disabled; "vl" = very low; "l" = low; "m" = medium; "h" = high; "vh" = very high) for the following:
+            //     - Highlight Messages, Events, Voice, Stages, Threads (in that order)
+            new StringSelectMenuBuilder().setCustomId('setup-home_c_l_l_l_l_l').setMaxValues(1).setMinValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION'))
             .addOptions(
                 new StringSelectMenuOptionBuilder().setValue('CHANNEL').setLabel(localize(interaction.locale, 'SETUP_SELECT_CHANNEL')).setDescription(localize(interaction.locale, 'SETUP_EMBED_CHANNEL_DESCRIPTION')).setEmoji(`⚙`),
                 new StringSelectMenuOptionBuilder().setValue('ACTIVITY_THRESHOLD').setLabel(localize(interaction.locale, 'SETUP_SELECT_LABEL_ACTIVITY')).setDescription(localize(interaction.locale, 'SETUP_SELECT_EDIT_ACTIVITY_THRESHOLD')).setEmoji(`📊`),

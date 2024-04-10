@@ -81,7 +81,9 @@ module.exports = {
     FALSE: `False`,
 
     ENABLE: `Enable`,
+    ENABLED: `Enabled`,
     DISABLE: `Disable`,
+    DISABLED: `Disabled`,
 
     VERY_LOW_UPPERCASE: `VERY LOW`,
     LOW_UPPERCASE: `LOW`,
@@ -147,15 +149,15 @@ module.exports = {
 
     // ******* SETUP EMBED
     SETUP_EMBED_TITLE: `Home Channel Setup - Settings`,
-    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nOnce it's configured, select "Save & Proceed" in order to fully create your Home Channel!`,
+    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nNote: "Activity Threshold" refers to how much activity a thing needs to be automatically highlighted.\n\nOnce it's configured, select "Save & Proceed" in order to fully create your Home Channel!`,
     SETUP_EMBED_CHANNEL: `Channel to use for Home`,
     CREATE_CHANNEL_FOR_ME: `Create Channel for me`,
     SETUP_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
-    SETUP_EMBED_HIGHLIGHT_MESSAGES: `Highlight Messages`,
-    SETUP_EMBED_HIGHLIGHT_SCHEDULED_EVENTS: `Highlight Scheduled Events`,
-    SETUP_EMBED_HIGHLIGHT_VOICE_ACTIVITY: `Highlight Voice Activity`,
-    SETUP_EMBED_HIGHLIGHT_LIVE_STAGES: `Highlight Live Stages`,
-    SETUP_EMBED_HIGHLIGHT_ACTIVE_THREADS: `Highlight Active Threads & Posts`,
+    SETUP_EMBED_HIGHLIGHT_MESSAGES: `Activity Threshold for Messages`,
+    SETUP_EMBED_HIGHLIGHT_SCHEDULED_EVENTS: `Activity Threshold for Scheduled Events`,
+    SETUP_EMBED_HIGHLIGHT_VOICE_ACTIVITY: `Activity Threshold for Voice Channels`,
+    SETUP_EMBED_HIGHLIGHT_LIVE_STAGES: `Activity Threshold for live Stages`,
+    SETUP_EMBED_HIGHLIGHT_ACTIVE_THREADS: `Activity Threshold for Threads & Posts`,
     SETUP_EMBED_FOOTER_STEP_ONE: `Setup - Step 1 of 3`, // Configure Settings
     SETUP_EMBED_FOOTER_STEP_TWO: `Setup - Step 2 of 3`, // Validate Permissions
     SETUP_EMBED_FOOTER_STEP_THREE: `Setup - Step 3 of 3`, // Create & Setup "Home" Channel
@@ -165,21 +167,21 @@ module.exports = {
     // ******* SETUP SELECT
     SETUP_SELECT_CHANNEL: `Set Channel`,
     SETUP_SELECT_LABEL_ACTIVITY: `Set Activity Threshold`,
-    SETUP_SELECT_LABEL_MESSAGES: `Set Message Highlighting`,
-    SETUP_SELECT_LABEL_EVENTS: `Set Events Highlighting`,
-    SETUP_SELECT_LABEL_VOICE: `Set Voice Highlighting`,
-    SETUP_SELECT_LABEL_STAGES: `Set Stages Highlighting`,
-    SETUP_SELECT_LABEL_THREADS: `Set Threads Highlighting`,
+    SETUP_SELECT_LABEL_MESSAGES: `Set Message Threshold`,
+    SETUP_SELECT_LABEL_EVENTS: `Set Events Threshold`,
+    SETUP_SELECT_LABEL_VOICE: `Set Voice Threshold`,
+    SETUP_SELECT_LABEL_STAGES: `Set Stages Threshold`,
+    SETUP_SELECT_LABEL_THREADS: `Set Threads Threshold`,
     SETUP_SELECT_LABEL_SAVE_AND_CREATE: `Save & Proceed`,
     SETUP_SELECT_LABEL_CANCEL: `Cancel Setup`,
 
     SETUP_EMBED_CHANNEL_DESCRIPTION: `Set which Channel to use for your Home Channel`,
     SETUP_SELECT_EDIT_ACTIVITY_THRESHOLD: `Set the minimum Activity Threshold`,
-    SETUP_SELECT_TOGGLE_MESSAGES: `Toggle if Messages can be highlighted`,
-    SETUP_SELECT_TOGGLE_EVENTS: `Toggle if Scheduled Events can be highlighted`,
-    SETUP_SELECT_TOGGLE_VOICE: `Toggle if active Voice Channels can be highlighted`,
-    SETUP_SELECT_TOGGLE_STAGES: `Toggle if live Stages can be highlighted`,
-    SETUP_SELECT_TOGGLE_THREADS: `Toggle if Threads and Forum/Media Posts can be highlighted`,
+    SETUP_SELECT_TOGGLE_MESSAGES: `Set the minimum Activity Threshold for Messages`,
+    SETUP_SELECT_TOGGLE_EVENTS: `Set the minimum Activity Threshold for Scheduled Events`,
+    SETUP_SELECT_TOGGLE_VOICE: `Set the minimum Activity Threshold for Voice Channels`,
+    SETUP_SELECT_TOGGLE_STAGES: `Set the minimum Activity Threshold for live Stages`,
+    SETUP_SELECT_TOGGLE_THREADS: `Set the minimum Activity Threshold for Threads/Posts`,
     SETUP_SELECT_SAVE: `Save the settings and proceeds to Step 2`,
     SETUP_SELECT_CANCEL: `Cancel setup of your Home Channel`,
 
@@ -202,20 +204,20 @@ module.exports = {
 
 
     // ******* SETUP - TOGGLE HIGHLIGHTING STUFF
-    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Messages`,
-    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Messages being automatically highlighted on your Home Channel.\nIf enabled, Messages will be highlighted based off the number of Emoji Reactions and/or direct Replies they receive.\n\nPlease note: Disabling Message Highlights will **not** prevent you from manually featuring Messages onto your Home Channel.`,
+    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_TITLE: `Set Message Highlight Activity Threshold`,
+    SETUP_TOGGLE_MESSAGE_HIGHLIGHTS_DESCRIPTION: `Please set the minimum Activity Threshold for Messages to be automatically highlighted on your Home Channel.\nRecently sent Messages will be highlighted based off the number of Emoji Reactions and/or [direct Replies](<https://support.discord.com/hc/en-us/articles/360057382374>) they receive.\n\nPlease note: Disabling Message Highlights will **not** prevent you from manually featuring Messages onto your Home Channel.`,
 
-    SETUP_TOGGLE_EVENT_HIGHLIGHTS_TITLE: `Toggle Highlighting Events`,
-    SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable Scheduled Events being automatically highlighted on your Home Channel.\nIf enabled, Events will be highlighted based off the number of Members registering their interest for the Event.\n\nPlease note: Disabling Event Highlights will **not** prevent you from manually featuring Scheduled Events onto your Home Channel.`,
+    SETUP_TOGGLE_EVENT_HIGHLIGHTS_TITLE: `Toggle Event Highlight Activity Threshold`,
+    SETUP_TOGGLE_EVENT_HIGHLIGHTS_DESCRIPTION: `Please set the minimum Activity Threshold for Scheduled Events to be automatically highlighted on your Home Channel.\nEvents will be highlighted based off the number of Members registering their interest for the Event.\n\nPlease note: Disabling Event Highlights will **not** prevent you from manually featuring Scheduled Events onto your Home Channel.`,
 
-    SETUP_TOGGLE_VOICE_HIGHLIGHTS_TITLE: `Toggle Highlighting Voice`,
-    SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Voice Channels being automatically highlighted on your Home Channel.\nIf enabled, Voice Channels will be highlighted based off the number of Members connected to the Voice Channel at that time.`,
+    SETUP_TOGGLE_VOICE_HIGHLIGHTS_TITLE: `Toggle Voice Channel Highlight Activity Threshold`,
+    SETUP_TOGGLE_VOICE_HIGHLIGHTS_DESCRIPTION: `Please set the minimum Activity Threshold for active Voice Channels to be automatically highlighted on your Home Channel.\nVoice Channels will be highlighted based off the number of Members connected to the Voice Channel at that time.`,
 
-    SETUP_TOGGLE_STAGE_HIGHLIGHTS_TITLE: `Toggle Highlighting Stages`,
-    SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable live Stages being automatically highlighted on your Home Channel.`,
+    SETUP_TOGGLE_STAGE_HIGHLIGHTS_TITLE: `Toggle live Stage Highlight Activity Threshold`,
+    SETUP_TOGGLE_STAGE_HIGHLIGHTS_DESCRIPTION: `Please set the minimum Activity Threshold for live Stages to be automatically highlighted on your Home Channel.\nLive Stages will be highlighted based off the number of Audience Members connected to the Stage while it is live.`,
 
-    SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE: `Toggle Highlighting Threads/Posts`,
-    SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set if you would like to enable or disable active Threads & Forum/Media Posts being automatically highlighted on your Home Channel.\nIf enabled, Threads & Posts will be highlighted based off the number of Messages recently sent in them.\n\nPlease note: Disabling Thread/Post Highlights will **not** prevent you from manually featuring Threads & Forum/Media Posts onto your Home Channel.`,
+    SETUP_TOGGLE_THREAD_HIGHLIGHTS_TITLE: `Toggle Thread/Post Highlight Activity Threshold`,
+    SETUP_TOGGLE_THREAD_HIGHLIGHTS_DESCRIPTION: `Please set the minimum Activity Threshold for active Threads & Forum/Media Channel Posts to be automatically highlighted on your Home Channel.\nThreads & Posts will be highlighted based off the number of Messages recently sent in them.\n\nPlease note: Disabling Thread/Post Highlights will **not** prevent you from manually featuring Threads & Forum/Media Channel Posts onto your Home Channel.`,
 
 
 
@@ -277,12 +279,12 @@ module.exports = {
     SETTINGS_VIEW_EMBED_TITLE: `Current Home Settings for {{0}}`,
     SETTINGS_VIEW_EMBED_DESCRIPTION: `- *To edit these settings, use the {{0}} Command & include any of the provided options*\n- *Please note that currently you cannot change which Channel your Home is located in.*`,
     SETTINGS_VIEW_EMBED_HOME_CHANNEL: `Home Channel`,
-    SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
-    SETTINGS_VIEW_EMBED_MESSAGES: `Messages Highlightable?`,
-    SETTINGS_VIEW_EMBED_EVENTS: `Scheduled Events Highlightable?`,
-    SETTINGS_VIEW_EMBED_VOICE: `Active Voice Highlightable?`,
-    SETTINGS_VIEW_EMBED_STAGES: `Live Stages Highlightable?`,
-    SETTINGS_VIEW_EMBED_THREADS: `Threads & Forum/Media Posts Highlightable?`,
+    SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD: `Activity Thresholds`,
+    SETTINGS_VIEW_EMBED_MESSAGES: `**Messages:**`,
+    SETTINGS_VIEW_EMBED_EVENTS: `**Scheduled Events:**`,
+    SETTINGS_VIEW_EMBED_VOICE: `**Active Voice Channels:**`,
+    SETTINGS_VIEW_EMBED_STAGES: `**Live Stages:**`,
+    SETTINGS_VIEW_EMBED_THREADS: `**Threads & Forum/Media Posts:**`,
 
     SETTINGS_EDIT_EMBED_TITLE: `Updated Home Settings for {{0}}`,
     SETTINGS_EDIT_EMBED_DESCRIPTION: `- *To view your current settings without changing them, use the {{0}} Command without including any of provided options.*`,
@@ -378,6 +380,7 @@ module.exports = {
     FEATURE_MESSAGE_COMMAND_SUCCESS: `Successfully featured [that Message](<{{0}}>) to this Server's Home Channel.`,
 
     FEATURE_MESSAGE_COMMAND_ERROR_HOME_NOT_SETUP: `Whoops! You cannot feature Messages when this Server has not got a Home Channel setup yet!`,
+    FEATURE_MESSAGE_COMMAND_ERROR_DISABLED: `Sorry, this Server's Admins/Owner has disabled the ability for Messages to be featured & highlighted in its Home Channel.\nThis can be changed through use of \`/settings\` at any time.`,
     FEATURE_MESSAGE_COMMAND_ERROR_MAX_MESSAGES_FEATURED: `Sorry, Servers cannot have more than 10 Messages featured or highlighted in their Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_ALREADY_FEATURED: `[That Message](<{{0}}>) is already being featured on this Server's Home Channel!`,
     FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_LONG: `Sorry, you cannot feature Messages that have more than 1800 characters in its content.`,

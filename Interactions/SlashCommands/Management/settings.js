@@ -62,14 +62,15 @@ module.exports = {
         Data.defaultMemberPermissions = PermissionFlagsBits.ManageGuild;
         Data.options = [
             {
-                name: `activity_threshold`,
-                description: `Change the Activity Threshold for your Home Channel`,
+                name: `message_activity`,
+                description: `Set or disable the Activity Threshold for highlighting Messages`,
                 descriptionLocalizations: {
-                    'en-GB': `Change the Activity Threshold for your Home Channel`,
-                    'en-US': `Change the Activity Threshold for your Home Channel`
+                    'en-GB': `Set or disable the Activity Threshold for highlighting Messages`,
+                    'en-US': `Set or disable the Activity Threshold for highlighting Messages`,
                 },
                 type: ApplicationCommandOptionType.String,
                 choices: [
+                    { name: `Disable Highlighting Messages`, value: `DISABLED` },
                     { name: `Very Low`, value: `VERY_LOW` },
                     { name: `Low`, value: `LOW` },
                     { name: `Medium`, value: `MEDIUM` },
@@ -79,53 +80,75 @@ module.exports = {
                 required: false
             },
             {
-                name: `highlight_messages`,
-                description: `Set if Messages can be highlighted or not`,
+                name: `event_activity`,
+                description: `Set or disable the Activity Threshold for highlighting Scheduled Events`,
                 descriptionLocalizations: {
-                    'en-GB': `Set if Messages can be highlighted or not`,
-                    'en-US': `Set if Messages can be highlighted or not`,
+                    'en-GB': `Set or disable the Activity Threshold for highlighting Scheduled Events`,
+                    'en-US': `Set or disable the Activity Threshold for highlighting Scheduled Events`,
                 },
-                type: ApplicationCommandOptionType.Boolean,
-                required: false
-            },
-            {
-                name: `highlight_events`,
-                description: `Set if Scheduled Events can be highlighted or not`,
-                descriptionLocalizations: {
-                    'en-GB': `Set if Scheduled Events can be highlighted or not`,
-                    'en-US': `Set if Scheduled Events can be highlighted or not`,
-                },
-                type: ApplicationCommandOptionType.Boolean,
+                type: ApplicationCommandOptionType.String,
+                choices: [
+                    { name: `Disable Highlighting Events`, value: `DISABLED` },
+                    { name: `Very Low`, value: `VERY_LOW` },
+                    { name: `Low`, value: `LOW` },
+                    { name: `Medium`, value: `MEDIUM` },
+                    { name: `High`, value: `HIGH` }
+                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                ],
                 required: false
             },
             /* {
-                name: `highlight_voice`,
-                description: `Set if active Voice Channels can be highlighted or not`,
+                name: `voice_activity`,
+                description: `Set or disable the Activity Threshold for highlighting Voice Channels`,
                 descriptionLocalizations: {
-                    'en-GB': `Set if active Voice Channels can be highlighted or not`,
-                    'en-US': `Set if active Voice Channels can be highlighted or not`,
+                    'en-GB': `Set or disable the Activity Threshold for highlighting Voice Channels`,
+                    'en-US': `Set or disable the Activity Threshold for highlighting Voice Channels`,
                 },
-                type: ApplicationCommandOptionType.Boolean,
+                type: ApplicationCommandOptionType.String,
+                choices: [
+                    { name: `Disable Highlighting Voice`, value: `DISABLED` },
+                    { name: `Very Low`, value: `VERY_LOW` },
+                    { name: `Low`, value: `LOW` },
+                    { name: `Medium`, value: `MEDIUM` },
+                    { name: `High`, value: `HIGH` }
+                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                ],
                 required: false
             },
             {
-                name: `highlight_stages`,
-                description: `Set if live Stages can be highlighted or not`,
+                name: `stage_activity`,
+                description: `Set or disable the Activity Threshold for highlighting live Stages`,
                 descriptionLocalizations: {
-                    'en-GB': `Set if live Stages can be highlighted or not`,
-                    'en-US': `Set if live Stages can be highlighted or not`,
+                    'en-GB': `Set or disable the Activity Threshold for highlighting live Stages`,
+                    'en-US': `Set or disable the Activity Threshold for highlighting live Stages`,
                 },
-                type: ApplicationCommandOptionType.Boolean,
+                type: ApplicationCommandOptionType.String,
+                choices: [
+                    { name: `Disable Highlighting Stages`, value: `DISABLED` },
+                    { name: `Very Low`, value: `VERY_LOW` },
+                    { name: `Low`, value: `LOW` },
+                    { name: `Medium`, value: `MEDIUM` },
+                    { name: `High`, value: `HIGH` }
+                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                ],
                 required: false
             }, */
             {
-                name: `highlight_threads`,
-                description: `Set if Threads and Forum Posts can be highlighted or not`,
+                name: `thread_activity`,
+                description: `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
                 descriptionLocalizations: {
-                    'en-GB': `Set if Threads and Forum Posts can be highlighted or not`,
-                    'en-US': `Set if Threads and Forum Posts can be highlighted or not`,
+                    'en-GB': `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
+                    'en-US': `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
                 },
-                type: ApplicationCommandOptionType.Boolean,
+                type: ApplicationCommandOptionType.String,
+                choices: [
+                    { name: `Disable Highlighting Threads & Posts`, value: `DISABLED` },
+                    { name: `Very Low`, value: `VERY_LOW` },
+                    { name: `Low`, value: `LOW` },
+                    { name: `Medium`, value: `MEDIUM` },
+                    { name: `High`, value: `HIGH` }
+                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                ],
                 required: false
             }
         ];
@@ -192,17 +215,16 @@ async function viewSettings(interaction)
     let serverConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
 
     // Put into Embed
+    let thresholdString = `- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES')} ${localize(interaction.locale, serverConfig.messageActivity === "VERY_LOW" ? 'VERY_LOW' : serverConfig.messageActivity === "LOW" ? 'LOW' : serverConfig.messageActivity === "MEDIUM" ? 'MEDIUM' : serverConfig.messageActivity === "HIGH" ? 'HIGH' : serverConfig.messageActivity === "VERY_HIGH" ? 'VERY_HIGH' : 'DISABLED')}
+- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS')} ${localize(interaction.locale, serverConfig.eventActivity === "VERY_LOW" ? 'VERY_LOW' : serverConfig.eventActivity === "LOW" ? 'LOW' : serverConfig.eventActivity === "MEDIUM" ? 'MEDIUM' : serverConfig.eventActivity === "HIGH" ? 'HIGH' : serverConfig.eventActivity === "VERY_HIGH" ? 'VERY_HIGH' : 'DISABLED')}
+- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS')} ${localize(interaction.locale, serverConfig.threadActivity === "VERY_LOW" ? 'VERY_LOW' : serverConfig.threadActivity === "LOW" ? 'LOW' : serverConfig.threadActivity === "MEDIUM" ? 'MEDIUM' : serverConfig.threadActivity === "HIGH" ? 'HIGH' : serverConfig.threadActivity === "VERY_HIGH" ? 'VERY_HIGH' : 'DISABLED')}`;
+
     let settingsEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_TITLE', interaction.guild.name))
     .setDescription(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_DESCRIPTION', `</settings:${interaction.commandId}>`))
     .addFields(
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_HOME_CHANNEL'), value: `<#${serverConfig.homeChannelId}>` },
-        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: localize(interaction.locale, serverConfig.activityThreshold === "VERY_LOW" ? 'VERY_LOW' : serverConfig.activityThreshold === "LOW" ? 'LOW' : serverConfig.activityThreshold === "MEDIUM" ? 'MEDIUM' : serverConfig.activityThreshold === "HIGH" ? 'HIGH' : 'VERY_HIGH') },
-        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES'), value: localize(interaction.locale, serverConfig.highlightMessages ? 'TRUE' : 'FALSE') },
-        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS'), value: localize(interaction.locale, serverConfig.highlightEvents ? 'TRUE' : 'FALSE') },
-        //{ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_VOICE'), value: localize(interaction.locale, serverConfig.highlightVoice ? 'TRUE' : 'FALSE') },
-        //{ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAGES'), value: localize(interaction.locale, serverConfig.highlightStages ? 'TRUE' : 'FALSE') },
-        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS'), value: localize(interaction.locale, serverConfig.highlightThreads ? 'TRUE' : 'FALSE') }
+        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: thresholdString }
     );
 
     // ACK
@@ -228,12 +250,11 @@ async function editSettings(interaction)
     await interaction.deferReply({ ephemeral: true });
 
     // Fetch all the options
-    let activityOption = interaction.options.getString("activity_threshold");
-    let messagesOption = interaction.options.getBoolean("highlight_messages");
-    let eventsOption = interaction.options.getBoolean("highlight_events");
-    //let voiceOption = interaction.options.getBoolean("highlight_voice");
-    //let stageOption = interaction.options.getBoolean("highlight_stages");
-    let threadsOption = interaction.options.getBoolean("highlight_threads");
+    let messagesOption = interaction.options.getString("message_activity");
+    let eventsOption = interaction.options.getString("event_activity");
+    //let voiceOption = interaction.options.getString("voice_activity");
+    //let stageOption = interaction.options.getString("stage_activity");
+    let threadsOption = interaction.options.getString("thread_activity");
 
     // Fetch current config
     let serverConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
@@ -246,42 +267,39 @@ async function editSettings(interaction)
 
     // Now go through them, changing their values & adding to Embed
     serverConfig.isNew = false;
-
-    if ( activityOption != null )
-    {
-        serverConfig.activityThreshold = activityOption === "VERY_LOW" ? 'VERY_LOW' : activityOption === "LOW" ? 'LOW' : activityOption === "MEDIUM" ? 'MEDIUM' : activityOption === "HIGH" ? 'HIGH' : 'VERY_HIGH';
-        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: localize(interaction.locale, activityOption === "VERY_LOW" ? 'VERY_LOW' : activityOption === "LOW" ? 'LOW' : activityOption === "MEDIUM" ? 'MEDIUM' : activityOption === "HIGH" ? 'HIGH' : 'VERY_HIGH') });
-    }
+    let changedThresholds = "";
 
     if ( messagesOption != null )
     {
-        serverConfig.highlightMessages = messagesOption;
-        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES'), value: localize(interaction.locale, messagesOption ? 'TRUE' : 'FALSE') });
+        serverConfig.messageActivity = messagesOption;
+        changedThresholds += `- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_MESSAGES')} ${localize(interaction.locale, messagesOption)}`;
     }
 
     if ( eventsOption != null )
     {
-        serverConfig.highlightEvents = eventsOption;
-        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS'), value: localize(interaction.locale, eventsOption ? 'TRUE' : 'FALSE') });
+        serverConfig.eventActivity = eventsOption;
+        changedThresholds += `${changedThresholds.length > 2 ? `\n` : ""}- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_EVENTS')} ${localize(interaction.locale, eventsOption)}`;
     }
 
     /* if ( voiceOption != null )
     {
-        serverConfig.highlightVoice = voiceOption;
-        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_VOICE'), value: localize(interaction.locale, voiceOption ? 'TRUE' : 'FALSE') });
+        serverConfig.voiceActivity = voiceOption;
+        changedThresholds += `${changedThresholds.length > 2 ? `\n` : ""}- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_VOICE')} ${localize(interaction.locale, voiceOption)}`;
     }
 
     if ( stageOption != null )
     {
-        serverConfig.highlightStages = stageOption;
-        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAGES'), value: localize(interaction.locale, stageOption ? 'TRUE' : 'FALSE') });
+        serverConfig.stageActivity = stageOption;
+        changedThresholds += `${changedThresholds.length > 2 ? `\n` : ""}- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAGES')} ${localize(interaction.locale, stageOption)}`;
     } */
 
     if ( threadsOption != null )
     {
-        serverConfig.highlightThreads = threadsOption;
-        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS'), value: localize(interaction.locale, threadsOption ? 'TRUE' : 'FALSE') });
+        serverConfig.threadActivity = threadsOption;
+        changedThresholds += `${changedThresholds.length > 2 ? `\n` : ""}- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS')} ${localize(interaction.locale, threadsOption)}`;
     }
+
+    updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: changedThresholds });
 
 
     // Save to DB
