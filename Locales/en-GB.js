@@ -391,7 +391,7 @@ module.exports = {
     FEATURE_MESSAGE_COMMAND_ERROR_CHANNEL_BLOCKED: `Sorry, you cannot feature Messages sent in blocked Channels.`,
     FEATURE_MESSAGE_COMMAND_ERROR_CATEGORY_BLOCKED: `Sorry, you cannot feature Messages sent within blocked Categories.`,
     FEATURE_MESSAGE_COMMAND_ERROR_AUTHOR_ROLE_BLOCKED: `Sorry, the User who sent [that Message](<{{0}}>) has a Role which has been blocked from being featured in this Server's Home Channel.`,
-    FEATURE_MESSAGE_COMMAND_ERROR_POLLS_NOT_SUPPORTED: `Sorry, HomeCord currently cannot feature or highlight Messages containing Polls.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_POLLS_NOT_SUPPORTED: `Sorry, HomeCord cannot feature or highlight Messages containing Polls.`,
     FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_OLD: `Sorry, you cannot feature Messages that are older than 14 days.`,
     FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_GENERIC: `Sorry, you cannot feature that type of Message, only standard Messages sent by Users (not System Messages, Messages sent by Discord's AutoMod, etc.)`,
     FEATURE_MESSAGE_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to feature [that Message](<{{0}}>) to this Server's Home Channel.`,
