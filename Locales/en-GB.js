@@ -109,8 +109,9 @@ module.exports = {
 
 
     // ******* FOR SUPPORT COMMAND
-    SUPPORT_COMMAND_RESPONSE: `Need help with using HomeCord? Want to report an issue or suggest a new idea for HomeCord?\nFeel free to join HomeCord's Support Server ("Twilight Domain") via the link below!`,
+    SUPPORT_COMMAND_RESPONSE: `Need help with using HomeCord? Want to report an issue or suggest a new idea for HomeCord?\nFeel free to join HomeCord's Support Server ("Twilight Domain") or view its Documentation via the links below!`,
     SUPPORT_COMMAND_BUTTON_LABEL: `Join Support Server`,
+    SUPPORT_COMMAND_DOCS_BUTTON_LABEL: `View Documentation`,
 
 
 
