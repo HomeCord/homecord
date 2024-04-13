@@ -22,7 +22,7 @@ module.exports = {
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing
-    Cooldown: 600,
+    Cooldown: 60,
 
     // Cooldowns for specific subcommands and/or subcommand-groups
     //     IF SUBCOMMAND: name as "subcommandName"
