@@ -164,14 +164,22 @@ module.exports = {
                         originalMessageId: RepliedMessage.id,
                         featuredMessageId: sentMessage.id,
                         featureType: "HIGHLIGHT",
-                        featureUntil: calculateIsoTimeUntil('THREE_DAYS')
+                        featureUntil: (guildConfig.messageActivity === 'VERY_LOW' || guildConfig.messageActivity === 'LOW') ? calculateIsoTimeUntil('SEVEN_DAYS') : guildConfig.messageActivity === 'MEDIUM' ? calculateIsoTimeUntil('FIVE_DAYS') : calculateIsoTimeUntil('THREE_DAYS')
                     })
                     .then(async (newDocument) => {
                         await newDocument.save()
                         .then(async () => {
                         
                             // Store callback to remove featured Message from Home Channel after duration (just in case)
-                            await TimerModel.create({ timerExpires: calculateUnixTimeUntil('THREE_DAYS'), callback: expireMessage.toString(), guildId: message.guildId, originalMessageId: RepliedMessage.id, featuredMessageId: sentMessage.id, channelId: message.channelId, guildLocale: message.guild.preferredLocale })
+                            await TimerModel.create({
+                                timerExpires: (guildConfig.messageActivity === 'VERY_LOW' || guildConfig.messageActivity === 'LOW') ? calculateUnixTimeUntil('SEVEN_DAYS') : guildConfig.messageActivity === 'MEDIUM' ? calculateUnixTimeUntil('FIVE_DAYS') : calculateUnixTimeUntil('THREE_DAYS'),
+                                callback: expireMessage.toString(),
+                                guildId: message.guildId,
+                                originalMessageId: RepliedMessage.id,
+                                featuredMessageId: sentMessage.id,
+                                channelId: message.channelId,
+                                guildLocale: message.guild.preferredLocale
+                            })
                             .then(async newDocument => { await newDocument.save(); })
                             .catch(async err => { await LogError(err); });
                         
@@ -180,7 +188,7 @@ module.exports = {
                             if ( (await FeaturedMessage.find({ guildId: message.guildId })).length === 1 ) { await refreshMessagesAudio(message.guildId, message.guild.preferredLocale); }
                         
                             // Timeout for auto-removing the Message
-                            setTimeout(async () => { await expireMessage(message.guildId, RepliedMessage.id, message.guild.preferredLocale) }, calculateTimeoutDuration('THREE_DAYS'));
+                            setTimeout(async () => { await expireMessage(message.guildId, RepliedMessage.id, message.guild.preferredLocale) }, (guildConfig.messageActivity === 'VERY_LOW' || guildConfig.messageActivity === 'LOW') ? calculateTimeoutDuration('SEVEN_DAYS') : guildConfig.messageActivity === 'MEDIUM' ? calculateTimeoutDuration('FIVE_DAYS') : calculateTimeoutDuration('THREE_DAYS'));
                             
                             MessageActivityCache.delete(RepliedMessage.id); // Delete from cache now that its highlighted
                             
@@ -376,14 +384,22 @@ module.exports = {
                         originalMessageId: message.id,
                         featuredMessageId: sentMessage.id,
                         featureType: "HIGHLIGHT",
-                        featureUntil: calculateIsoTimeUntil('THREE_DAYS')
+                        featureUntil: (guildConfig.messageActivity === 'VERY_LOW' || guildConfig.messageActivity === 'LOW') ? calculateIsoTimeUntil('SEVEN_DAYS') : guildConfig.messageActivity === 'MEDIUM' ? calculateIsoTimeUntil('FIVE_DAYS') : calculateIsoTimeUntil('THREE_DAYS')
                     })
                     .then(async (newDocument) => {
                         await newDocument.save()
                         .then(async () => {
                         
                             // Store callback to remove featured Message from Home Channel after duration (just in case)
-                            await TimerModel.create({ timerExpires: calculateUnixTimeUntil('THREE_DAYS'), callback: expireMessage.toString(), guildId: message.guildId, originalMessageId: message.id, featuredMessageId: sentMessage.id, channelId: message.channelId, guildLocale: message.guild.preferredLocale })
+                            await TimerModel.create({
+                                timerExpires: (guildConfig.messageActivity === 'VERY_LOW' || guildConfig.messageActivity === 'LOW') ? calculateUnixTimeUntil('SEVEN_DAYS') : guildConfig.messageActivity === 'MEDIUM' ? calculateUnixTimeUntil('FIVE_DAYS') : calculateUnixTimeUntil('THREE_DAYS'),
+                                callback: expireMessage.toString(),
+                                guildId: message.guildId,
+                                originalMessageId: message.id,
+                                featuredMessageId: sentMessage.id,
+                                channelId: message.channelId,
+                                guildLocale: message.guild.preferredLocale
+                            })
                             .then(async newDocument => { await newDocument.save(); })
                             .catch(async err => { await LogError(err); });
                         
@@ -392,7 +408,7 @@ module.exports = {
                             if ( (await FeaturedMessage.find({ guildId: message.guildId })).length === 1 ) { await refreshMessagesAudio(message.guildId, message.guild.preferredLocale); }
                         
                             // Timeout for auto-removing the Message
-                            setTimeout(async () => { await expireMessage(message.guildId, message.id, message.guild.preferredLocale) }, calculateTimeoutDuration('THREE_DAYS'));
+                            setTimeout(async () => { await expireMessage(message.guildId, message.id, message.guild.preferredLocale) }, (guildConfig.messageActivity === 'VERY_LOW' || guildConfig.messageActivity === 'LOW') ? calculateTimeoutDuration('SEVEN_DAYS') : guildConfig.messageActivity === 'MEDIUM' ? calculateTimeoutDuration('FIVE_DAYS') : calculateTimeoutDuration('THREE_DAYS'));
                             
                             MessageActivityCache.delete(message.id); // Delete from cache now that its highlighted
                             
@@ -492,13 +508,19 @@ module.exports = {
                     threadId: message.channelId,
                     threadType: message.channel.parent?.type === ChannelType.GuildForum ? "POST" : message.channel.parent?.type === ChannelType.GuildMedia ? "POST" : "THREAD",
                     featureType: "HIGHLIGHT",
-                    featureUntil: calculateIsoTimeUntil('THREE_DAYS')
+                    featureUntil: (guildConfig.threadActivity === 'VERY_LOW' || guildConfig.threadActivity === 'LOW') ? calculateIsoTimeUntil('SEVEN_DAYS') : guildConfig.threadActivity === 'MEDIUM' ? calculateIsoTimeUntil('FIVE_DAYS') : calculateIsoTimeUntil('THREE_DAYS')
                 })
                 .then(async (newDocument) => {
                     await newDocument.save()
                     .then(async () => {
                         // Store callback to remove featured Thread from Home Channel after duration (just in case)
-                        await TimerModel.create({ timerExpires: calculateUnixTimeUntil('THREE_DAYS'), callback: expireThread.toString(), guildId: message.guildId, threadId: message.channelId, guildLocale: message.guild.preferredLocale })
+                        await TimerModel.create({
+                            timerExpires: (guildConfig.threadActivity === 'VERY_LOW' || guildConfig.threadActivity === 'LOW') ? calculateUnixTimeUntil('SEVEN_DAYS') : guildConfig.threadActivity === 'MEDIUM' ? calculateUnixTimeUntil('FIVE_DAYS') : calculateUnixTimeUntil('THREE_DAYS'),
+                            callback: expireThread.toString(),
+                            guildId: message.guildId,
+                            threadId: message.channelId,
+                            guildLocale: message.guild.preferredLocale
+                        })
                         .then(async newDocument => { await newDocument.save(); })
                         .catch(async err => { await LogError(err); });
                     
@@ -506,7 +528,7 @@ module.exports = {
                         await refreshEventsThreads(message.guildId, message.guild.preferredLocale);
                     
                         // Timeout for auto-removing the Thread
-                        setTimeout(async () => { await expireThread(message.guildId, message.channelId, message.guild.preferredLocale) }, calculateTimeoutDuration('THREE_DAYS'));
+                        setTimeout(async () => { await expireThread(message.guildId, message.channelId, message.guild.preferredLocale) }, (guildConfig.threadActivity === 'VERY_LOW' || guildConfig.threadActivity === 'LOW') ? calculateTimeoutDuration('SEVEN_DAYS') : guildConfig.threadActivity === 'MEDIUM' ? calculateTimeoutDuration('FIVE_DAYS') : calculateTimeoutDuration('THREE_DAYS'));
                         
                         ThreadActivityCache.delete(message.channelId); // Delete from cache now that its highlighted
                         

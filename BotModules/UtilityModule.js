@@ -5,7 +5,7 @@ const { DiscordClient } = require("../constants");
 module.exports = {
     /**
      * Calculates the ISO Timestamp based off the duration inputted via commands
-     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'SEVEN_DAYS'} durationInput 
+     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'FIVE_DAYS'|'SEVEN_DAYS'} durationInput 
      */
     calculateIsoTimeUntil(durationInput)
     {
@@ -27,6 +27,10 @@ module.exports = {
             case "THREE_DAYS":
                 calculatedIsoTimestamp = new Date(now + 2.592e+8).toISOString();
                 break;
+            
+            case "FIVE_DAYS":
+                calculatedIsoTimestamp = new Date(now + 4.32e+8).toISOString();
+                break;
 
             case "SEVEN_DAYS":
                 calculatedIsoTimestamp = new Date(now + 6.048e+8).toISOString();
@@ -41,7 +45,7 @@ module.exports = {
 
     /**
      * Calculates the Unix Timestamp in milliseconds based off the duration inputted via commands
-     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'SEVEN_DAYS'} durationInput 
+     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'FIVE_DAYS'|'SEVEN_DAYS'} durationInput 
      */
     calculateUnixTimeUntil(durationInput)
     {
@@ -64,6 +68,10 @@ module.exports = {
                 calculatedUnixTimestamp = new Date(now + 2.592e+8).getTime();
                 break;
 
+            case "FIVE_DAYS":
+                calculatedUnixTimestamp = new Date(now + 4.32e+8).getTime();
+                break;
+
             case "SEVEN_DAYS":
                 calculatedUnixTimestamp = new Date(now + 6.048e+8).getTime();
                 break;
@@ -77,7 +85,7 @@ module.exports = {
 
     /**
      * Calculates the milliseconds based off the duration inputted via commands, for use in setTimeout()
-     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'SEVEN_DAYS'} durationInput 
+     * @param {'TWELVE_HOURS'|'ONE_DAY'|'THREE_DAYS'|'FIVE_DAYS'|'SEVEN_DAYS'} durationInput 
      */
     calculateTimeoutDuration(durationInput)
     {
@@ -98,6 +106,10 @@ module.exports = {
 
             case "THREE_DAYS":
                 calculatedDuration = 2.592e+8;
+                break;
+
+            case "FIVE_DAYS":
+                calculatedDuration = 4.32e+8;
                 break;
 
             case "SEVEN_DAYS":
