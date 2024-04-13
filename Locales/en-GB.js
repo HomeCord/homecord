@@ -195,6 +195,7 @@ module.exports = {
     SETUP_SET_CHANNEL_EMBED_DESCRIPTION: `Please set where you would like your Home Channel to be.\n\nIf you want to use an existing Text Channel, select it using the Channel Select Menu below. *(It's recommended to pick a read-only Channel that Server Members cannot send messages into)*\n\nOtherwise, please tap the "Create for me" Button if you want HomeCord to create your Home Channel for you.`,
     
     SETUP_SET_CHANNEL_ERROR_INVALID_CHANNEL_TYPE: `Selected Channel was not a Text Channel. Please select a Text Channel (not any other Channel Type).`,
+    SETUP_SET_CHANNEL_ERROR_MISSING_MANAGE_CHANNEL_PERMISSION: `Whoops! You cannot select the "Create Channel for Me" option when I don't have the "**Manage Channels**" Permission on the Role-level!\n*(I need that Permission in order to create the Home Channel, if not using an existing Channel)*`,
 
 
 
