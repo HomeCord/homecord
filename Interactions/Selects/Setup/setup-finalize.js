@@ -98,7 +98,7 @@ async function setupNewChannel(interaction, settingValues)
         // ******* Attempt to create Webhook in Channel
         await createdChannel.createWebhook({
             name: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_NAME'),
-            avatar: "https://us-east-1.tixte.net/uploads/zebby.is-from.space/homecord-icon.png",
+            avatar: "https://us-east-1.tixte.net/uploads/zebby.is-from.space/homecord-icon_v004c.png",
             reason: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_CREATION_REASON', `${fetchDisplayName(interaction.user, true)}`)
         })
         .then(async createdWebhook => {
@@ -220,7 +220,7 @@ async function setupExistingChannel(interaction, settingValues)
     // ******* Attempt to create Webhook in Channel
     await fetchedChannel.createWebhook({
         name: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_NAME'),
-        avatar: "https://us-east-1.tixte.net/uploads/zebby.is-from.space/homecord-icon.png",
+        avatar: "https://us-east-1.tixte.net/uploads/zebby.is-from.space/homecord-icon_v004c.png",
         reason: localize(interaction.guildLocale, 'HOMECORD_WEBHOOK_CREATION_REASON', `${fetchDisplayName(interaction.user, true)}`)
     })
     .then(async createdWebhook => {
