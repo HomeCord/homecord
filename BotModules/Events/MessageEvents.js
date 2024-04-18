@@ -138,8 +138,8 @@ module.exports = {
 
                 // If attachments in original messages, do thing
                 let originalAttachments = [];
-                if ( message.attachments.size > 0 ) {
-                    message.attachments.forEach(attachment => {
+                if ( RepliedMessage.attachments.size > 0 ) {
+                    RepliedMessage.attachments.forEach(attachment => {
                         if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                         else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
                     });
