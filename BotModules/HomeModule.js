@@ -136,8 +136,8 @@ module.exports = {
                 // Grab Event's name
                 let tempEvent = fetchedGuild.scheduledEvents.resolve(eventDocument.eventId);
                 // Tweak formatting depending on highlighted or featured
-                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> **[${tempEvent.name}](<${tempEvent.url}>) - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> <:blurpleSparkles:1204729760689954826> ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
-                else { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> [${tempEvent.name}](<${tempEvent.url}>) - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
+                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> **${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> <:blurpleSparkles:1204729760689954826> ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
+                else { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> ${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
             });
 
             // Set into Home Channel
@@ -176,8 +176,8 @@ module.exports = {
                 // Grab Event's name
                 let tempEvent = fetchedGuild.scheduledEvents.resolve(eventDocument.eventId);
                 // Tweak formatting depending on highlighted or featured
-                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> **[${tempEvent.name}](<${tempEvent.url}>) - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> <:blurpleSparkles:1204729760689954826> ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
-                else { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> [${tempEvent.name}](<${tempEvent.url}>) - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
+                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> **${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> <:blurpleSparkles:1204729760689954826> ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
+                else { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> ${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
             });
 
             FeaturedThreadEntries.forEach(async threadDocument => {
