@@ -498,4 +498,14 @@ module.exports = {
     // ******* INVITE COMMAND
     INVITE_COMMAND_BUTTON_LABEL: `Invite HomeCord`,
     INVITE_COMMAND_RESPONSE: `Want to add HomeCord to your Server? Use its invite link below!`,
+
+
+
+    // ******* REFRESH COMMAND
+    REFRESH_COMMAND_SUCCESS: `Successfully force refreshed this Server's Home Channel.`,
+
+    REFRESH_COMMAND_ERROR_HOME_NOT_SETUP: `Whoops! You cannot refresh a Home Channel that doesn't exist!\nUse \`setup\` to begin creating a Home Channel for this Server.`,
+    REFRESH_COMMAND_ERROR_GUILD_OUTAGE: `Sorry, I cannot refresh this Server's Home Channel while there is a [Discord outage](<https://discordstatus.com>) occurring.\nPlease wait until after the outage has been patched.`,
+    REFRESH_COMMAND_ERROR_MISSING_WEBHOOK: `Sorry, I cannot refresh this Server's Home Channel without my Webhook in that Channel!\nPlease run the \`/setup\` Command again to fix this issue.`,
+    REFRESH_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to refresh this Server's Home Channel.\nIf this issue keeps happening, feel free to contact HomeCord's developers via either GitHub or HomeCord's Support Server (both linked in \`/support\` Command).`,
 };
