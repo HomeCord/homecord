@@ -484,4 +484,18 @@ module.exports = {
     UNBLOCK_COMMAND_ERROR_ROLE_GENERIC: `Sorry, there was an error trying to remove the selected Roles from this Server's Home Block List.`,
     UNBLOCK_COMMAND_ERROR_CHANNEL_GENERIC: `Sorry, there was an error trying to remove the selected Channels from this Server's Home Block List.`,
     UNBLOCK_COMMAND_ERROR_CATEGORY_GENERIC: `Sorry, there was an error trying to remove the selected Categories from this Server's Home Block List.`,
+
+
+
+    // ******* SUBSCRIBE COMMAND
+    SUBSCRIBE_COMMAND_SUCCESS: `Successfully subscribed {{0}} to HomeCord's Announcements Feed!\n\nYou can edit and/or unfollow this Feed at any time by going into **Server Settings > Integrations > Channels Followed**.`,
+
+    SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_VIEW_CHANNEL: `Sorry, HomeCord needs the "**View Channel**" Permission in {{0}} to be able to follow its Announcements Feed there.`,
+    SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_MANAGE_WEBHOOKS: `Sorry, HomeCord needs the "**Manage Webhooks**" Permission in {{0}} to be able to follow its Announcements Feed there.\n\n*(This Permission can be revoked from HomeCord again afterwards)*`,
+
+
+
+    // ******* INVITE COMMAND
+    INVITE_COMMAND_BUTTON_LABEL: `Invite HomeCord`,
+    INVITE_COMMAND_RESPONSE: `Want to add HomeCord to your Server? Use its invite link below!`,
 };

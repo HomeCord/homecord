@@ -91,14 +91,14 @@ module.exports = {
         // Ensure Bot can actually see the Channel in question
         if ( !InputChannel.permissionsFor(DiscordClient.user.id).has(PermissionFlagsBits.ViewChannel) )
         {
-            await interaction.reply({ ephemeral: true, content: localize(interaction.locale, '', `<#${InputChannel.id}>`) });
+            await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_VIEW_CHANNEL', `<#${InputChannel.id}>`) });
             return;
         }
 
         // Check Bot has MANAGE_WEBHOOKS Permission in the Channel
         if ( !InputChannel.permissionsFor(DiscordClient.user.id).has(PermissionFlagsBits.ManageWebhooks) )
         {
-            await interaction.reply({ ephemeral: true, content: localize(interaction.locale, '', `<#${InputChannel.id}>`) });
+            await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_MANAGE_WEBHOOKS', `<#${InputChannel.id}>`) });
             return;
         }
 
@@ -112,7 +112,7 @@ module.exports = {
         // Subscribe to feed!
         await HomeCordUpdatesChannel.addFollower(InputChannel.id, localize(interaction.guildLocale, '', fetchDisplayName(interaction.user, true)))
         .then(async () => {
-            await interaction.editReply({ content: localize(interaction.locale, '', `<#${InputChannel.id}>`) });
+            await interaction.editReply({ content: localize(interaction.locale, 'SUBSCRIBE_COMMAND_SUCCESS', `<#${InputChannel.id}>`) });
             return;
         })
         .catch(async err => {
