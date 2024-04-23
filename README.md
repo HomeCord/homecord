@@ -4,6 +4,8 @@
 
 README to be written later...
 
+but you can find HomeCord's documentation [over here](<https://github.com/HomeCord/homecord-docs/blob/main/README.md>).
+
 ---
 
 # THE LICENSE
