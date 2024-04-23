@@ -1,0 +1,10 @@
+contact_links:
+  - name: Feedback & Feature Requests
+    url: https://github.com/HomeCord/HomeCord/discussions/new/choose
+    about: Have ideas for HomeCord? Post it in our Discussions tab!
+  - name: Support Server
+    url: https://discord.gg/4bFgUyWUMY
+    about: Need real-time help & support? Head on over to our Support Server on Discord.
+  - name: Invite Bot
+    url: https://discord.com/oauth2/authorize?client_id=1156152328290840606&permissions=537250896&scope=applications.commands+bot
+    about: Want to invite HomeCord to your own Server? Use this link here!
