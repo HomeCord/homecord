@@ -8,3 +8,5 @@ deployCommands.js
 
 /JsonFiles/Hidden/
 /Resources/activityThresholds.js
+
+/TextCommands/test.js
