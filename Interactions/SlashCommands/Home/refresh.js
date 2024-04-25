@@ -22,7 +22,7 @@ module.exports = {
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing
-    Cooldown: 6.048e+8, // 7 days
+    Cooldown: 604800, // 7 days
 
     // Cooldowns for specific subcommands and/or subcommand-groups
     //     IF SUBCOMMAND: name as "subcommandName"
@@ -76,7 +76,7 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         // Ensure Server actually has a Home Channel setup
-        if ( await GuildConfig.exists({ guildId: guildId }) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'REFRESH_COMMAND_ERROR_HOME_NOT_SETUP') }); return; }
+        if ( await GuildConfig.exists({ guildId: interaction.guildId }) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'REFRESH_COMMAND_ERROR_HOME_NOT_SETUP') }); return; }
 
 
         // *******
