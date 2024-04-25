@@ -2,12 +2,6 @@ const { ChatInputCommandInteraction, ChatInputApplicationCommandData, Applicatio
 const { DiscordClient } = require("../../../constants");
 const { localize } = require("../../../BotModules/LocalizationModule");
 
-// Invite Link
-const HomeCordInvite = DiscordClient.generateInvite({
-    scopes: [ OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands ],
-    permissions: [ PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageWebhooks, PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.AddReactions, PermissionFlagsBits.UseExternalEmojis ]
-});
-
 module.exports = {
     // Command's Name
     //     Use full lowercase
@@ -76,6 +70,12 @@ module.exports = {
      */
     async execute(interaction)
     {
+        // Invite Link
+        const HomeCordInvite = DiscordClient.generateInvite({
+            scopes: [ OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands ],
+            permissions: [ PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageWebhooks, PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.AddReactions, PermissionFlagsBits.UseExternalEmojis ]
+        });
+
         // Make button
         const LinkButton = new ActionRowBuilder().addComponents([
             new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'INVITE_COMMAND_BUTTON_LABEL')).setURL(HomeCordInvite)
