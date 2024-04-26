@@ -11,7 +11,7 @@ module.exports =
             GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.MessageContent,
             GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildScheduledEvents
         ],
-        partials: [ Partials.Message, Partials.Reaction ],
+        partials: [ Partials.Message, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User ],
         // For performance. Numbers are in seconds
         sweepers: {
             ...Options.DefaultSweeperSettings,

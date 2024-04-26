@@ -307,6 +307,7 @@ const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEv
 const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
 const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
 const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
+const { processGuildEventUserAdd } = require("./BotModules/Events/GuildEventEvents.js");
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT
@@ -524,6 +525,31 @@ DiscordClient.on('threadDelete', async (oldThread) => {
         await FeaturedThread.deleteMany({ threadId: oldThread.id, guildId: oldThread.guildId });
         await refreshEventsThreads(oldThread.guildId, oldThread.guild.preferredLocale);
         return;
+    }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - GUILD SCHEDULED EVENT USER ADD EVENT
+
+DiscordClient.on('guildScheduledEventUserAdd', async (scheduledEvent, user) => {
+    
+    // Only run if Scheduled Event highlighting is enabled
+    let guildConfig = await GuildConfig.findOne({ guildId: scheduledEvent.guildId });
+    if ( guildConfig == null ) { return; }
+    
+    if ( guildConfig.eventActivity !== "DISABLED" )
+    {
+        await processGuildEventUserAdd(scheduledEvent, user);
     }
 
     return;
