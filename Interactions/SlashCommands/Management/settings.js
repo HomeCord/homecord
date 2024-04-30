@@ -150,6 +150,16 @@ module.exports = {
                     //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
                 ],
                 required: false
+            },
+            {
+                name: `allow_star_reactions`,
+                description: `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
+                descriptionLocalizations: {
+                    'en-GB': `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
+                    'en-US': `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
+                },
+                type: ApplicationCommandOptionType.Boolean,
+                required: false
             }
         ];
 
@@ -224,7 +234,8 @@ async function viewSettings(interaction)
     .setDescription(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_DESCRIPTION', `</settings:${interaction.commandId}>`))
     .addFields(
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_HOME_CHANNEL'), value: `<#${serverConfig.homeChannelId}>` },
-        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: thresholdString }
+        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: thresholdString },
+        { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_STAR_REACTIONS'), value: localize(interaction.locale, serverConfig.allowStarReactions === true ? 'TRUE' : 'FALSE') }
     );
 
     // ACK
@@ -255,6 +266,7 @@ async function editSettings(interaction)
     //let voiceOption = interaction.options.getString("voice_activity");
     //let stageOption = interaction.options.getString("stage_activity");
     let threadsOption = interaction.options.getString("thread_activity");
+    let starReactionsOption = interaction.options.getBoolean("allow_star_reactions");
 
     // Fetch current config
     let serverConfig = await GuildConfig.findOne({ guildId: interaction.guildId });
@@ -300,6 +312,12 @@ async function editSettings(interaction)
     }
 
     updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: changedThresholds });
+
+    if ( starReactionsOption != null )
+    {
+        serverConfig.allowStarReactions = starReactionsOption;
+        updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_EDIT_EMBED_STAR_REACTIONS'), value: localize(interaction.locale, starReactionsOption === true ? 'TRUE' : 'FALSE') });
+    }
 
 
     // Save to DB

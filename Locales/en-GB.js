@@ -287,9 +287,11 @@ module.exports = {
     SETTINGS_VIEW_EMBED_VOICE: `**Active Voice Channels:**`,
     SETTINGS_VIEW_EMBED_STAGES: `**Live Stages:**`,
     SETTINGS_VIEW_EMBED_THREADS: `**Threads & Forum/Media Posts:**`,
+    SETTINGS_VIEW_EMBED_STAR_REACTIONS: `**Allow Star Reactions for Message Highlighting:**`,
 
     SETTINGS_EDIT_EMBED_TITLE: `Updated Home Settings for {{0}}`,
     SETTINGS_EDIT_EMBED_DESCRIPTION: `- *To view your current settings without changing them, use the {{0}} Command without including any of provided options.*`,
+    SETTINGS_EDIT_EMBED_STAR_REACTIONS: `Allow Star Reactions for Message Highlighting`,
 
     SETTINGS_COMMAND_ERROR_HOME_NOT_SETUP: `This Server doesn't have a Home Channel setup using HomeCord. As such, there are no settings for you to view or edit!\nIf you want to setup a Home Channel using HomeCord, please use the {{0}} Command.`,
 

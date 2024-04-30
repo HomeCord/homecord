@@ -406,10 +406,6 @@ DiscordClient.on('messageReactionAdd', async (reaction, user) => {
     // Just in case, ignore DMs
     if ( reaction.message?.channel?.type === ChannelType.DM ) { return; }
 
-    // Ignore Unicode Stars for now
-    //   Just to prevent being flooded by Starboard Bots
-    if ( reaction.emoji.name === "⭐" ) { return; }
-
     // Catch for partials
     if ( reaction.partial ) { await reaction.fetch(); }
 
@@ -418,6 +414,10 @@ DiscordClient.on('messageReactionAdd', async (reaction, user) => {
 
     // Check for highlighting! (if enabled)
     let guildConfig = await GuildConfig.findOne({ guildId: reaction.message.guildId });
+
+    // Ignore Unicode Stars for now, depending on Config
+    //   Just to prevent being flooded by Starboard Bots
+    if ( reaction.emoji.name === "⭐" && guildConfig.allowStarReactions !== true ) { return; }
 
     if ( guildConfig?.messageActivity !== "DISABLED" )
     {
