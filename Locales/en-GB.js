@@ -287,7 +287,7 @@ module.exports = {
     SETTINGS_VIEW_EMBED_VOICE: `**Active Voice Channels:**`,
     SETTINGS_VIEW_EMBED_STAGES: `**Live Stages:**`,
     SETTINGS_VIEW_EMBED_THREADS: `**Threads & Forum/Media Posts:**`,
-    SETTINGS_VIEW_EMBED_STAR_REACTIONS: `**Allow Star Reactions for Message Highlighting:**`,
+    SETTINGS_VIEW_EMBED_STAR_REACTIONS: `Allow Star Reactions for Message Highlighting`,
 
     SETTINGS_EDIT_EMBED_TITLE: `Updated Home Settings for {{0}}`,
     SETTINGS_EDIT_EMBED_DESCRIPTION: `- *To view your current settings without changing them, use the {{0}} Command without including any of provided options.*`,
