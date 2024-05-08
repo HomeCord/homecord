@@ -138,11 +138,24 @@ module.exports = {
 
                 // If attachments in original messages, do thing
                 let originalAttachments = [];
-                if ( RepliedMessage.attachments.size > 0 ) {
+                if ( RepliedMessage.attachments.size > 0 && RepliedMessage.poll == null ) {
                     RepliedMessage.attachments.forEach(attachment => {
                         if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                         else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
                     });
+                }
+
+
+                // Message content to cross-post (changes depending on if it is a Poll or not, and if it is Highlighted or Featured)
+                let crosspostMessage = "";
+                
+                if ( RepliedMessage.poll == null )
+                {
+                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${RepliedMessage.url}>)**${RepliedMessage.content.length > 0 ? `\n\n${RepliedMessage.content.length > 1800 ? `${RepliedMessage.content.slice(0, 1801)}...` : RepliedMessage.content}` : ''}`;
+                }
+                else
+                {
+                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG')}](<${RepliedMessage.url}>)**\n\n${RepliedMessage.poll.question.text}`;
                 }
 
 
@@ -153,8 +166,7 @@ module.exports = {
                     //embeds: RepliedMessage.embeds.length > 0 ? RepliedMessage.embeds : undefined, // Link embeds break with this lol
                     files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
-                    // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
-                    content: `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${RepliedMessage.url}>)**${RepliedMessage.content.length > 0 ? `\n\n${RepliedMessage.content.length > 1800 ? `${RepliedMessage.content.slice(0, 1801)}...` : RepliedMessage.content}` : ''}`
+                    content: crosspostMessage
                 })
                 .then(async sentMessage => {
 
@@ -358,11 +370,24 @@ module.exports = {
 
                 // If attachments in original messages, do thing
                 let originalAttachments = [];
-                if ( message.attachments.size > 0 ) {
+                if ( message.attachments.size > 0 && message.poll == null ) {
                     message.attachments.forEach(attachment => {
                         if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                         else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
                     });
+                }
+
+
+                // Message content to cross-post (changes depending on if it is a Poll or not, and if it is Highlighted or Featured)
+                let crosspostMessage = "";
+                
+                if ( message.poll == null )
+                {
+                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${message.url}>)**${message.content.length > 0 ? `\n\n${message.content.length > 1800 ? `${message.content.slice(0, 1801)}...` : message.content}` : ''}`;
+                }
+                else
+                {
+                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG')}](<${message.url}>)**\n\n${message.poll.question.text}`;
                 }
 
 
@@ -373,8 +398,7 @@ module.exports = {
                     //embeds: message.embeds.length > 0 ? message.embeds : undefined, // Link embeds broke
                     files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
-                    // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
-                    content: `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${message.url}>)**${message.content.length > 0 ? `\n\n${message.content.length > 1800 ? `${message.content.slice(0, 1801)}...` : message.content}` : ''}`
+                    content: crosspostMessage
                 })
                 .then(async sentMessage => {
 

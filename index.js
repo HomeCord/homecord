@@ -170,16 +170,7 @@ Mongoose.connection.on('error', async err => { await LogError(err); });
 // DISCORD - MESSAGE CREATE EVENT
 const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js");
 
-DiscordClient.ws.on('MESSAGE_CREATE', async (rawMessage) => {
-    
-    // If Message has Poll, exit early
-    if ( rawMessage.poll ) { return; }
-    
-    // Fetch into DJS Message Object
-    const messageChannel = await DiscordClient.channels.fetch(rawMessage.channel_id);
-    /** @type {Message} */
-    const message = await messageChannel.messages.fetch({ message: rawMessage.id });
-
+DiscordClient.on('messageCreate', async (message) => {
 
     // Bots
     if ( message.author.bot ) { return; }
@@ -188,8 +179,7 @@ DiscordClient.ws.on('MESSAGE_CREATE', async (rawMessage) => {
     if ( message.system || message.author.system ) { return; }
 
     // DM Channel Messages
-    if ( message.channel instanceof DMChannel ) { return; }
-    if ( message.channel instanceof PartialGroupDMChannel ) { return; }
+    if ( message.channel.type === ChannelType.DM || message.channel.type === ChannelType.GroupDM ) { return; }
 
     // Safe-guard against Discord Outages
     if ( !message.guild.available ) { return; }

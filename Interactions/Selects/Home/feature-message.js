@@ -58,11 +58,24 @@ module.exports = {
 
         // If attachments in original messages, do thing
         let originalAttachments = [];
-        if ( OriginalMessage.attachments.size > 0 ) {
+        if ( OriginalMessage.attachments.size > 0 && OriginalMessage.poll == null ) {
             OriginalMessage.attachments.forEach(attachment => {
                 if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                 else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
             });
+        }
+
+
+        // Message content to cross-post (changes depending on if it is a Poll or not, and if it is Highlighted or Featured)
+        let crosspostMessage = "";
+                
+        if ( OriginalMessage.poll == null )
+        {
+            crosspostMessage = `<:blurpleSparkles:1204729760689954826> **[${localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_MESSAGE_TAG')}](<${OriginalMessage.url}>)**${OriginalMessage.content.length > 0 ? `\n\n${OriginalMessage.content.length > 1800 ? `${OriginalMessage.content.slice(0, 1801)}...` : OriginalMessage.content}` : ''}`;
+        }
+        else
+        {
+            crosspostMessage = `<:blurpleSparkles:1204729760689954826> **[${localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_POLL_TAG')}](<${OriginalMessage.url}>)**\n\n${OriginalMessage.poll.question.text}`;
         }
 
 
@@ -73,8 +86,7 @@ module.exports = {
             //embeds: OriginalMessage.embeds.length > 0 ? OriginalMessage.embeds : undefined, // Link embeds broke with this. Whoops
             files: originalAttachments.length > 0 ? originalAttachments : undefined,
             allowedMentions: { parse: [] },
-            // Content is not just a straight copy-paste so that we can add "Featured Message" & Message URL to it
-            content: `<:blurpleSparkles:1204729760689954826> **[${localize(interaction.guildLocale, 'HOME_FEATURED_MESSAGE_TAG')}](<${OriginalMessage.url}>)**${OriginalMessage.content.length > 0 ? `\n\n${OriginalMessage.content}` : ''}`
+            content: crosspostMessage
         })
         .then(async sentMessage => {
 
