@@ -87,18 +87,6 @@ module.exports = {
         // Check if Message content is too long
         if ( InputMessage.content.length > 1800 ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_LONG') }); return; }
 
-        // Ensure NOT a Poll Message (can't check with .poll field due to DJS not merging support for Polls yet)
-        if ( 
-            InputMessage.attachments.size < 1
-            && InputMessage.content === ''
-            && InputMessage.embeds.length < 1
-            && InputMessage.stickers.size < 1
-            && InputMessage.type === MessageType.Default
-        ) {
-            await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_POLLS_NOT_SUPPORTED') });
-            return;
-        }
-
         // Ensure Server has a Home Channel setup
         if ( await GuildConfig.exists({ guildId: interaction.guildId }) == null ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_HOME_NOT_SETUP') }); return; }
 
