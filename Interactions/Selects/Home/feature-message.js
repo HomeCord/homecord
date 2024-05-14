@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction } = require("discord.js");
+const { StringSelectMenuInteraction, AttachmentBuilder } = require("discord.js");
 const { localize } = require("../../../BotModules/LocalizationModule");
 const { GuildConfig, TimerModel, FeaturedMessage } = require("../../../Mongoose/Models");
 const { DiscordClient } = require("../../../constants");
