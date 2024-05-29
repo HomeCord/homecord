@@ -389,7 +389,6 @@ module.exports = {
     FEATURE_MESSAGE_COMMAND_ERROR_DISABLED: `Sorry, this Server's Admins/Owner has disabled the ability for Messages to be featured & highlighted in its Home Channel.\nThis can be changed through use of \`/settings\` at any time.`,
     FEATURE_MESSAGE_COMMAND_ERROR_MAX_MESSAGES_FEATURED: `Sorry, Servers cannot have more than 10 Messages featured or highlighted in their Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_ALREADY_FEATURED: `[That Message](<{{0}}>) is already being featured on this Server's Home Channel!`,
-    FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_LONG: `Sorry, you cannot feature Messages that have more than 1800 characters in its content.`,
     FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_BOT_MESSAGE: `Sorry, you cannot feature Messages sent by Bots on this Server's Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_SYSTEM_MESSAGE: `Sorry, you cannot feature Discord System Messages on this Server's Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_VOICE_MESSAGE: `Sorry, HomeCord does not support featuring Voice Messages to Home Channels.`,

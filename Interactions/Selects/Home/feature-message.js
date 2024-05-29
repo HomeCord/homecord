@@ -74,7 +74,7 @@ module.exports = {
                 
         if ( OriginalMessage.poll == null )
         {
-            crosspostMessage = `${OriginalMessage.content.length > 0 ? `${OriginalMessage.content.length > 1800 ? `${OriginalMessage.content.slice(0, 1801)}...` : OriginalMessage.content}` : ''}`;
+            crosspostMessage = `${OriginalMessage.content.length > 0 ? `${OriginalMessage.content.length > 1990 ? `${OriginalMessage.content.slice(0, 1991)}...` : OriginalMessage.content}` : ''}`;
             ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_MESSAGE_TAG'));
         }
         else
