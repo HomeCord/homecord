@@ -1,4 +1,4 @@
-const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType, MessageType } = require("discord.js");
+const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType, MessageType, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel, FeaturedThread } = require("../../Mongoose/Models");
 const { replyThreshold, reactionThreshold, threadThreshold } = require("../../Resources/activityThresholds");
 const { DiscordClient } = require("../../constants");
@@ -147,16 +147,24 @@ module.exports = {
 
 
                 // Message content to cross-post (changes depending on if it is a Poll or not, and if it is Highlighted or Featured)
+                //   Include a Link Button to link back to source Message
                 let crosspostMessage = "";
+
+                const ButtonMessageLink = new ButtonBuilder().setStyle(ButtonStyle.Link).setURL(RepliedMessage.url);
                 
                 if ( RepliedMessage.poll == null )
                 {
-                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${RepliedMessage.url}>)**${RepliedMessage.content.length > 0 ? `\n\n${RepliedMessage.content.length > 1800 ? `${RepliedMessage.content.slice(0, 1801)}...` : RepliedMessage.content}` : ''}`;
+                    crosspostMessage = `${RepliedMessage.content.length > 0 ? `${RepliedMessage.content.length > 1990 ? `${RepliedMessage.content.slice(0, 1991)}...` : RepliedMessage.content}` : ''}`;
+                    ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG'));
                 }
                 else
                 {
-                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG')}](<${RepliedMessage.url}>)**\n\n${RepliedMessage.poll.question.text}`;
+                    crosspostMessage = `${RepliedMessage.poll.question.text}`;
+                    ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG'));
                 }
+
+                // Throw Button into Action Row so it's sendable
+                const ActionRowMessageLink = new ActionRowBuilder().addComponents(ButtonMessageLink);
 
 
                 // Cross-post Message to Home Channel
@@ -166,7 +174,8 @@ module.exports = {
                     //embeds: RepliedMessage.embeds.length > 0 ? RepliedMessage.embeds : undefined, // Link embeds break with this lol
                     files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
-                    content: crosspostMessage
+                    content: crosspostMessage,
+                    components: [ActionRowMessageLink]
                 })
                 .then(async sentMessage => {
 
@@ -379,16 +388,24 @@ module.exports = {
 
 
                 // Message content to cross-post (changes depending on if it is a Poll or not, and if it is Highlighted or Featured)
+                //   Include a Link Button to link back to the source Message
                 let crosspostMessage = "";
+
+                const ButtonMessageLink = new ButtonBuilder().setStyle(ButtonStyle.Link).setURL(message.url);
                 
                 if ( message.poll == null )
                 {
-                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')}](<${message.url}>)**${message.content.length > 0 ? `\n\n${message.content.length > 1800 ? `${message.content.slice(0, 1801)}...` : message.content}` : ''}`;
+                    crosspostMessage = `${message.content.length > 0 ? `${message.content.length > 1800 ? `${message.content.slice(0, 1801)}...` : message.content}` : ''}`;
+                    ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG'));
                 }
                 else
                 {
-                    crosspostMessage = `**[${localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG')}](<${message.url}>)**\n\n${message.poll.question.text}`;
+                    crosspostMessage = `${message.poll.question.text}`;
+                    ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG'));
                 }
+
+                // Throw Button into Action Row so it's sendable
+                const ActionRowMessageLink = new ActionRowBuilder().addComponents(ButtonMessageLink);
 
 
                 // Cross-post Message to Home Channel
@@ -398,7 +415,8 @@ module.exports = {
                     //embeds: message.embeds.length > 0 ? message.embeds : undefined, // Link embeds broke
                     files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
-                    content: crosspostMessage
+                    content: crosspostMessage,
+                    components: [ActionRowMessageLink]
                 })
                 .then(async sentMessage => {
 

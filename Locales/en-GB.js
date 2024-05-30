@@ -30,7 +30,7 @@ module.exports = {
     // ******* GENERIC CONTEXT COMMAND STUFF
     CONTEXT_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to run this Context Command...`,
     CONTEXT_COMMAND_ERROR_DMS_UNSUPPORTED: `Sorry, but this Context Command cannot be used within Direct Messages (DMs) or Group DMs.`,
-    CONTEXT_COMMAND_ERROR_SYSTEM_AND_BOT_MESSAGES_UNSUPPORTED: `Sorry, but this Context Command cannot be used on a System or Bot Message.`,
+    CONTEXT_COMMAND_ERROR_SYSTEM_AND_BOT_MESSAGES_UNSUPPORTED: `Sorry, but this Context Command cannot be used on a System or App Message.`,
     CONTEXT_COMMAND_ERROR_GUILDS_UNSUPPORTED: `Sorry, but this Context Command can only be used in Direct Messages (DMs) with me.`,
     CONTEXT_COMMAND_ERROR_DMS_UNSUPPORTED: `Sorry, but this Context Command cannot be used within Direct Messages (DMs) or Group DMs.`,
 
@@ -70,7 +70,7 @@ module.exports = {
 
 
     // ******* GENERIC AUTOCOMPLETE STUFF
-    AUTOCOMPLETE_ERROR_GENERIC: `Error: Unable to process. Please contact this Bot's developer!`,
+    AUTOCOMPLETE_ERROR_GENERIC: `Error: Unable to process. Please contact HomeCord's developer!`,
 
 
 
@@ -117,7 +117,7 @@ module.exports = {
 
     // ******* FOR HOME CHANNEL ITSELF
     HOME_CHANNEL_NAME: `home`,
-    HOME_CHANNEL_DESCRIPTION: `See a summary of highlighted Server activity in this Home Channel, powered by the HomeCord Bot!`,
+    HOME_CHANNEL_DESCRIPTION: `See a summary of highlighted recent Server activity in this Home Channel, powered by the HomeCord Server App!`,
 
     HOME_TITLE: `# {{0}} - Home Channel`,
     HOME_EMPTY: `*There doesn't seem to be anything highlighted...*\n*Maybe you can help by starting a conversation in this Server's Channels!*`,
@@ -389,8 +389,7 @@ module.exports = {
     FEATURE_MESSAGE_COMMAND_ERROR_DISABLED: `Sorry, this Server's Admins/Owner has disabled the ability for Messages to be featured & highlighted in its Home Channel.\nThis can be changed through use of \`/settings\` at any time.`,
     FEATURE_MESSAGE_COMMAND_ERROR_MAX_MESSAGES_FEATURED: `Sorry, Servers cannot have more than 10 Messages featured or highlighted in their Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_ALREADY_FEATURED: `[That Message](<{{0}}>) is already being featured on this Server's Home Channel!`,
-    FEATURE_MESSAGE_COMMAND_ERROR_MESSAGE_TOO_LONG: `Sorry, you cannot feature Messages that have more than 1800 characters in its content.`,
-    FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_BOT_MESSAGE: `Sorry, you cannot feature Messages sent by Bots on this Server's Home Channel.`,
+    FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_BOT_MESSAGE: `Sorry, you cannot feature Messages sent by Apps on this Server's Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_SYSTEM_MESSAGE: `Sorry, you cannot feature Discord System Messages on this Server's Home Channel.`,
     FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_VOICE_MESSAGE: `Sorry, HomeCord does not support featuring Voice Messages to Home Channels.`,
     FEATURE_MESSAGE_COMMAND_ERROR_AUTHOR_PREFERENCES_DISABLED: `Sorry, the User who sent [that Message](<{{0}}>) has disallowed HomeCord from featuring or highlighting their Messages to Servers' Home Channels.`,

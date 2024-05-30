@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction, AttachmentBuilder } = require("discord.js");
+const { StringSelectMenuInteraction, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { localize } = require("../../../BotModules/LocalizationModule");
 const { GuildConfig, TimerModel, FeaturedMessage } = require("../../../Mongoose/Models");
 const { DiscordClient } = require("../../../constants");
@@ -67,16 +67,24 @@ module.exports = {
 
 
         // Message content to cross-post (changes depending on if it is a Poll or not, and if it is Highlighted or Featured)
+        //   Include a Link Button to link back to source Message
         let crosspostMessage = "";
+
+        const ButtonMessageLink = new ButtonBuilder().setStyle(ButtonStyle.Link).setURL(OriginalMessage.url).setEmoji(`<:blurpleSparkles:1204729760689954826>`);
                 
         if ( OriginalMessage.poll == null )
         {
-            crosspostMessage = `<:blurpleSparkles:1204729760689954826> **[${localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_MESSAGE_TAG')}](<${OriginalMessage.url}>)**${OriginalMessage.content.length > 0 ? `\n\n${OriginalMessage.content.length > 1800 ? `${OriginalMessage.content.slice(0, 1801)}...` : OriginalMessage.content}` : ''}`;
+            crosspostMessage = `${OriginalMessage.content.length > 0 ? `${OriginalMessage.content.length > 1990 ? `${OriginalMessage.content.slice(0, 1991)}...` : OriginalMessage.content}` : ''}`;
+            ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_MESSAGE_TAG'));
         }
         else
         {
-            crosspostMessage = `<:blurpleSparkles:1204729760689954826> **[${localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_POLL_TAG')}](<${OriginalMessage.url}>)**\n\n${OriginalMessage.poll.question.text}`;
+            crosspostMessage = `${OriginalMessage.poll.question.text}`;
+            ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_POLL_TAG'));
         }
+
+        // Throw Button into Action Row so it's sendable
+        const ActionRowMessageLink = new ActionRowBuilder().addComponents(ButtonMessageLink);
 
 
         // Cross-post Message to Home Channel now that it's being featured
@@ -86,7 +94,8 @@ module.exports = {
             //embeds: OriginalMessage.embeds.length > 0 ? OriginalMessage.embeds : undefined, // Link embeds broke with this. Whoops
             files: originalAttachments.length > 0 ? originalAttachments : undefined,
             allowedMentions: { parse: [] },
-            content: crosspostMessage
+            content: crosspostMessage,
+            components: [ActionRowMessageLink]
         })
         .then(async sentMessage => {
 
