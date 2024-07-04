@@ -4,9 +4,25 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { DiscordClient, Collections, checkPomelo } = require("./constants.js");
 const Config = require("./config.js");
+
+const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js");
+const SlashCommandHandler = require("./BotModules/Handlers/SlashCommandHandler.js");
+const ContextCommandHandler = require("./BotModules/Handlers/ContextCommandHandler.js");
+const ButtonHandler = require("./BotModules/Handlers/ButtonHandler.js");
+const SelectHandler = require("./BotModules/Handlers/SelectHandler.js");
+const AutocompleteHandler = require("./BotModules/Handlers/AutocompleteHandler.js");
+const ModalHandler = require("./BotModules/Handlers/ModalHandler.js");
+
 const { LogWarn, LogError, LogInfo } = require("./BotModules/LoggingModule.js");
 const { restartTimersOnStartup } = require("./BotModules/TimerModule.js");
 const { processMessageReply, processMessageReaction, processMessageInThread } = require("./BotModules/Events/MessageEvents.js");
+const { removeGuild } = require("./BotModules/DatabaseModule.js");
+const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
+
+const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
+const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
+const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
+const { processGuildEventUserAdd, processGuildEventUpdate } = require("./BotModules/Events/GuildEventEvents.js");
 
 
 
@@ -168,7 +184,6 @@ Mongoose.connection.on('error', async err => { await LogError(err); });
 
 /******************************************************************************* */
 // DISCORD - MESSAGE CREATE EVENT
-const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js");
 
 DiscordClient.on('messageCreate', async (message) => {
 
@@ -234,12 +249,6 @@ DiscordClient.on('messageCreate', async (message) => {
 
 /******************************************************************************* */
 // DISCORD - INTERACTION CREATE EVENT
-const SlashCommandHandler = require("./BotModules/Handlers/SlashCommandHandler.js");
-const ContextCommandHandler = require("./BotModules/Handlers/ContextCommandHandler.js");
-const ButtonHandler = require("./BotModules/Handlers/ButtonHandler.js");
-const SelectHandler = require("./BotModules/Handlers/SelectHandler.js");
-const AutocompleteHandler = require("./BotModules/Handlers/AutocompleteHandler.js");
-const ModalHandler = require("./BotModules/Handlers/ModalHandler.js");
 
 DiscordClient.on('interactionCreate', async (interaction) => {
     if ( interaction.isChatInputCommand() )
@@ -291,13 +300,7 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 
-// Needed for the next set of Events
-const { removeGuild } = require("./BotModules/DatabaseModule.js");
-const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
-const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
-const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
-const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
-const { processGuildEventUserAdd } = require("./BotModules/Events/GuildEventEvents.js");
+
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT
@@ -541,6 +544,25 @@ DiscordClient.on('guildScheduledEventUserAdd', async (scheduledEvent, user) => {
     {
         await processGuildEventUserAdd(scheduledEvent, user);
     }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - GUILD SCHEDULED EVENT UPDATE EVENT
+
+DiscordClient.on('guildScheduledEventUpdate', async (oldEvent, newEvent) => {
+
+    // Throw straight into method
+    await processGuildEventUpdate(oldEvent, newEvent);
 
     return;
 

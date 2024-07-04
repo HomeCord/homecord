@@ -116,6 +116,24 @@ module.exports = {
         }
         
         return;
+    },
+
+
+
+
+
+
+
+
+
+    /**
+     * Processes Scheduled Event Updates
+     * @param {GuildScheduledEvent} oldScheduledEvent 
+     * @param {GuildScheduledEvent} newScheduledEvent 
+     */
+    async processGuildEventUpdate(oldScheduledEvent, newScheduledEvent)
+    {
+        //.
     }
 
 }
