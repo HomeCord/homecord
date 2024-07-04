@@ -166,7 +166,7 @@ module.exports = {
                         pollChoices.push(`- ${PollAnswer[1].emoji != null ? `${PollAnswer[1].emoji.toString()} ` : ''}${PollAnswer[1].text != null ? PollAnswer[1].text : ''}`);
                     }
 
-                    crosspostMessage = `## ${RepliedMessage.poll.question.text}\n\n${pollChoices.join(`\n`)}`;
+                    crosspostMessage = `__**${RepliedMessage.poll.question.text}**__\n\n${pollChoices.join(`\n`)}`;
                     ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG'));
                 }
 
