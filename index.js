@@ -23,6 +23,7 @@ const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule
 const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
 const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
 const { processGuildEventUserAdd, processGuildEventUpdate } = require("./BotModules/Events/GuildEventEvents.js");
+const { processThreadUpdate } = require("./BotModules/Events/ThreadEvents.js");
 
 
 
@@ -574,6 +575,34 @@ DiscordClient.on('guildScheduledEventUpdate', async (oldEvent, newEvent) => {
         if ( await FeaturedEvent.exists({ guildId: newEvent.guildId, eventId: newEvent.id }) == null ) { return; }
 
         await processGuildEventUpdate(oldEvent, newEvent);
+    }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - THREAD UPDATE EVENT
+
+DiscordClient.on('threadUpdate', async (oldThread, newThread) => {
+
+    // Throw straight into method IF THREAD HIGHLIGHTING IS ENABLED
+    let guildConfig = await GuildConfig.findOne({ guildId: newEvent.guildId });
+    if ( guildConfig == null ) { return; }
+    
+    if ( guildConfig.threadActivity !== "DISABLED" )
+    {
+        // Only perform checks if the Thread in question IS featured or highlighted
+        if ( await FeaturedThread.exists({ guildId: newEvent.guildId, threadId: newThread.id }) == null ) { return; }
+
+        await processThreadUpdate(oldThread, newThread);
     }
 
     return;
