@@ -561,8 +561,20 @@ DiscordClient.on('guildScheduledEventUserAdd', async (scheduledEvent, user) => {
 
 DiscordClient.on('guildScheduledEventUpdate', async (oldEvent, newEvent) => {
 
-    // Throw straight into method
-    await processGuildEventUpdate(oldEvent, newEvent);
+    // There MUST be an old event to be compared with - thus, reject instantly if none is present
+    if ( !oldEvent ) { return; }
+
+    // Throw straight into method IF EVENT HIGHLIGHTING IS ENABLED
+    let guildConfig = await GuildConfig.findOne({ guildId: newEvent.guildId });
+    if ( guildConfig == null ) { return; }
+    
+    if ( guildConfig.eventActivity !== "DISABLED" )
+    {
+        // Only perform checks if the Event in question IS featured or highlighted
+        if ( await FeaturedEvent.exists({ guildId: newEvent.guildId, eventId: newEvent.id }) == null ) { return; }
+
+        await processGuildEventUpdate(oldEvent, newEvent);
+    }
 
     return;
 

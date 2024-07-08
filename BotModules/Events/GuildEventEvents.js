@@ -128,12 +128,51 @@ module.exports = {
 
     /**
      * Processes Scheduled Event Updates
-     * @param {GuildScheduledEvent} oldScheduledEvent 
+     * @param {?GuildScheduledEvent} oldScheduledEvent 
      * @param {GuildScheduledEvent} newScheduledEvent 
      */
     async processGuildEventUpdate(oldScheduledEvent, newScheduledEvent)
     {
-        //.
+        // Was it Event Name, Event Start Time, or Event Status that was updated? Reject if neither was updated
+        if ( (oldScheduledEvent.name !== newScheduledEvent.name) || (oldScheduledEvent.scheduledStartTimestamp !== newScheduledEvent.scheduledStartTimestamp) )
+        {
+            // NAME OR START TIME WAS UPDATED
+            //   Just re-run the refresh method, that will auto-update the displayed Event Name & Start Time
+            await refreshEventsThreads(newScheduledEvent.guildId, newScheduledEvent.guild?.preferredLocale);
+            return;
+        }
+
+        if ( oldScheduledEvent.status !== newScheduledEvent.status )
+        {
+            // STATUS WAS UPDATED
+            //   Check if cancelled or just going live. If anything other than cancelled/expired, do nothing
+            if ( newScheduledEvent.status === GuildScheduledEventStatus.Canceled || newScheduledEvent.status === GuildScheduledEventStatus.Completed )
+            {
+                // Remove from Home
+                await FeaturedEvent.deleteOne({ guildId: newScheduledEvent.guildId, eventId: newScheduledEvent.id })
+                .then(async (oldDocument) => {
+                    try {
+
+                        // Call method to update Home Channel to reflect removed Event
+                        await refreshEventsThreads(newScheduledEvent.guildId, newScheduledEvent.guild?.preferredLocale);
+                        return;
+
+                    }
+                    catch (err) {
+                        await LogError(err);
+                        return;
+                    }
+                })
+                .catch(async err => {
+                    await LogError(err);
+                });
+            }
+
+            return;
+        }
+
+        // Nothing was updated
+        return;
     }
 
 }
