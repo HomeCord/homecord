@@ -25,10 +25,10 @@ module.exports =
                 filter: () => member => !homecordUserId.includes(member.id)
             },
             threadMembers: {
-                interval: 86_400,
+                interval: 3_600,
                 filter: () => member => !homecordUserId.includes(member.id)
             },
-            threads: { interval: 86_400, lifetime: 86_400 }
+            threads: { interval: 3_600, lifetime: 1_800 }
         }
     }),
 
