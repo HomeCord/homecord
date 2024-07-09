@@ -123,10 +123,10 @@ module.exports = {
     HOME_EMPTY: `*There doesn't seem to be anything highlighted...*\n*Maybe you can help by starting a conversation in this Server's Channels!*`,
     HOME_SUBHEADING: `*A summary and showcase of this Server's activity and events!*\n*Nothing displayed? Maybe you can help by starting a conversation in this Server's Channels!*`,
 
-    HOME_FEATURED_CHANNELS_HEADER: `## Featured Channels\nChannels featured by this Server's Admins. You might want to check these out!\n*Note: Channels displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
-    HOME_SCHEDULED_EVENTS_HEADER: `## Upcoming Scheduled Events\nHighlighted upcoming Events happening right here in this Server!\n*Note: You can see a full list of this Server's Scheduled Events in the Events Tab at the top of your Channel List.*`,
+    HOME_FEATURED_CHANNELS_HEADER: `## Featured Channels\nChannels featured by this Server's Admins. You might want to check these out!\n-# *Note: Channels displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
+    HOME_SCHEDULED_EVENTS_HEADER: `## Upcoming Scheduled Events\nHighlighted upcoming Events happening right here in this Server!\n-# *Note: You can see a full list of this Server's Scheduled Events in the Events Tab at the top of your Channel List.*`,
     HOME_ACTIVE_VOICE_HEADER: `## Active Voice Channels\nHighlighted active Voice Channels. Why not hop in and join the chaos?`,
-    HOME_ACTIVE_THREADS_HEADER: `## Active Threads & Forum/Media Posts\nLooking for specific conversations? Maybe these active Threads or Forum/Media Posts hold the answer!\n*Note: Threads/Posts displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
+    HOME_ACTIVE_THREADS_HEADER: `## Active Threads & Forum/Media Posts\nLooking for specific conversations? Maybe these active Threads or Forum/Media Posts hold the answer!\n-# *Note: Threads/Posts displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
     HOME_FEATURED_MESSAGES_HEADER: `## Highlighted Messages\nNoteworthy Messages a lot of Server Members seem to like!`,
 
     HOME_FEATURED_EVENT_TAG: `Featured Event!`,
@@ -152,7 +152,7 @@ module.exports = {
 
     // ******* SETUP EMBED
     SETUP_EMBED_TITLE: `Home Channel Setup - Settings`,
-    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nNote: "Activity Threshold" refers to how much activity a thing needs to be automatically highlighted.\n\nOnce it's configured, select "Save & Proceed" in order to fully create your Home Channel!`,
+    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nNote: "Activity Threshold" refers to how much activity an item needs to be automatically highlighted.\n\nOnce it's configured, select "Save & Proceed" in order to fully create your Home Channel!`,
     SETUP_EMBED_CHANNEL: `Channel to use for Home`,
     CREATE_CHANNEL_FOR_ME: `Create Channel for me`,
     SETUP_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
