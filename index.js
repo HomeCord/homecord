@@ -211,6 +211,8 @@ DiscordClient.on('messageCreate', async (message) => {
         // Ignore if in Home Channel
         if ( await GuildConfig.exists({ homeChannelId: message.channelId }) != null ) { return; }
 
+        // TODO: Ignore if a Forward
+
         
         // If a direct reply, check for highlighting! (if enabled)
         let homeConfig = await GuildConfig.findOne({ guildId: message.guildId });
