@@ -8,7 +8,7 @@ Feature Messages, Events, Forum Posts, and more while getting an overview of rec
 
 - [Add HomeCord to your Server](https://discord.com/oauth2/authorize?client_id=1156152328290840606&permissions=537250896&scope=applications.commands+bot)
 - [View HomeCord's Documentation](https://github.com/HomeCord/homecord-docs/blob/main/README.md)
-- [Join HomeCord's Support Server](https://discord.gg/4bFgUyWUMY)
+- [Join HomeCord's Support Server](https://discord.gg/BdXQjkADgd)
 
 ---
 

@@ -71,7 +71,7 @@ module.exports = {
         // Put link into Link Button
         const SupportActionRow = new ActionRowBuilder().addComponents([
             new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_DOCS_BUTTON_LABEL')).setURL("https://github.com/HomeCord/homecord-docs/blob/main/README.md"),
-            new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_BUTTON_LABEL')).setURL("https://discord.gg/4bFgUyWUMY")
+            new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_BUTTON_LABEL')).setURL("https://discord.gg/BdXQjkADgd")
         ]);
 
         // ACK
