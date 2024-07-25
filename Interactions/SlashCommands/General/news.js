@@ -106,7 +106,7 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         // Fetch Announcement Channels, just in case
-        const HomeCordUpdatesChannel = await DiscordClient.channels.fetch("1160812593234055218");
+        const HomeCordUpdatesChannel = await DiscordClient.channels.fetch("1265231685142843485");
 
 
         // Subscribe to feed!
