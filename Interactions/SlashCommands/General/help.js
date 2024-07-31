@@ -70,13 +70,13 @@ module.exports = {
     async execute(interaction)
     {
         // Construct Buttons
-        const ChangelogButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_CHANGELOG')).setURL("");
-        const PrivacyButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_PRIVACY')).setURL("");
-        const TermsButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_TERMS')).setURL("");
-        const GitHubButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_GITHUB')).setURL("");
-        const SupportButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_SUPPORT')).setURL("");
-        const InviteButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_INVITE')).setURL("");
-        const DocumentationButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_DOCUMENTATION')).setURL("");
+        const ChangelogButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_CHANGELOG')).setURL("https://github.com/HomeCord/homecord/releases");
+        const PrivacyButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_PRIVACY')).setURL("https://homecord.gitbook.io/docs/legal/privacy-policy");
+        const TermsButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_TERMS')).setURL("https://homecord.gitbook.io/docs/legal/terms-of-service");
+        const GitHubButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_GITHUB')).setURL("https://github.com/HomeCord/homecord");
+        const SupportButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_SUPPORT')).setURL("https://discord.gg/BdXQjkADgd");
+        const InviteButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_INVITE')).setURL("https://discord.com/oauth2/authorize?client_id=1156152328290840606&permissions=537250896&scope=applications.commands+bot");
+        const DocumentationButton = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'HELP_COMMAND_BUTTON_DOCUMENTATION')).setURL("https://homecord.gitbook.io/docs");
 
         // Construct Select
         const HelpSelect = new StringSelectMenuBuilder().setCustomId("help-pages").setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'HELP_COMMAND_MENU_PLACEHOLDER')).addOptions([
