@@ -88,8 +88,7 @@ async function setupNewChannel(interaction, settingValues)
         type: ChannelType.GuildText,
         topic: localize(interaction.guildLocale, 'HOME_CHANNEL_DESCRIPTION'),
         permissionOverwrites: [
-            // 1 << 49 is the new SEND_POLLS Permission, using raw value here since DJS hasn't added support for it yet lol
-            { id: interaction.guildId, deny: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.CreatePublicThreads, PermissionFlagsBits.CreatePrivateThreads, PermissionFlagsBits.AddReactions, PermissionFlagsBits.UseEmbeddedActivities, 1 << 49], allow: PermissionFlagsBits.UseExternalEmojis, type: OverwriteType.Role }, // for atEveryone
+            { id: interaction.guildId, deny: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.CreatePublicThreads, PermissionFlagsBits.CreatePrivateThreads, PermissionFlagsBits.AddReactions, PermissionFlagsBits.UseEmbeddedActivities, PermissionFlagsBits.SendPolls], type: OverwriteType.Role }, // for atEveryone
             { id: DiscordClient.user.id, allow: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageWebhooks], type: OverwriteType.Member } // for HomeCord
         ],
         reason: localize(interaction.guildLocale, 'HOMECORD_CHANNEL_CREATION_REASON', fetchDisplayName(interaction.user, true))
@@ -375,10 +374,6 @@ async function revalidateHome(interaction, settingValues)
         // Attach Files
         if ( !interaction.guild.members.me.permissionsIn(settingValues[0]).has(PermissionFlagsBits.AttachFiles) ) { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_ATTACH_FILES_PERMISSION_MISSING')}`; }
         else { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_ATTACH_FILES_PERMISSION_SUCCESS')}`; }
-
-        // Use External Emojis
-        if ( !fetchedChannel.permissionsFor(interaction.guildId).has(PermissionFlagsBits.UseExternalEmojis) ) { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EXTERNAL_EMOJIS_PERMISSION_MISSING')}`; }
-        else { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EXTERNAL_EMOJIS_PERMISSION_SUCCESS')}`; }
 
         // Channel Position
         suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_CHANNEL_POSITION', `<#${fetchedChannel.id}>`)}`;

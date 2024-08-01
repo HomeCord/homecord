@@ -4,6 +4,7 @@ const { DiscordClient } = require("../constants");
 const { localize } = require("./LocalizationModule");
 const { LogError } = require("./LoggingModule.js");
 const { resetHomeSliently } = require("./ResetHomeModule.js");
+const { EMOJI_SCHEDULED_EVENTS, EMOJI_CHANNEL_THREAD, EMOJI_CHANNEL_FORUM, EMOJI_BLURPLE_SPARKLES } = require("../Resources/appEmojis.js");
 
 
 
@@ -136,8 +137,8 @@ module.exports = {
                 // Grab Event's name
                 let tempEvent = fetchedGuild.scheduledEvents.resolve(eventDocument.eventId);
                 // Tweak formatting depending on highlighted or featured
-                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> **${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> <:blurpleSparkles:1204729760689954826> ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
-                else { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> ${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
+                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- ${EMOJI_SCHEDULED_EVENTS} **${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> ${EMOJI_BLURPLE_SPARKLES} ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
+                else { readableEvents.push(`- ${EMOJI_SCHEDULED_EVENTS} ${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
             });
 
             // Set into Home Channel
@@ -154,8 +155,8 @@ module.exports = {
 
             FeaturedThreadEntries.forEach(async threadDocument => {
                 // Tweak formatting depending on highlighted or featured
-                if ( threadDocument.featureType === "FEATURE" ) { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `<:ChannelThread:1205449480397393990>` : `<:ChannelForum:1029012363048914967>`} **<#${threadDocument.threadId}> <:blurpleSparkles:1204729760689954826> ${threadDocument.threadType === "THREAD" ? `${localize(locale, 'HOME_FEATURED_THREAD_TAG')}` : `${localize(locale, 'HOME_FEATURED_POST_TAG')}`}**`) }
-                else { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `<:ChannelThread:1205449480397393990>` : `<:ChannelForum:1029012363048914967>`} <#${threadDocument.threadId}>`) }
+                if ( threadDocument.featureType === "FEATURE" ) { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `${EMOJI_CHANNEL_THREAD}` : `${EMOJI_CHANNEL_FORUM}`} **<#${threadDocument.threadId}> ${EMOJI_BLURPLE_SPARKLES} ${threadDocument.threadType === "THREAD" ? `${localize(locale, 'HOME_FEATURED_THREAD_TAG')}` : `${localize(locale, 'HOME_FEATURED_POST_TAG')}`}**`) }
+                else { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `${EMOJI_CHANNEL_THREAD}` : `${EMOJI_CHANNEL_FORUM}`} <#${threadDocument.threadId}>`) }
             });
 
             // Set into Home Channel
@@ -176,14 +177,14 @@ module.exports = {
                 // Grab Event's name
                 let tempEvent = fetchedGuild.scheduledEvents.resolve(eventDocument.eventId);
                 // Tweak formatting depending on highlighted or featured
-                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> **${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> <:blurpleSparkles:1204729760689954826> ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
-                else { readableEvents.push(`- <:ScheduledEvent:1009372447503552514> ${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
+                if ( eventDocument.featureType === "FEATURE" ) { readableEvents.push(`- ${EMOJI_SCHEDULED_EVENTS} **${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R> ${EMOJI_BLURPLE_SPARKLES} ${localize(locale, 'HOME_FEATURED_EVENT_TAG')}**`); }
+                else { readableEvents.push(`- ${EMOJI_SCHEDULED_EVENTS} ${tempEvent.name} - <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:f> <t:${Math.floor(tempEvent.scheduledStartAt.getTime() / 1000)}:R>`); }
             });
 
             FeaturedThreadEntries.forEach(async threadDocument => {
                 // Tweak formatting depending on highlighted or featured
-                if ( threadDocument.featureType === "FEATURE" ) { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `<:ChannelThread:1205449480397393990>` : `<:ChannelForum:1029012363048914967>`} **<#${threadDocument.threadId}> <:blurpleSparkles:1204729760689954826> ${threadDocument.threadType === "THREAD" ? `${localize(locale, 'HOME_FEATURED_THREAD_TAG')}` : `${localize(locale, 'HOME_FEATURED_POST_TAG')}`}**`) }
-                else { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `<:ChannelThread:1205449480397393990>` : `<:ChannelForum:1029012363048914967>`} <#${threadDocument.threadId}>`) }
+                if ( threadDocument.featureType === "FEATURE" ) { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `${EMOJI_CHANNEL_THREAD}` : `${EMOJI_CHANNEL_FORUM}`} **<#${threadDocument.threadId}> ${EMOJI_BLURPLE_SPARKLES} ${threadDocument.threadType === "THREAD" ? `${localize(locale, 'HOME_FEATURED_THREAD_TAG')}` : `${localize(locale, 'HOME_FEATURED_POST_TAG')}`}**`) }
+                else { readableThreads.push(`- ${threadDocument.threadType === "THREAD" ? `${EMOJI_CHANNEL_THREAD}` : `${EMOJI_CHANNEL_FORUM}`} <#${threadDocument.threadId}>`) }
             });
 
             // Set into Home Channel

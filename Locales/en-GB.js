@@ -123,10 +123,10 @@ module.exports = {
     HOME_EMPTY: `*There doesn't seem to be anything highlighted...*\n*Maybe you can help by starting a conversation in this Server's Channels!*`,
     HOME_SUBHEADING: `*A summary and showcase of this Server's activity and events!*\n*Nothing displayed? Maybe you can help by starting a conversation in this Server's Channels!*`,
 
-    HOME_FEATURED_CHANNELS_HEADER: `## Featured Channels\nChannels featured by this Server's Admins. You might want to check these out!\n*Note: Channels displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
-    HOME_SCHEDULED_EVENTS_HEADER: `## Upcoming Scheduled Events\nHighlighted upcoming Events happening right here in this Server!\n*Note: You can see a full list of this Server's Scheduled Events in the Events Tab at the top of your Channel List.*`,
+    HOME_FEATURED_CHANNELS_HEADER: `## Featured Channels\nChannels featured by this Server's Admins. You might want to check these out!\n-# *Note: Channels displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
+    HOME_SCHEDULED_EVENTS_HEADER: `## Upcoming Scheduled Events\nHighlighted upcoming Events happening right here in this Server!\n-# *Note: You can see a full list of this Server's Scheduled Events in the Events Tab at the top of your Channel List.*`,
     HOME_ACTIVE_VOICE_HEADER: `## Active Voice Channels\nHighlighted active Voice Channels. Why not hop in and join the chaos?`,
-    HOME_ACTIVE_THREADS_HEADER: `## Active Threads & Forum/Media Posts\nLooking for specific conversations? Maybe these active Threads or Forum/Media Posts hold the answer!\n*Note: Threads/Posts displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
+    HOME_ACTIVE_THREADS_HEADER: `## Active Threads & Forum/Media Posts\nLooking for specific conversations? Maybe these active Threads or Forum/Media Posts hold the answer!\n-# *Note: Threads/Posts displaying as "Unknown"? Simply tap their mentions to load their names again.*`,
     HOME_FEATURED_MESSAGES_HEADER: `## Highlighted Messages\nNoteworthy Messages a lot of Server Members seem to like!`,
 
     HOME_FEATURED_EVENT_TAG: `Featured Event!`,
@@ -152,7 +152,7 @@ module.exports = {
 
     // ******* SETUP EMBED
     SETUP_EMBED_TITLE: `Home Channel Setup - Settings`,
-    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nNote: "Activity Threshold" refers to how much activity a thing needs to be automatically highlighted.\n\nOnce it's configured, select "Save & Proceed" in order to fully create your Home Channel!`,
+    SETUP_EMBED_DESCRIPTION: `Please configure your Home Channel to how you would like it.\nNote: "Activity Threshold" refers to how much activity an item needs to be automatically highlighted.\n\nOnce it's configured, select "Save & Proceed" in order to fully create your Home Channel!`,
     SETUP_EMBED_CHANNEL: `Channel to use for Home`,
     CREATE_CHANNEL_FOR_ME: `Create Channel for me`,
     SETUP_EMBED_ACTIVITY_THRESHOLD: `Activity Threshold`,
@@ -510,4 +510,148 @@ module.exports = {
     REFRESH_COMMAND_ERROR_GUILD_OUTAGE: `Sorry, I cannot refresh this Server's Home Channel while there is a [Discord outage](<https://discordstatus.com>) occurring.\nPlease wait until after the outage has been patched.`,
     REFRESH_COMMAND_ERROR_MISSING_WEBHOOK: `Sorry, I cannot refresh this Server's Home Channel without my Webhook in that Channel!\nPlease run the \`/setup\` Command again to fix this issue.`,
     REFRESH_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to refresh this Server's Home Channel.\nIf this issue keeps happening, feel free to contact HomeCord's developers via either GitHub or HomeCord's Support Server (both linked in \`/support\` Command).`,
+
+
+
+    // ******* HELP COMMAND AND HELP PAGES
+    HELP_COMMAND_BUTTON_CHANGELOG: `Changelog`,
+    HELP_COMMAND_BUTTON_PRIVACY: `Privacy Policy`,
+    HELP_COMMAND_BUTTON_TERMS: `Terms of Service`,
+    HELP_COMMAND_BUTTON_GITHUB: `GitHub`,
+    HELP_COMMAND_BUTTON_SUPPORT: `Support Server`,
+    HELP_COMMAND_BUTTON_INVITE: `Add HomeCord`,
+    HELP_COMMAND_BUTTON_DOCUMENTATION: `Documentation`,
+
+    HELP_COMMAND_MENU_PLACEHOLDER: `Select a Help Page to view`,
+    HELP_COMMAND_MENU_INDEX: `Main Page & HomeCord's Links`,
+    HELP_COMMAND_MENU_SETUP_GUIDE: `How to setup HomeCord`,
+    HELP_COMMAND_MENU_CONFIG_GUIDE: `How to configure HomeCord after setup`,
+    HELP_COMMAND_MENU_HOME_CHANNEL: `What are Home Channels?`,
+    HELP_COMMAND_MENU_HIGHLIGHT_VS_FEATURE: `Different between "Highlight" & "Feature"`,
+    HELP_COMMAND_MENU_MESSAGE_PRIVACY: `User Message Privacy Setting`,
+    HELP_COMMAND_MENU_BLOCKLIST: `Guide to HomeCord's Block Lists`,
+    HELP_COMMAND_MENU_COMMAND_LIST: `Command List`,
+    HELP_COMMAND_MENU_COMMAND_PERMISSIONS: `How to set Permissions for Commands`,
+
+    HELP_COMMAND_PAGE_INDEX: `# __HomeCord's Help Module__
+Welcome to HomeCord's Help Module.
+
+This features a selection of quick tips & guides for common queries about HomeCord.
+If you have a question about HomeCord, it's always best to look in this Help Module first in case your answer is here!
+
+To change the Help Page, use the Dropdown Select Menu below. You'll also find below the official links for HomeCord and its various pages & documentation.
+If you have a question, or need some help, that is not answered by this Help Module - feel free to either join HomeCord's Support Server, or open an Issue Ticket on HomeCord's GitHub page.`,
+
+    HELP_COMMAND_PAGE_SETUP_GUIDE: `# __How to setup HomeCord's Home Channels__
+To setup HomeCord & its "Home" Channel in your Server, use the \`/setup\` Command. :information_source: *Please note that, by default, only those with at least the "**Manage Server**" Permission can use this Command.*
+
+Upon using the \`/setup\` Command, you will be shown a guided setup menu which you can use to configure the settings of your Home Channel before it is made.
+
+For the first Setup Page, you'll be able to set:
+- **Which Channel to use** - For setting if you want to use an existing Text Channel, or make a new one, for use as your Home Channel.
+- **Message/Events/Threads Activity** - For setting the minimum activity threshold that each mentioned item needs to meet to be automatically Highlighted to your Home Channel.
+  - :information_source: *Each Activity Threshold can also be disabled, preventing automatic highlighting of said item in the process.*
+
+For the second Setup Page, HomeCord will run validation checks to see if it is able to correctly setup a new Home Channel in your Server or not.
+This features a couple required checks, and (depending on your **"Which Channel to use"** setting from the first Setup Page) some optional checks.
+
+Once the validation checks have passed successfully, you'll be able to save your configuration, and watch as HomeCord setups your newfound Home Channel for your Server!`,
+
+    HELP_COMMAND_PAGE_CONFIG_GUIDE: `# __Configuring HomeCord's Settings after Setup__
+After you have setup HomeCord in your Server, you'll still be able to configure its settings for your Home Channel.
+
+To do so, simply use the \`/settings\` Command *(:information_source: requires "**Manage Server**" Permission by default)*, and include any of the listed config options you want to change.
+If you only want to view your current configuration setup, simply send the Command *without* including any of the options.`,
+
+    HELP_COMMAND_PAGE_HOME_CHANNEL: `# __What are HomeCord's "Home" Channels?__
+HomeCord's "Home" Channels function similarly to the old [Server Home Experiment](<https://support.discord.com/hc/en-us/articles/6156116949911>) Discord ran, and later scrapped, in 2022/2023.
+
+In short: HomeCord's "Home" Channels showcase recent but noteworthy activity in your Server's Channels - namely:
+- Popular Messages,
+- Active Public Threads, Forum Channel Posts, and Media Channel Posts,
+- Upcoming Scheduled Events
+
+By showcasing possibly interesting events and conversations happening in your Server, your Server's activity may increase as possible 'lurking' Members may end up joining in conversations and thus, becoming full Members of your Server, just from seeing what's featured or highlighted to your Home Channel!
+Plus, if you wish, HomeCord's Home Channel can also be used as an ephemeral Starboard! :star:
+
+Furthermore, you can also permanently feature a small selection of Channels on your Server to the top of your Home Channel as "Important Channels". Allowing new and regular Members alike a quick way to see where important Channels are - such as information Channels, announcements, or where the main "general" channel is.`,
+
+    HELP_COMMAND_PAGE_HIGHLIGHT_VS_FEATURE: `# __Highlighting vs Featuring - What's the difference?__
+There are two ways for an item to be showcased to your Home Channel - either being highlighted, or being featured.
+
+A **Highlighted** item is one that has been *automatically* showcased to your Home Channel after it has met the minimum Activity Threshold.
+Messages, Scheduled Events, and Threads/Posts are items that can be highlighted.
+If you don't want a specific type of item to be highlightable in your Server, simply disable its Activity Threshold using the \`/settings\` Command.
+
+A **Featured** item is one that has been *manually* showcased to your Home Channel by a Server Moderator, Admin, or Owner, via use of the \`/feature\` Slash Command or "\`Feature Message\`" Context Command.
+Messages, Scheduled Events, Threads/Posts, and Channels are items that can be featured - with Channels being able to be featured permanently, unlike the other items which can only be featured for a short time.
+
+While it is not possible to disable the ability to feature certain types of items (outside of restricting who can use the Feature Commands); HomeCord *will* respect the Server's Home Block List and (for Messages) the Message Author's set Preferences in HomeCord, when either highlighting or featuring items.`,
+
+    HELP_COMMAND_PAGE_MESSAGE_PRIVACY: `# __HomeCord Message Privacy Setting__
+Since not everyone will be comfortable with allowing their Messages to be highlighted or featured in Home Channels - HomeCord offers a toggle you can use to opt-out of allowing your Messages to be showcased.
+
+To do so, simply run the \`/preferences\` Command in any Server that has the HomeCord App, being sure to include the listed option.
+Once opted-out, HomeCord will no longer allow your Messages to be featured or highlighted in its Home Channels in *any* Server that uses HomeCord.
+
+:warning: **This Preference Setting is NOT able to be set per-Server for each User. It can only be set per-User to apply to ALL Servers that both HomeCord and the User are in.**`,
+
+    HELP_COMMAND_PAGE_BLOCKLIST: `# __HomeCord's Block List System__
+HomeCord offers a Block List system that Server Admins can use to restrict if items from specific Channels, Categories, or sent by those with specific Roles, can be showcased onto the Home Channel.
+
+## Adding or Removing from the Block List
+To add or remove items to/from your Server's Block List for HomeCord, simply use either the \`/block\` or \`/unblock\` Command.
+Since HomeCord supports bulk-adding or bulk-removing for its Block Lists, these Command will *not* have any options tied to them. Instead, simply run the Commands in chat, and you'll be presented with a searchable dropdown that you can use to select multiple items at once.
+
+You can later view what is on your Server's Block List by using the \`/blocklist\` Command.
+Please note that all three of the above mentioned Commands requires, by default, the "**Manage Server**" Permission to be able to use them.
+
+## Blocking Channels
+When a Channel is added to your Block List, HomeCord will NOT:
+- Highlight/Feature any Messages sent in that Channel, or in any Threads in that Channel
+- Highlight/Feature any Threads/Posts within that Channel
+
+## Blocking Categories
+When a Category is added to your Block List, HomeCord will NOT:
+- Highlight/Feature any Messages sent in any Channels within that Category
+- Highlight/Feature any Messages sent within any Threads/Posts within that Category
+- Highlight/Feature any Threads/Posts within that Category
+
+## Blocking Roles
+When a Role is added to your Block List, HomeCord will NOT:
+- Highlight/Feature any Messages sent by any Member with that Blocked Role`,
+
+    HELP_COMMAND_PAGE_COMMAND_LIST: `# __HomeCord's Commands List__
+
+## Management Commands
+- *Requires "Manage Server" Permission by default*
+  - \`/setup\` - Begins the setup process for creating a Home Channel in your Server with HomeCord.
+  - \`/settings\` - View or Edit the Home Channel Settings for your Server.
+  - \`/refresh\` - Force-refresh your Server's Home Channel. :warning: *Has a long cooldown of 7 days between uses.*
+  - \`/block\` - Add Channels, Categories, or Roles to your Server's Home Block List.
+  - \`/unblock\` - Remove Channels, Categories, or Roles from your Server's Home Block List.
+  - \`/blocklist\` - View your Server's Home Block List.
+- *Requires "Manage Webhooks" Permission by default*
+  - \`/news\` - Adds a feed of HomeCord's updates & status feed to the specified Text Channel in your Server.
+
+## Moderator Commands
+- *Requires "Manage Channels" Permission by default*
+  - \`/feature\` - Manually feature a Channel, Event, or Thread/Post to your Home Channel.
+  - \`/unfeature\` - Manually remove a featured/highlighted Channel, Event, or Thread/Post from your Home Channel.
+  - "\`Feature Message\`" - (Context Command) Manually feature a Message to your Home Channel.
+  - "\`Unfeature Message\`" - (Context Command) Manually remove a featured/highlighted Message from your Home Channel.
+  
+## General Commands
+- *Does NOT require any Permissions by default to use*
+  - \`/help\` - Shows HomeCord's Help Pages and official links.
+  - \`/preferences\` - View or edit your own User-based settings within HomeCord.
+  - \`/invite\` - Shows the invite link you can use to add HomeCord to your own Server.
+  - \`/support\` - Shows a link to HomeCord's Support Server, and to its Documentation.`,
+
+    HELP_COMMAND_PAGE_COMMAND_PERMISSIONS: `# __Setting Permissions for HomeCord's Commands__
+Much like with all other Server Apps on Discord with Slash & Context Commands, HomeCord's Commands are also able to have their default Permission requirements overridden by Server Admins if wished to.
+
+To do so, simply navigate to **Server Settings -> Integrations -> HomeCord** in your Server on Discord, and you'll be able to edit its Command Permission requirements there.
+
+:information_source: *Note: This is only possible to do on Desktop & Web versions of Discord. Sorry Mobile Users, blame Discord!*`,
 };

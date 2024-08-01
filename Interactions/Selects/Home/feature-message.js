@@ -79,7 +79,14 @@ module.exports = {
         }
         else
         {
-            crosspostMessage = `${OriginalMessage.poll.question.text}`;
+            // Grab Poll Choices & make into an unordered list with Markdown
+            let pollChoices = [];
+            for ( const PollAnswer of OriginalMessage.poll.answers )
+            {
+                pollChoices.push(`- ${PollAnswer[1].emoji != null ? `${PollAnswer[1].emoji.toString()} ` : ''}${PollAnswer[1].text != null ? PollAnswer[1].text : ''}`);
+            }
+
+            crosspostMessage = `__**${OriginalMessage.poll.question.text}**__\n\n${pollChoices.join(`\n`)}`;
             ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_POLL_TAG'));
         }
 

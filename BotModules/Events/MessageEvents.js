@@ -159,7 +159,14 @@ module.exports = {
                 }
                 else
                 {
-                    crosspostMessage = `${RepliedMessage.poll.question.text}`;
+                    // Grab Poll Choices & make into an unordered list with Markdown
+                    let pollChoices = [];
+                    for (const PollAnswer of RepliedMessage.poll.answers)
+                    {
+                        pollChoices.push(`- ${PollAnswer[1].emoji != null ? `${PollAnswer[1].emoji.toString()} ` : ''}${PollAnswer[1].text != null ? PollAnswer[1].text : ''}`);
+                    }
+
+                    crosspostMessage = `__**${RepliedMessage.poll.question.text}**__\n\n${pollChoices.join(`\n`)}`;
                     ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG'));
                 }
 

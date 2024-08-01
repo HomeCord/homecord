@@ -4,9 +4,26 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { DiscordClient, Collections, checkPomelo } = require("./constants.js");
 const Config = require("./config.js");
+
+const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js");
+const SlashCommandHandler = require("./BotModules/Handlers/SlashCommandHandler.js");
+const ContextCommandHandler = require("./BotModules/Handlers/ContextCommandHandler.js");
+const ButtonHandler = require("./BotModules/Handlers/ButtonHandler.js");
+const SelectHandler = require("./BotModules/Handlers/SelectHandler.js");
+const AutocompleteHandler = require("./BotModules/Handlers/AutocompleteHandler.js");
+const ModalHandler = require("./BotModules/Handlers/ModalHandler.js");
+
 const { LogWarn, LogError, LogInfo } = require("./BotModules/LoggingModule.js");
 const { restartTimersOnStartup } = require("./BotModules/TimerModule.js");
 const { processMessageReply, processMessageReaction, processMessageInThread } = require("./BotModules/Events/MessageEvents.js");
+const { removeGuild } = require("./BotModules/DatabaseModule.js");
+const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
+
+const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
+const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
+const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
+const { processGuildEventUserAdd, processGuildEventUpdate } = require("./BotModules/Events/GuildEventEvents.js");
+const { processThreadUpdate } = require("./BotModules/Events/ThreadEvents.js");
 
 
 
@@ -168,7 +185,6 @@ Mongoose.connection.on('error', async err => { await LogError(err); });
 
 /******************************************************************************* */
 // DISCORD - MESSAGE CREATE EVENT
-const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js");
 
 DiscordClient.on('messageCreate', async (message) => {
 
@@ -194,6 +210,8 @@ DiscordClient.on('messageCreate', async (message) => {
 
         // Ignore if in Home Channel
         if ( await GuildConfig.exists({ homeChannelId: message.channelId }) != null ) { return; }
+
+        // TODO: Ignore if a Forward
 
         
         // If a direct reply, check for highlighting! (if enabled)
@@ -234,12 +252,6 @@ DiscordClient.on('messageCreate', async (message) => {
 
 /******************************************************************************* */
 // DISCORD - INTERACTION CREATE EVENT
-const SlashCommandHandler = require("./BotModules/Handlers/SlashCommandHandler.js");
-const ContextCommandHandler = require("./BotModules/Handlers/ContextCommandHandler.js");
-const ButtonHandler = require("./BotModules/Handlers/ButtonHandler.js");
-const SelectHandler = require("./BotModules/Handlers/SelectHandler.js");
-const AutocompleteHandler = require("./BotModules/Handlers/AutocompleteHandler.js");
-const ModalHandler = require("./BotModules/Handlers/ModalHandler.js");
 
 DiscordClient.on('interactionCreate', async (interaction) => {
     if ( interaction.isChatInputCommand() )
@@ -291,13 +303,7 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 
-// Needed for the next set of Events
-const { removeGuild } = require("./BotModules/DatabaseModule.js");
-const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
-const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
-const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
-const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
-const { processGuildEventUserAdd } = require("./BotModules/Events/GuildEventEvents.js");
+
 
 /******************************************************************************* */
 // DISCORD - GUILD DELETE EVENT
@@ -540,6 +546,65 @@ DiscordClient.on('guildScheduledEventUserAdd', async (scheduledEvent, user) => {
     if ( guildConfig.eventActivity !== "DISABLED" )
     {
         await processGuildEventUserAdd(scheduledEvent, user);
+    }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - GUILD SCHEDULED EVENT UPDATE EVENT
+
+DiscordClient.on('guildScheduledEventUpdate', async (oldEvent, newEvent) => {
+
+    // There MUST be an old event to be compared with - thus, reject instantly if none is present
+    if ( !oldEvent ) { return; }
+
+    // Throw straight into method IF EVENT HIGHLIGHTING IS ENABLED
+    let guildConfig = await GuildConfig.findOne({ guildId: newEvent.guildId });
+    if ( guildConfig == null ) { return; }
+    
+    if ( guildConfig.eventActivity !== "DISABLED" )
+    {
+        // Only perform checks if the Event in question IS featured or highlighted
+        if ( await FeaturedEvent.exists({ guildId: newEvent.guildId, eventId: newEvent.id }) == null ) { return; }
+
+        await processGuildEventUpdate(oldEvent, newEvent);
+    }
+
+    return;
+
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
+// DISCORD - THREAD UPDATE EVENT
+
+DiscordClient.on('threadUpdate', async (oldThread, newThread) => {
+
+    // Throw straight into method IF THREAD HIGHLIGHTING IS ENABLED
+    let guildConfig = await GuildConfig.findOne({ guildId: newEvent.guildId });
+    if ( guildConfig == null ) { return; }
+    
+    if ( guildConfig.threadActivity !== "DISABLED" )
+    {
+        // Only perform checks if the Thread in question IS featured or highlighted
+        if ( await FeaturedThread.exists({ guildId: newEvent.guildId, threadId: newThread.id }) == null ) { return; }
+
+        await processThreadUpdate(oldThread, newThread);
     }
 
     return;

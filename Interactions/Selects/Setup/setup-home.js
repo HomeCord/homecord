@@ -53,7 +53,7 @@ module.exports = {
                 // Create Select
                 let messageSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-message_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`DISABLE`).setLabel(localize(interaction.locale, 'DISABLE')),
                         new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
@@ -73,7 +73,7 @@ module.exports = {
                 // Create Select
                 let eventSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-event_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`DISABLE`).setLabel(localize(interaction.locale, 'DISABLE')),
                         new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
@@ -93,7 +93,7 @@ module.exports = {
                 // Create Select
                 let voiceSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-voice_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`DISABLE`).setLabel(localize(interaction.locale, 'DISABLE')),
                         new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
@@ -113,7 +113,7 @@ module.exports = {
                 // Create Select
                 let stageSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-stage_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`DISABLE`).setLabel(localize(interaction.locale, 'DISABLE')),
                         new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
@@ -133,7 +133,7 @@ module.exports = {
                 // Create Select
                 let threadSelect = new ActionRowBuilder().addComponents(
                     new StringSelectMenuBuilder().setCustomId(`setup-set-thread_${interaction.customId.slice(11)}`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'PLEASE_SELECT_AN_OPTION')).setOptions(
-                        new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'DISABLE')),
+                        new StringSelectMenuOptionBuilder().setValue(`DISABLE`).setLabel(localize(interaction.locale, 'DISABLE')),
                         new StringSelectMenuOptionBuilder().setValue(`VERY_LOW`).setLabel(localize(interaction.locale, 'VERY_LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`LOW`).setLabel(localize(interaction.locale, 'LOW')),
                         new StringSelectMenuOptionBuilder().setValue(`MEDIUM`).setLabel(localize(interaction.locale, 'MEDIUM')),
@@ -246,10 +246,6 @@ async function setupStep2(interaction, settingValues)
         // Attach Files
         if ( !interaction.guild.members.me.permissionsIn(settingValues[0]).has(PermissionFlagsBits.AttachFiles) ) { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_ATTACH_FILES_PERMISSION_MISSING')}`; }
         else { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_ATTACH_FILES_PERMISSION_SUCCESS')}`; }
-
-        // Use External Emojis
-        if ( !fetchedChannel.permissionsFor(interaction.guildId).has(PermissionFlagsBits.UseExternalEmojis) ) { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EXTERNAL_EMOJIS_PERMISSION_MISSING')}`; }
-        else { suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_EXTERNAL_EMOJIS_PERMISSION_SUCCESS')}`; }
 
         // Channel Position
         suggestionString += `${suggestionString.length > 3 ? `\n` : ''}- ${localize(interaction.locale, 'SETUP_CHANNEL_POSITION', `<#${fetchedChannel.id}>`)}`;

@@ -78,6 +78,8 @@ module.exports = {
         // Check if Voice Message
         if ( InputMessage.flags.has(MessageFlags.IsVoiceMessage) ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_VOICE_MESSAGE') }); return; }
 
+        // TODO: Check if a Forward
+
         // Check if invalid Message type
         if ( DisallowedMessageTypes.includes(InputMessage.type) ) { await interaction.editReply({ content: localize(interaction.locale, 'FEATURE_MESSAGE_COMMAND_ERROR_UNSUPPORTED_GENERIC') }); return; }
 
