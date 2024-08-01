@@ -83,7 +83,6 @@ module.exports = {
             new StringSelectMenuOptionBuilder().setValue("index").setLabel(localize(interaction.locale, 'HELP_COMMAND_MENU_INDEX')),
             new StringSelectMenuOptionBuilder().setValue("setup-guide").setLabel(localize(interaction.locale, 'HELP_COMMAND_MENU_SETUP_GUIDE')),
             new StringSelectMenuOptionBuilder().setValue("config-guide").setLabel(localize(interaction.locale, 'HELP_COMMAND_MENU_CONFIG_GUIDE')),
-            new StringSelectMenuOptionBuilder().setValue("home-channel").setLabel(localize(interaction.locale, 'HELP_COMMAND_MENU_HOME_CHANNEL')),
             new StringSelectMenuOptionBuilder().setValue("highlight-vs-feature").setLabel(localize(interaction.locale, 'HELP_COMMAND_MENU_HIGHLIGHT_VS_FEATURE')),
             new StringSelectMenuOptionBuilder().setValue("message-privacy").setLabel(localize(interaction.locale, 'HELP_COMMAND_MENU_MESSAGE_PRIVACY')),
             new StringSelectMenuOptionBuilder().setValue("blocklist").setLabel(localize(interaction.locale, 'HELP_COMMAND_MENU_BLOCKLIST')),
