@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { StringSelectMenuInteraction, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, TextChannel, PermissionFlagsBits } = require("discord.js");
 const { localize } = require("../../../BotModules/LocalizationModule");
 const { GuildConfig, TimerModel, FeaturedMessage } = require("../../../Mongoose/Models");
 const { DiscordClient } = require("../../../constants");
@@ -57,8 +57,13 @@ module.exports = {
 
 
         // If attachments in original messages, do thing
+        //   Also ensure has permissions to cross-post Attachments to Home
         let originalAttachments = [];
-        if ( OriginalMessage.attachments.size > 0 && OriginalMessage.poll == null ) {
+        /** @type {TextChannel} */
+        let fetchedHomeChannel = await DiscordClient.channels.fetch(ServerConfig.homeChannelId);
+        let attachmentPermissionCheck = fetchedHomeChannel.permissionsFor(DiscordClient.user.id).has(PermissionFlagsBits.AttachFiles);
+
+        if ( OriginalMessage.attachments.size > 0 && OriginalMessage.poll == null && attachmentPermissionCheck ) {
             OriginalMessage.attachments.forEach(attachment => {
                 if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                 else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
