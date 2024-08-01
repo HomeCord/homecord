@@ -1,4 +1,4 @@
-const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType, MessageType, ButtonBuilder, ButtonStyle, ActionRowBuilder, TextChannel, PermissionFlagsBits } = require("discord.js");
+const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType, MessageType, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel, FeaturedThread } = require("../../Mongoose/Models");
 const { replyThreshold, reactionThreshold, threadThreshold } = require("../../Resources/activityThresholds");
 const { DiscordClient } = require("../../constants");
@@ -137,13 +137,8 @@ module.exports = {
 
 
                 // If attachments in original messages, do thing
-                //   As long as HomeCord has ATTACH_FILES Permission in Home
                 let originalAttachments = [];
-                /** @type {TextChannel} */
-                let fetchedHomeChannel = await DiscordClient.channels.fetch(guildConfig.homeChannelId);
-                let attachmentPermissionCheck = fetchedHomeChannel.permissionsFor(DiscordClient.user.id).has(PermissionFlagsBits.AttachFiles);
-
-                if ( RepliedMessage.attachments.size > 0 && RepliedMessage.poll == null && attachmentPermissionCheck ) {
+                if ( RepliedMessage.attachments.size > 0 && RepliedMessage.poll == null ) {
                     RepliedMessage.attachments.forEach(attachment => {
                         if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                         else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
