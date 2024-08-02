@@ -2,6 +2,7 @@ const { RateLimitError, DMChannel, PartialGroupDMChannel, MessageType, ChannelTy
 const Mongoose = require("mongoose");
 const fs = require("node:fs");
 const path = require("node:path");
+const { AutoPoster } = require("topgg-autoposter");
 const { DiscordClient, Collections, checkPomelo } = require("./constants.js");
 const Config = require("./config.js");
 
@@ -29,6 +30,9 @@ const { processThreadUpdate } = require("./BotModules/Events/ThreadEvents.js");
 
 // Just so its mutable
 DiscordClient.DebugMode = false;
+
+// For auto-posting stats to TopGG Page
+const TopggPoster = AutoPoster(Config.TopGGToken, DiscordClient);
 
 
 
@@ -175,6 +179,9 @@ DiscordClient.on('error', async (err) => { await LogError(err); return; });
 
 // Mongoose Errors
 Mongoose.connection.on('error', async err => { await LogError(err); });
+
+// TopGG Errors
+TopggPoster.on('error', async (err) => { await LogError(err); });
 
 
 
