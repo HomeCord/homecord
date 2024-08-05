@@ -603,13 +603,13 @@ DiscordClient.on('guildScheduledEventUpdate', async (oldEvent, newEvent) => {
 DiscordClient.on('threadUpdate', async (oldThread, newThread) => {
 
     // Throw straight into method IF THREAD HIGHLIGHTING IS ENABLED
-    let guildConfig = await GuildConfig.findOne({ guildId: newEvent.guildId });
+    let guildConfig = await GuildConfig.findOne({ guildId: newThread.guildId });
     if ( guildConfig == null ) { return; }
     
     if ( guildConfig.threadActivity !== "DISABLED" )
     {
         // Only perform checks if the Thread in question IS featured or highlighted
-        if ( await FeaturedThread.exists({ guildId: newEvent.guildId, threadId: newThread.id }) == null ) { return; }
+        if ( await FeaturedThread.exists({ guildId: newThread.guildId, threadId: newThread.id }) == null ) { return; }
 
         await processThreadUpdate(oldThread, newThread);
     }
