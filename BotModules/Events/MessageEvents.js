@@ -32,6 +32,9 @@ const DisallowedMessageTypes = [ MessageType.AutoModerationAction, MessageType.C
     MessageType.StageEnd, MessageType.StageRaiseHand, MessageType.StageSpeaker, MessageType.StageStart, MessageType.StageTopic, MessageType.ThreadCreated,
     MessageType.UserJoin ];
 
+// Allowed File Content Types for showcased Message Attachments
+const AllowedContentTypes = [ "image/png", "image/jpeg", "image/gif" ];
+
 module.exports = {
 
     /**
@@ -138,9 +141,12 @@ module.exports = {
 
                 // If attachments in original messages, do thing
                 let originalAttachments = [];
+                let containsUnsupportedAttachments = false;
+
                 if ( RepliedMessage.attachments.size > 0 && RepliedMessage.poll == null ) {
                     RepliedMessage.attachments.forEach(attachment => {
-                        if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
+                        if ( !AllowedContentTypes.includes(attachment.contentType) ) { containsUnsupportedAttachments = true; }
+                        else if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                         else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
                     });
                 }
@@ -155,7 +161,9 @@ module.exports = {
                 if ( RepliedMessage.poll == null )
                 {
                     crosspostMessage = `${RepliedMessage.content.length > 0 ? `${RepliedMessage.content.length > 1990 ? `${RepliedMessage.content.slice(0, 1991)}...` : RepliedMessage.content}` : ''}`;
-                    ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG'));
+                    // Button Label depends on Attachments (if any)
+                    if ( RepliedMessage.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG')); }
+                    else { ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')); }
                 }
                 else
                 {
@@ -387,9 +395,12 @@ module.exports = {
 
                 // If attachments in original messages, do thing
                 let originalAttachments = [];
+                let containsUnsupportedAttachments = false;
+
                 if ( message.attachments.size > 0 && message.poll == null ) {
                     message.attachments.forEach(attachment => {
-                        if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
+                        if ( !AllowedContentTypes.includes(attachment.contentType) ) { containsUnsupportedAttachments = true; }
+                        else if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                         else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
                     });
                 }
@@ -404,11 +415,20 @@ module.exports = {
                 if ( message.poll == null )
                 {
                     crosspostMessage = `${message.content.length > 0 ? `${message.content.length > 1800 ? `${message.content.slice(0, 1801)}...` : message.content}` : ''}`;
-                    ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG'));
+                    // Button Label depends on Attachments (if any)
+                    if ( message.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG')); }
+                    else { ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')); }
                 }
                 else
                 {
-                    crosspostMessage = `${message.poll.question.text}`;
+                    // Grab Poll Choices & make into an unordered list with Markdown
+                    let pollChoices = [];
+                    for (const PollAnswer of message.poll.answers)
+                    {
+                        pollChoices.push(`- ${PollAnswer[1].emoji != null ? `${PollAnswer[1].emoji.toString()} ` : ''}${PollAnswer[1].text != null ? PollAnswer[1].text : ''}`);
+                    }
+
+                    crosspostMessage = `__**${message.poll.question.text}**__\n\n${pollChoices.join(`\n`)}`;
                     ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_POLL_TAG'));
                 }
 

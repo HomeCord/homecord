@@ -58,9 +58,12 @@ module.exports = {
 
         // If attachments in original messages, do thing
         let originalAttachments = [];
+        let containsUnsupportedAttachments = false;
+
         if ( OriginalMessage.attachments.size > 0 && OriginalMessage.poll == null ) {
             OriginalMessage.attachments.forEach(attachment => {
-                if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
+                if ( !AllowedContentTypes.includes(attachment.contentType) ) { containsUnsupportedAttachments = true; }
+                else if ( attachment.spoiler === true ) { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setSpoiler(attachment.spoiler).setName(attachment.name) ); }
                 else { originalAttachments.push( new AttachmentBuilder().setFile(attachment.url, attachment.name).setName(attachment.name) ); }
             });
         }
@@ -75,7 +78,9 @@ module.exports = {
         if ( OriginalMessage.poll == null )
         {
             crosspostMessage = `${OriginalMessage.content.length > 0 ? `${OriginalMessage.content.length > 1990 ? `${OriginalMessage.content.slice(0, 1991)}...` : OriginalMessage.content}` : ''}`;
-            ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_MESSAGE_TAG'));
+            // Button Label depends on Attachments (if any)
+            if ( OriginalMessage.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG')); }
+            else { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')); }
         }
         else
         {

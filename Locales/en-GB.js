@@ -134,6 +134,8 @@ module.exports = {
     HOME_FEATURED_THREAD_TAG: `Featured Thread!`,
     HOME_FEATURED_MESSAGE_TAG: `Featured Message`,
     HOME_ORIGINAL_MESSAGE_TAG: `Original Message`,
+    HOME_FEATURED_MESSAGE_AND_ATTACHMENT_TAG: `Featured Message & Attachment(s)`,
+    HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG: `Original Message & Attachment(s)`,
     HOME_FEATURED_POLL_TAG: `Featured Poll`,
     HOME_ORIGINAL_POLL_TAG: `Original Poll`,
 
