@@ -308,6 +308,8 @@ module.exports = {
     PREFERENCES_EDIT_EMBED_TITLE: `Updated Preferences`,
     PREFERENCES_EDIT_EMBED_DESCRIPTION: `- *To view your current preferences without changing them, use the {{0}} Command without including any of the provided options.*`,
 
+    PREFERENCES_EDIT_ERROR_NO_OPTIONS_INCLUDED: `Whoops! It looks like you didn't include any preferences for me to change for you.\nPlease try again, ensuring you include at least one option to change your preference of!`,
+
 
 
     // ******* FEATURE COMMAND - GENERAL
