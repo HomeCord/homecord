@@ -62,104 +62,124 @@ module.exports = {
         Data.defaultMemberPermissions = PermissionFlagsBits.ManageGuild;
         Data.options = [
             {
-                name: `message_activity`,
-                description: `Set or disable the Activity Threshold for highlighting Messages`,
+                name: `view`,
+                description: `View HomeCord's current settings for this Server`,
                 descriptionLocalizations: {
-                    'en-GB': `Set or disable the Activity Threshold for highlighting Messages`,
-                    'en-US': `Set or disable the Activity Threshold for highlighting Messages`,
+                    'en-GB': `View HomeCord's current settings for this Server`,
+                    'en-US': `View HomeCord's current settings for this Server`,
                 },
-                type: ApplicationCommandOptionType.String,
-                choices: [
-                    { name: `Disable Highlighting Messages`, value: `DISABLED` },
-                    { name: `Very Low`, value: `VERY_LOW` },
-                    { name: `Low`, value: `LOW` },
-                    { name: `Medium`, value: `MEDIUM` },
-                    { name: `High`, value: `HIGH` }
-                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
-                ],
-                required: false
+                type: ApplicationCommandOptionType.Subcommand
             },
             {
-                name: `event_activity`,
-                description: `Set or disable the Activity Threshold for highlighting Scheduled Events`,
+                name: `edit`,
+                description: `Edit HomeCord's settings for this Server`,
                 descriptionLocalizations: {
-                    'en-GB': `Set or disable the Activity Threshold for highlighting Scheduled Events`,
-                    'en-US': `Set or disable the Activity Threshold for highlighting Scheduled Events`,
+                    'en-GB': `Edit HomeCord's settings for this Server`,
+                    'en-US': `Edit HomeCord's settings for this Server`,
                 },
-                type: ApplicationCommandOptionType.String,
-                choices: [
-                    { name: `Disable Highlighting Events`, value: `DISABLED` },
-                    { name: `Very Low`, value: `VERY_LOW` },
-                    { name: `Low`, value: `LOW` },
-                    { name: `Medium`, value: `MEDIUM` },
-                    { name: `High`, value: `HIGH` }
-                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
-                ],
-                required: false
-            },
-            /* {
-                name: `voice_activity`,
-                description: `Set or disable the Activity Threshold for highlighting Voice Channels`,
-                descriptionLocalizations: {
-                    'en-GB': `Set or disable the Activity Threshold for highlighting Voice Channels`,
-                    'en-US': `Set or disable the Activity Threshold for highlighting Voice Channels`,
-                },
-                type: ApplicationCommandOptionType.String,
-                choices: [
-                    { name: `Disable Highlighting Voice`, value: `DISABLED` },
-                    { name: `Very Low`, value: `VERY_LOW` },
-                    { name: `Low`, value: `LOW` },
-                    { name: `Medium`, value: `MEDIUM` },
-                    { name: `High`, value: `HIGH` }
-                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
-                ],
-                required: false
-            },
-            {
-                name: `stage_activity`,
-                description: `Set or disable the Activity Threshold for highlighting live Stages`,
-                descriptionLocalizations: {
-                    'en-GB': `Set or disable the Activity Threshold for highlighting live Stages`,
-                    'en-US': `Set or disable the Activity Threshold for highlighting live Stages`,
-                },
-                type: ApplicationCommandOptionType.String,
-                choices: [
-                    { name: `Disable Highlighting Stages`, value: `DISABLED` },
-                    { name: `Very Low`, value: `VERY_LOW` },
-                    { name: `Low`, value: `LOW` },
-                    { name: `Medium`, value: `MEDIUM` },
-                    { name: `High`, value: `HIGH` }
-                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
-                ],
-                required: false
-            }, */
-            {
-                name: `thread_activity`,
-                description: `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
-                descriptionLocalizations: {
-                    'en-GB': `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
-                    'en-US': `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
-                },
-                type: ApplicationCommandOptionType.String,
-                choices: [
-                    { name: `Disable Highlighting Threads & Posts`, value: `DISABLED` },
-                    { name: `Very Low`, value: `VERY_LOW` },
-                    { name: `Low`, value: `LOW` },
-                    { name: `Medium`, value: `MEDIUM` },
-                    { name: `High`, value: `HIGH` }
-                    //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
-                ],
-                required: false
-            },
-            {
-                name: `allow_star_reactions`,
-                description: `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
-                descriptionLocalizations: {
-                    'en-GB': `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
-                    'en-US': `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
-                },
-                type: ApplicationCommandOptionType.Boolean,
-                required: false
+                type: ApplicationCommandOptionType.Subcommand,
+                options: [
+                    {
+                        name: `message_activity`,
+                        description: `Set or disable the Activity Threshold for highlighting Messages`,
+                        descriptionLocalizations: {
+                            'en-GB': `Set or disable the Activity Threshold for highlighting Messages`,
+                            'en-US': `Set or disable the Activity Threshold for highlighting Messages`,
+                        },
+                        type: ApplicationCommandOptionType.String,
+                        choices: [
+                            { name: `Disable Highlighting Messages`, value: `DISABLED` },
+                            { name: `Very Low`, value: `VERY_LOW` },
+                            { name: `Low`, value: `LOW` },
+                            { name: `Medium`, value: `MEDIUM` },
+                            { name: `High`, value: `HIGH` }
+                            //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                        ],
+                        required: false
+                    },
+                    {
+                        name: `event_activity`,
+                        description: `Set or disable the Activity Threshold for highlighting Scheduled Events`,
+                        descriptionLocalizations: {
+                            'en-GB': `Set or disable the Activity Threshold for highlighting Scheduled Events`,
+                            'en-US': `Set or disable the Activity Threshold for highlighting Scheduled Events`,
+                        },
+                        type: ApplicationCommandOptionType.String,
+                        choices: [
+                            { name: `Disable Highlighting Events`, value: `DISABLED` },
+                            { name: `Very Low`, value: `VERY_LOW` },
+                            { name: `Low`, value: `LOW` },
+                            { name: `Medium`, value: `MEDIUM` },
+                            { name: `High`, value: `HIGH` }
+                            //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                        ],
+                        required: false
+                    },
+                    /* {
+                        name: `voice_activity`,
+                        description: `Set or disable the Activity Threshold for highlighting Voice Channels`,
+                        descriptionLocalizations: {
+                            'en-GB': `Set or disable the Activity Threshold for highlighting Voice Channels`,
+                            'en-US': `Set or disable the Activity Threshold for highlighting Voice Channels`,
+                        },
+                        type: ApplicationCommandOptionType.String,
+                        choices: [
+                            { name: `Disable Highlighting Voice`, value: `DISABLED` },
+                            { name: `Very Low`, value: `VERY_LOW` },
+                            { name: `Low`, value: `LOW` },
+                            { name: `Medium`, value: `MEDIUM` },
+                            { name: `High`, value: `HIGH` }
+                            //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                        ],
+                        required: false
+                    },
+                    {
+                        name: `stage_activity`,
+                        description: `Set or disable the Activity Threshold for highlighting live Stages`,
+                        descriptionLocalizations: {
+                            'en-GB': `Set or disable the Activity Threshold for highlighting live Stages`,
+                            'en-US': `Set or disable the Activity Threshold for highlighting live Stages`,
+                        },
+                        type: ApplicationCommandOptionType.String,
+                        choices: [
+                            { name: `Disable Highlighting Stages`, value: `DISABLED` },
+                            { name: `Very Low`, value: `VERY_LOW` },
+                            { name: `Low`, value: `LOW` },
+                            { name: `Medium`, value: `MEDIUM` },
+                            { name: `High`, value: `HIGH` }
+                            //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                        ],
+                        required: false
+                    }, */
+                    {
+                        name: `thread_activity`,
+                        description: `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
+                        descriptionLocalizations: {
+                            'en-GB': `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
+                            'en-US': `Set or disable the Activity Threshold for highlighting Threads & Forum Posts`,
+                        },
+                        type: ApplicationCommandOptionType.String,
+                        choices: [
+                            { name: `Disable Highlighting Threads & Posts`, value: `DISABLED` },
+                            { name: `Very Low`, value: `VERY_LOW` },
+                            { name: `Low`, value: `LOW` },
+                            { name: `Medium`, value: `MEDIUM` },
+                            { name: `High`, value: `HIGH` }
+                            //{ name: `Very High`, value: `VERY_HIGH` } // Intentionally commented out for now
+                        ],
+                        required: false
+                    },
+                    {
+                        name: `allow_star_reactions`,
+                        description: `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
+                        descriptionLocalizations: {
+                            'en-GB': `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
+                            'en-US': `Allow ⭐ Star Reactions to count towards automatically highlighting Messages`,
+                        },
+                        type: ApplicationCommandOptionType.Boolean,
+                        required: false
+                    }
+                ]
             }
         ];
 
@@ -184,9 +204,11 @@ module.exports = {
             return;
         }
 
+        // Fetch used Subcommand. If "edit" was used but no options included, send error message
+        const SubcommandUsed = interaction.options.getSubcommand(true);
 
-        // If no options provided, default to "View Settings" - otherwise, edit the given Setting values
-        if ( interaction.options.data.length === 0 ) { await viewSettings(interaction); }
+        if ( SubcommandUsed === "view" ) { await viewSettings(interaction); }
+        else if ( SubcommandUsed === "edit" && interaction.options.data.length <= 1 ) { await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'SETTINGS_COMMAND_ERROR_EDIT_NO_OPTIONS_INCLUDED') }); }
         else { await editSettings(interaction); }
 
         return;

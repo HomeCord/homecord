@@ -296,6 +296,7 @@ module.exports = {
     SETTINGS_EDIT_EMBED_STAR_REACTIONS: `Allow Star Reactions for Message Highlighting`,
 
     SETTINGS_COMMAND_ERROR_HOME_NOT_SETUP: `This Server doesn't have a Home Channel setup using HomeCord. As such, there are no settings for you to view or edit!\nIf you want to setup a Home Channel using HomeCord, please use the {{0}} Command.`,
+    SETTINGS_COMMAND_ERROR_EDIT_NO_OPTIONS_INCLUDED: `Whoops! It looks like you didn't include any settings for me to change for you.\nPlease try again, ensuring you include at least one option to change the setting of!`,
 
 
 
