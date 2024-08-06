@@ -77,7 +77,11 @@ module.exports = {
                 
         if ( OriginalMessage.poll == null )
         {
-            crosspostMessage = `${OriginalMessage.content.length > 0 ? `${OriginalMessage.content.length > 1990 ? `${OriginalMessage.content.slice(0, 1991)}...` : OriginalMessage.content}` : ''}`;
+            // Use CDN link for first Attachment if no content is included but there is an Attachment
+            crosspostMessage = `${OriginalMessage.content.length > 0 ?
+                `${OriginalMessage.content.length > 1990 ? `${OriginalMessage.content.slice(0, 1991)}...` : OriginalMessage.content}`
+                : OriginalMessage.attachments.size > 0 ? `${OriginalMessage.attachments.first()?.url}` : ''}`;
+
             // Button Label depends on Attachments (if any)
             if ( OriginalMessage.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG')); }
             else { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')); }
