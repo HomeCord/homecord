@@ -1,4 +1,4 @@
-const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType, MessageType, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { Message, Collection, MessageReaction, User, AttachmentBuilder, ChannelType, MessageType, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require("discord.js");
 const { GuildBlocklist, FeaturedMessage, GuildConfig, TimerModel, FeaturedThread } = require("../../Mongoose/Models");
 const { replyThreshold, reactionThreshold, threadThreshold } = require("../../Resources/activityThresholds");
 const { DiscordClient } = require("../../constants");
@@ -182,7 +182,8 @@ module.exports = {
                     files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
                     content: crosspostMessage,
-                    components: [ActionRowMessageLink]
+                    components: [ActionRowMessageLink],
+                    flags: RepliedMessage.flags.has(MessageFlags.SuppressEmbeds) ? MessageFlags.SuppressEmbeds : undefined
                 })
                 .then(async sentMessage => {
 
@@ -423,7 +424,8 @@ module.exports = {
                     files: originalAttachments.length > 0 ? originalAttachments : undefined,
                     allowedMentions: { parse: [] },
                     content: crosspostMessage,
-                    components: [ActionRowMessageLink]
+                    components: [ActionRowMessageLink],
+                    flags: message.flags.has(MessageFlags.SuppressEmbeds) ? MessageFlags.SuppressEmbeds : undefined
                 })
                 .then(async sentMessage => {
 

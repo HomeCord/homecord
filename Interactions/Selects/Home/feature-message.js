@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { StringSelectMenuInteraction, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } = require("discord.js");
 const { localize } = require("../../../BotModules/LocalizationModule");
 const { GuildConfig, TimerModel, FeaturedMessage } = require("../../../Mongoose/Models");
 const { DiscordClient } = require("../../../constants");
@@ -102,7 +102,8 @@ module.exports = {
             files: originalAttachments.length > 0 ? originalAttachments : undefined,
             allowedMentions: { parse: [] },
             content: crosspostMessage,
-            components: [ActionRowMessageLink]
+            components: [ActionRowMessageLink],
+            flags: OriginalMessage.flags.has(MessageFlags.SuppressEmbeds) ? MessageFlags.SuppressEmbeds : undefined
         })
         .then(async sentMessage => {
 
