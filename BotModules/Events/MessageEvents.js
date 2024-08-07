@@ -85,7 +85,11 @@ module.exports = {
             if ( role.id !== message.guildId ) { roleFilterArray.push({ blockedId: role.id }); }
         });
 
-        if ( await GuildBlocklist.exists({ guildId: message.guildId, $or: roleFilterArray }) != null ) { return; }
+        // Don't run the Role Block List check if the Member doesn't have any Roles! (Excluding atEveryone)
+        if ( roleFilterArray.length > 0 )
+        {
+            if ( await GuildBlocklist.exists({ guildId: message.guildId, $or: roleFilterArray }) != null ) { return; }
+        }
 
 
         // Check if Message is in cache
@@ -321,7 +325,11 @@ module.exports = {
             if ( role.id !== message.guildId ) { roleFilterArray.push({ blockedId: role.id }); }
         });
 
-        if ( await GuildBlocklist.exists({ guildId: message.guildId, $or: roleFilterArray }) != null ) { return; }
+        // Don't do the Role Block List check if the Member doesn't have any Roles (excluding atEveryone)
+        if ( roleFilterArray.length > 0 )
+        {
+            if ( await GuildBlocklist.exists({ guildId: message.guildId, $or: roleFilterArray }) != null ) { return; }
+        }
 
 
         // Check if Message is in cache
