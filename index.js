@@ -32,7 +32,9 @@ const { processThreadUpdate } = require("./BotModules/Events/ThreadEvents.js");
 DiscordClient.DebugMode = false;
 
 // For auto-posting stats to TopGG Page
-const TopggPoster = AutoPoster(Config.TopGGToken, DiscordClient);
+//   IF statement is to prevent my testing (development) version from messing with the Server Count stat on the TopGG website
+let TopggPoster;
+if ( DiscordClient.user.id !== "795718481873469500" ) { TopggPoster = AutoPoster(Config.TopGGToken, DiscordClient); }
 
 
 
