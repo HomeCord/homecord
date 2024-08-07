@@ -294,7 +294,7 @@ module.exports = {
     SETTINGS_VIEW_EMBED_STAR_REACTIONS: `Allow Star Reactions for Message Highlighting`,
 
     SETTINGS_EDIT_EMBED_TITLE: `Updated Home Settings for {{0}}`,
-    SETTINGS_EDIT_EMBED_DESCRIPTION: `- *To view your current settings without changing them, use the {{0}} Command without including any of provided options.*`,
+    SETTINGS_EDIT_EMBED_DESCRIPTION: `- *To view your current settings without changing them, use the {{0}} Command.*`,
     SETTINGS_EDIT_EMBED_STAR_REACTIONS: `Allow Star Reactions for Message Highlighting`,
 
     SETTINGS_COMMAND_ERROR_HOME_NOT_SETUP: `This Server doesn't have a Home Channel setup using HomeCord. As such, there are no settings for you to view or edit!\nIf you want to setup a Home Channel using HomeCord, please use the {{0}} Command.`,
@@ -304,11 +304,11 @@ module.exports = {
 
     // ******* PREFERENCES COMMAND
     PREFERENCES_VIEW_EMBED_TITLE: `Your Preferences for HomeCord`,
-    PREFERENCES_VIEW_EMBED_DESCRIPTION: `- *To edit these preferences, use the {{0}} Command & include any of the provide options*`,
+    PREFERENCES_VIEW_EMBED_DESCRIPTION: `- *To edit these preferences, use the {{0}} Command & include any of the provided options*`,
     PREFERENCES_VIEW_EMBED_HIGHLIGHTABLE: `Messages can be featured in Home Channels?`,
 
     PREFERENCES_EDIT_EMBED_TITLE: `Updated Preferences`,
-    PREFERENCES_EDIT_EMBED_DESCRIPTION: `- *To view your current preferences without changing them, use the {{0}} Command without including any of the provided options.*`,
+    PREFERENCES_EDIT_EMBED_DESCRIPTION: `- *To view your current preferences without changing them, use the {{0}} Command.*`,
 
     PREFERENCES_EDIT_ERROR_NO_OPTIONS_INCLUDED: `Whoops! It looks like you didn't include any preferences for me to change for you.\nPlease try again, ensuring you include at least one option to change your preference of!`,
 

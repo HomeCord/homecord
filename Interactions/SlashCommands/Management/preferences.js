@@ -153,7 +153,7 @@ async function viewPreferences(interaction)
     // Put into Embed
     const PreferenceEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_TITLE'))
-    .setDescription(localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_DESCRIPTION', `</preferences:${interaction.commandId}>`))
+    .setDescription(localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_DESCRIPTION', `</preferences edit:${interaction.commandId}>`))
     .addFields(
         { name: localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_HIGHLIGHTABLE'), value: localize(interaction.locale, userPreferences.isHighlightable ? 'TRUE' : 'FALSE') }
     );
@@ -189,7 +189,7 @@ async function editPreferences(interaction)
     // Create Embed
     const UpdateEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_TITLE'))
-    .setDescription(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_DESCRIPTION', `</preferences:${interaction.commandId}>`));
+    .setDescription(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_DESCRIPTION', `</preferences view:${interaction.commandId}>`));
 
     
     // Now go through the options, changing their values & adding them to Embed

@@ -253,7 +253,7 @@ async function viewSettings(interaction)
 
     let settingsEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_TITLE', interaction.guild.name))
-    .setDescription(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_DESCRIPTION', `</settings:${interaction.commandId}>`))
+    .setDescription(localize(interaction.locale, 'SETTINGS_VIEW_EMBED_DESCRIPTION', `</settings edit:${interaction.commandId}>`))
     .addFields(
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_HOME_CHANNEL'), value: `<#${serverConfig.homeChannelId}>` },
         { name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: thresholdString },
@@ -296,7 +296,7 @@ async function editSettings(interaction)
     // Create Embed
     let updateEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_TITLE', interaction.guild.name))
-    .setDescription(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_DESCRIPTION', `</settings:${interaction.commandId}>`));
+    .setDescription(localize(interaction.locale, 'SETTINGS_EDIT_EMBED_DESCRIPTION', `</settings view:${interaction.commandId}>`));
 
 
     // Now go through them, changing their values & adding to Embed
