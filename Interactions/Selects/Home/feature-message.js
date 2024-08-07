@@ -8,6 +8,9 @@ const { refreshMessagesAudio } = require("../../../BotModules/HomeModule");
 const { resetHomeSliently } = require("../../../BotModules/ResetHomeModule");
 const { expireMessage } = require("../../../BotModules/ExpiryModule");
 
+// Allowed File Content Types for showcased Message Attachments
+const AllowedContentTypes = [ "image/png", "image/jpeg", "image/gif" ];
+
 module.exports = {
     // Select's Name
     //     Used as its custom ID (or at least the start of it)
