@@ -64,14 +64,34 @@ module.exports = {
         Data.dmPermission = true;
         Data.options = [
             {
-                type: ApplicationCommandOptionType.Boolean,
-                name: "featureable",
-                description: "Can your own Messages be featured in HomeCord's Home Channels? (Default: True)",
+                name: `view`,
+                description: `View your current preferences in HomeCord`,
                 descriptionLocalizations: {
-                    'en-GB': "Can your own Messages be featured in HomeCord's Home Channels? (Default: True)",
-                    'en-US': "Can your own Messages be featured in HomeCord's Home Channels? (Default: True)"
+                    'en-GB': `View your current preferences in HomeCord`,
+                    'en-US': `View your current preferences in HomeCord`,
                 },
-                required: false
+                type: ApplicationCommandOptionType.Subcommand
+            },
+            {
+                name: `edit`,
+                description: `Edit your preferences in HomeCord`,
+                descriptionLocalizations: {
+                    'en-GB': `Edit your preferences in HomeCord`,
+                    'en-US': `Edit your preferences in HomeCord`,
+                },
+                type: ApplicationCommandOptionType.Subcommand,
+                options: [
+                    {
+                        type: ApplicationCommandOptionType.Boolean,
+                        name: "featureable",
+                        description: "Can your own Messages be showcased in HomeCord's Home Channels? (Default: True)",
+                        descriptionLocalizations: {
+                            'en-GB': "Can your own Messages be showcased in HomeCord's Home Channels? (Default: True)",
+                            'en-US': "Can your own Messages be showcased in HomeCord's Home Channels? (Default: True)"
+                        },
+                        required: true // Required for now, will make it false if more preferences are added in the future.
+                    }
+                ]
             }
         ];
 
@@ -88,8 +108,11 @@ module.exports = {
     {
         await interaction.deferReply({ ephemeral: true });
 
-        // if no options provided, default to "View" mode - otherwise, "Edit" mode
-        if ( interaction.options.data.length === 0 ) { await viewPreferences(interaction); }
+        // Fetch used Subcommand. If "edit" was used but no options included, send error message
+        const SubcommandUsed = interaction.options.getSubcommand(true);
+
+        if ( SubcommandUsed === "view" ) { await viewPreferences(interaction); }
+        else if ( SubcommandUsed === "edit" && interaction.options.data[0].options.length < 1 ) { await interaction.editReply({ content: localize(interaction.locale, 'PREFERENCES_EDIT_ERROR_NO_OPTIONS_INCLUDED') }); }
         else { await editPreferences(interaction); }
 
         return;
@@ -130,7 +153,7 @@ async function viewPreferences(interaction)
     // Put into Embed
     const PreferenceEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_TITLE'))
-    .setDescription(localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_DESCRIPTION', `</preferences:${interaction.commandId}>`))
+    .setDescription(localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_DESCRIPTION', `</preferences edit:${interaction.commandId}>`))
     .addFields(
         { name: localize(interaction.locale, 'PREFERENCES_VIEW_EMBED_HIGHLIGHTABLE'), value: localize(interaction.locale, userPreferences.isHighlightable ? 'TRUE' : 'FALSE') }
     );
@@ -166,7 +189,7 @@ async function editPreferences(interaction)
     // Create Embed
     const UpdateEmbed = new EmbedBuilder().setColor('Grey')
     .setTitle(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_TITLE'))
-    .setDescription(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_DESCRIPTION', `</preferences:${interaction.commandId}>`));
+    .setDescription(localize(interaction.locale, 'PREFERENCES_EDIT_EMBED_DESCRIPTION', `</preferences view:${interaction.commandId}>`));
 
     
     // Now go through the options, changing their values & adding them to Embed
