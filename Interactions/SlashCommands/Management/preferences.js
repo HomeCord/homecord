@@ -112,7 +112,7 @@ module.exports = {
         const SubcommandUsed = interaction.options.getSubcommand(true);
 
         if ( SubcommandUsed === "view" ) { await viewPreferences(interaction); }
-        else if ( SubcommandUsed === "edit" && interaction.options.data.length <= 1 ) { await interaction.editReply({ content: localize(interaction.locale, 'PREFERENCES_EDIT_ERROR_NO_OPTIONS_INCLUDED') }); }
+        else if ( SubcommandUsed === "edit" && interaction.options.data[0].options.length < 1 ) { await interaction.editReply({ content: localize(interaction.locale, 'PREFERENCES_EDIT_ERROR_NO_OPTIONS_INCLUDED') }); }
         else { await editPreferences(interaction); }
 
         return;

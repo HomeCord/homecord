@@ -208,7 +208,7 @@ module.exports = {
         const SubcommandUsed = interaction.options.getSubcommand(true);
 
         if ( SubcommandUsed === "view" ) { await viewSettings(interaction); }
-        else if ( SubcommandUsed === "edit" && interaction.options.data.length <= 1 ) { await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'SETTINGS_COMMAND_ERROR_EDIT_NO_OPTIONS_INCLUDED') }); }
+        else if ( SubcommandUsed === "edit" && interaction.options.data[0].options.length < 1 ) { await interaction.reply({ ephemeral: true, content: localize(interaction.locale, 'SETTINGS_COMMAND_ERROR_EDIT_NO_OPTIONS_INCLUDED') }); }
         else { await editSettings(interaction); }
 
         return;
@@ -333,7 +333,7 @@ async function editSettings(interaction)
         changedThresholds += `${changedThresholds.length > 2 ? `\n` : ""}- ${localize(interaction.locale, 'SETTINGS_VIEW_EMBED_THREADS')} ${localize(interaction.locale, threadsOption)}`;
     }
 
-    updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: changedThresholds });
+    if ( changedThresholds.length > 2 ) { updateEmbed.addFields({ name: localize(interaction.locale, 'SETTINGS_VIEW_EMBED_ACTIVITY_THRESHOLD'), value: changedThresholds }); }
 
     if ( starReactionsOption != null )
     {
