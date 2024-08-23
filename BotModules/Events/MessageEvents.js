@@ -164,10 +164,9 @@ module.exports = {
                 
                 if ( RepliedMessage.poll == null )
                 {
-                    // Use CDN link for first Attachment if no content is included but there is an Attachment
                     crosspostMessage = `${RepliedMessage.content.length > 0 ?
                         `${RepliedMessage.content.length > 1990 ? `${RepliedMessage.content.slice(0, 1991)}...` : RepliedMessage.content}`
-                        : RepliedMessage.attachments.size > 0 ? `${RepliedMessage.attachments.first()?.url}` : ''}`;
+                        : containsUnsupportedAttachments ? `${RepliedMessage.attachments.first()?.url}` : ''}`;
 
                     // Button Label depends on Attachments (if any)
                     if ( RepliedMessage.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG')); }
@@ -429,7 +428,7 @@ module.exports = {
                     // Use CDN link for first Attachment if no content is included but there is an Attachment
                     crosspostMessage = `${message.content.length > 0 ?
                         `${message.content.length > 1990 ? `${message.content.slice(0, 1991)}...` : message.content}`
-                        : message.attachments.size > 0 ? `${message.attachments.first()?.url}` : ''}`;
+                        : containsUnsupportedAttachments ? `${message.attachments.first()?.url}` : ''}`;
 
                     // Button Label depends on Attachments (if any)
                     if ( message.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(message.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG')); }
