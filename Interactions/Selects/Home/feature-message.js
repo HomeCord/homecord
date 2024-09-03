@@ -86,8 +86,8 @@ module.exports = {
                 : containsUnsupportedAttachments ? `${OriginalMessage.attachments.first()?.url}` : ''}`;
 
             // Button Label depends on Attachments (if any)
-            if ( OriginalMessage.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_AND_ATTACHMENT_TAG')); }
-            else { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_ORIGINAL_MESSAGE_TAG')); }
+            if ( OriginalMessage.content !== '' && originalAttachments.length === 0 && containsUnsupportedAttachments ) { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_MESSAGE_AND_ATTACHMENT_TAG')); }
+            else { ButtonMessageLink.setLabel(localize(OriginalMessage.guild.preferredLocale, 'HOME_FEATURED_MESSAGE_TAG')); }
         }
         else
         {
