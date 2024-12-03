@@ -10,7 +10,7 @@
     "bufferutil": "^4.0.6",
     "discord.js": "^14.15.3",
     "erlpack": "github:discord/erlpack",
-    "mongoose": "^7.6.9",
+    "mongoose": "^8.8.3",
     "sodium-native": "^4.0.4",
     "topgg-autoposter": "^2.0.2",
     "utf-8-validate": "^5.0.9",
