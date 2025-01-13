@@ -29,11 +29,12 @@
   },
   "homepage": "https://github.com/HomeCord/homecord#readme",
   "dependencies": {
+    "@discordjs/builders": "^1.10.0",
     "@discordjs/collection": "^2.1.1",
-    "@discordjs/core": "^2.0.0",
-    "@discordjs/rest": "^2.4.0",
-    "@discordjs/ws": "^2.0.0",
-    "discord-api-types": "^0.37.111",
+    "@discordjs/core": "^2.0.1",
+    "@discordjs/rest": "^2.4.2",
+    "@discordjs/ws": "^2.0.1",
+    "discord-api-types": "^0.37.115",
     "mongoose": "^8.9.1",
     "topgg-autoposter": "^2.0.2"
   }

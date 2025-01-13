@@ -1,7 +1,9 @@
 import { GatewayDispatchEvents, PresenceUpdateStatus } from '@discordjs/core';
-import { InteractionType, MessageType } from 'discord-api-types/v10';
+import { ChannelType, InteractionType, MessageType } from 'discord-api-types/v10';
 import { isChatInputApplicationCommandInteraction, isContextMenuApplicationCommandInteraction, isMessageComponentButtonInteraction, isMessageComponentSelectMenuInteraction } from 'discord-api-types/utils';
+import { AutoPoster } from 'topgg-autoposter';
 import * as fs from 'node:fs';
+import * as Mongoose from 'mongoose';
 
 import { DiscordClient, UtilityCollections } from './Utility/utilityConstants.js';
 import { handleTextCommand } from './Handlers/Commands/textCommandHandler.js';
@@ -12,6 +14,15 @@ import { handleSelect } from './Handlers/Interactions/selectHandler.js';
 import { handleAutocomplete } from './Handlers/Interactions/autocompleteHandler.js';
 import { handleModal } from './Handlers/Interactions/modalHandler.js';
 import { logInfo } from './Utility/loggingModule.js';
+import { DISCORD_APP_USER_ID, MONGO_STRING, TOP_GG_TOKEN } from './config.js';
+
+
+
+
+// For auto-posting stats to TopGG Page
+//    IF statement is to prevent my Testing (Developer) version from messing with the stats during testing!
+let topggPoster;
+if ( DISCORD_APP_USER_ID !== '795718481873469500' ) { topggPoster = AutoPoster(TOP_GG_TOKEN, DiscordClient); }
 
 
 
@@ -127,6 +138,8 @@ DiscordClient.once(GatewayDispatchEvents.Ready, async () => {
 //  Debugging and Error Logging
 process.on('warning', console.warn);
 process.on('unhandledRejection', console.error);
+Mongoose.connection.on('error', console.error);
+topggPoster.on('error', console.error);
 
 
 
@@ -164,9 +177,11 @@ DiscordClient.on(GatewayDispatchEvents.MessageCreate, async ({ data: message, ap
 
 
     // Check for (and handle) Commands
-    await handleTextCommand(message, api);
+    let textCommandStatus = await handleTextCommand(message, api);
 
-    // Placeholder for any conditionals/extra code to run based off the result of handling Text Commands above
+    if ( textCommandStatus === 'NOT_A_COMMAND' ) {
+        // This is a Standard Message. As such, perform HomeCord functions.
+    }
 
     return;
 });
@@ -199,3 +214,175 @@ DiscordClient.on(GatewayDispatchEvents.InteractionCreate, async ({ data: interac
 
     return;
 });
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Guild Delete Event
+DiscordClient.on(GatewayDispatchEvents.GuildDelete, async ({ data: guild, api }) => {
+    // Sanity check to ensure this Event was triggered due to actually being removed from the Guild, and not due to a Discord Outage
+    if ( guild.unavailable ) { return; }
+
+    // HomeCord has been removed from a Guild, thus clear that Guild's data from Database
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Message Delete Event
+DiscordClient.on(GatewayDispatchEvents.MessageDelete, ({ data: message, api }) => {
+    // Check if Message was part of HomeCord's systems. If so, perform deletion from Home Channel and/or Database
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Channel Delete Event
+DiscordClient.on(GatewayDispatchEvents.ChannelDelete, ({ data: channel, api }) => {
+    // Sanity Check for DMs/GDMs
+    if ( channel.type === ChannelType.DM || channel.type === ChannelType.GroupDM ) { return; }
+    
+    // Check of deleted Channel was part of HomeCord's systems. If so, delete from Database
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Message Reaction Add Event
+DiscordClient.on(GatewayDispatchEvents.MessageReactionAdd, ({ data: reaction, api }) => {
+    // If Message Highlighting is enabled by Guild, perform checks to see if Message can be Highlighted and, if so, do it.
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Message Delete Bulk Event
+DiscordClient.on(GatewayDispatchEvents.MessageDeleteBulk, ({ data: messageBulk, api }) => {
+    // If any of the deleted Messages are part of HomeCord's systems - delete from Database/Home Channel.
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Guild Role Delete Event
+DiscordClient.on(GatewayDispatchEvents.GuildRoleDelete, ({ data: role, api }) => {
+    // If deleted Role was block-listed, delete from database.
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Guild Scheduled Event Delete Event
+DiscordClient.on(GatewayDispatchEvents.GuildScheduledEventDelete, ({ data: scheduledEvent, api }) => {
+    // If part of HomeCord's systems, delete from database/Home Channel
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Thread Delete Event
+DiscordClient.on(GatewayDispatchEvents.ThreadDelete, ({ data: thread, api }) => {
+    // If part of HomeCord's systems, delete from database/Home Channel.
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Guild Scheduled Event User Add Event
+DiscordClient.on(GatewayDispatchEvents.GuildScheduledEventUserAdd, ({ data: scheduledEvent, api }) => {
+    // If Event Highlighting is enabled in Guild, check if Event meets Threshold and if so, Highlight it
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Guild Scheduled Event Update Event
+DiscordClient.on(GatewayDispatchEvents.GuildScheduledEventUpdate, ({ data: scheduledEvent, api }) => {
+    // If Event is part of HomeCord's systems, and Event has now finished or been cancelled, delete from database/Home Channel
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Thread Update Event
+DiscordClient.on(GatewayDispatchEvents.ThreadUpdate, ({ data: thread, api }) => {
+    // If Thread is now archived, and is a part of HomeCord's systems, then delete from database/Home Channel
+});
+
+
+
+
+
+
+
+
+
+
+// *******************************
+Mongoose.connect(MONGO_STRING).catch(console.error);
