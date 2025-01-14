@@ -494,7 +494,7 @@ module.exports = {
 
 
 
-    // ******* SUBSCRIBE COMMAND
+    // ******* NEWS SUBSCRIBE COMMAND
     SUBSCRIBE_COMMAND_SUCCESS: `Successfully subscribed {{0}} to HomeCord's Announcements Feed!\n\nYou can edit and/or unfollow this Feed at any time by going into **Server Settings > Integrations > Channels Followed**.`,
 
     SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_VIEW_CHANNEL: `Sorry, HomeCord needs the "**View Channel**" Permission in {{0}} to be able to follow its Announcements Feed there.`,
@@ -504,7 +504,7 @@ module.exports = {
 
     // ******* INVITE COMMAND
     INVITE_COMMAND_BUTTON_LABEL: `Invite HomeCord`,
-    INVITE_COMMAND_RESPONSE: `Want to add HomeCord to your Server? Use its invite link below!`,
+    INVITE_COMMAND_RESPONSE: `Want to add HomeCord to your Server? Use the link below (or in its profile)!`,
 
 
 
