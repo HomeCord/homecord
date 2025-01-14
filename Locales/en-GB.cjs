@@ -498,8 +498,7 @@ module.exports = {
     // ******* NEWS SUBSCRIBE COMMAND
     SUBSCRIBE_COMMAND_SUCCESS: `Successfully subscribed {{0}} to HomeCord's Announcements Feed!\n\nYou can edit and/or unfollow this Feed at any time by going into **Server Settings > Integrations > Channels Followed**.`,
 
-    SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_VIEW_CHANNEL: `Sorry, HomeCord needs the "**View Channel**" Permission in {{0}} to be able to follow its Announcements Feed there.`,
-    SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_MANAGE_WEBHOOKS: `Sorry, HomeCord needs the "**Manage Webhooks**" Permission in {{0}} to be able to follow its Announcements Feed there.\n\n*(This Permission can be revoked from HomeCord again afterwards)*`,
+    SUBSCRIBE_COMMAND_ERROR: `Sorry, an error occurred while trying to add HomeCord's Announcements Feed to the {{0}} Channel.\n\nThis might be caused by HomeCord not having the **View Channel** and/or **Manage Webhooks** Permissions inside {{0}}. If so, please grant HomeCord those Permissions within the {{0}} Channel before attempting to use this Command again.`,
 
 
 
