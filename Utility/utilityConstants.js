@@ -9,7 +9,8 @@ import { DISCORD_TOKEN } from '../config.js';
 const DiscordRest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
 
 /** Required Intents */
-const RequestedIntents = GatewayIntentBits.Guilds | GatewayIntentBits.GuildIntegrations;
+const RequestedIntents = GatewayIntentBits.Guilds | GatewayIntentBits.GuildIntegrations | GatewayIntentBits.GuildMessages | GatewayIntentBits.MessageContent
+    | GatewayIntentBits.GuildVoiceStates | GatewayIntentBits.GuildMessageReactions | GatewayIntentBits.GuildScheduledEvents;
 
 /** WebSocket Manager for interacting with Discord API. Only exporting so I can use `.connect()` in index file */
 const DiscordGateway = new WebSocketManager({

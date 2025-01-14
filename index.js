@@ -138,8 +138,8 @@ DiscordClient.once(GatewayDispatchEvents.Ready, async () => {
 //  Debugging and Error Logging
 process.on('warning', console.warn);
 process.on('unhandledRejection', console.error);
-Mongoose.connection.on('error', console.error);
-topggPoster.on('error', console.error);
+//Mongoose.connection.on('error', console.error);
+//topggPoster.on('error', console.error);
 
 
 

@@ -3,17 +3,18 @@ import { DiscordClient } from "./Utility/utilityConstants.js";
 import { DISCORD_APP_USER_ID } from "./config.js";
 
 // SLASH COMMANDS
-//.
+// General
+import * as HelpCommand from './Commands/SlashCommands/General/help.js';
 
 // Array for bulk-registering Commands
-const AllCommands = [];
+const AllCommands = [ HelpCommand.SlashCommand.getRegisterData() ];
 
 
 // Wait for Ready before (un)registering Commands
 DiscordClient.once(GatewayDispatchEvents.Ready, async ({ data: readyData, api }) => {
 
     // Register single Command Globally
-    //await api.applicationCommands.createGlobalCommand(DISCORD_APP_USER_ID, COMMAND_PLACEHOLDER);
+    await api.applicationCommands.createGlobalCommand(DISCORD_APP_USER_ID, HelpCommand.SlashCommand.getRegisterData());
     
     // Register single Command to a specific Guild
     //await api.applicationCommands.createGuildCommand(DISCORD_APP_USER_ID, 'GUILD_ID_PLACEHOLDER', COMMAND_PLACEHOLDER);

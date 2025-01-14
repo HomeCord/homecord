@@ -526,13 +526,14 @@ module.exports = {
     HELP_COMMAND_BUTTON_SUPPORT: `Support Server`,
     HELP_COMMAND_BUTTON_INVITE: `Add HomeCord`,
     HELP_COMMAND_BUTTON_DOCUMENTATION: `Documentation`,
+    HELP_COMMAND_BUTTON_DONATE: `Donate`,
 
     HELP_COMMAND_MENU_PLACEHOLDER: `Select a Help Page to view`,
-    HELP_COMMAND_MENU_INDEX: `Main Page & HomeCord's Links`,
+    HELP_COMMAND_MENU_INDEX: `Main Page`,
     HELP_COMMAND_MENU_SETUP_GUIDE: `How to setup HomeCord`,
     HELP_COMMAND_MENU_CONFIG_GUIDE: `How to configure HomeCord after setup`,
     HELP_COMMAND_MENU_HOME_CHANNEL: `What are Home Channels?`,
-    HELP_COMMAND_MENU_HIGHLIGHT_VS_FEATURE: `Different between "Highlight" & "Feature"`,
+    HELP_COMMAND_MENU_HIGHLIGHT_VS_FEATURE: `Difference between "Highlight" & "Feature"`,
     HELP_COMMAND_MENU_MESSAGE_PRIVACY: `User Message Privacy Setting`,
     HELP_COMMAND_MENU_BLOCKLIST: `Guide to HomeCord's Block Lists`,
     HELP_COMMAND_MENU_COMMAND_LIST: `Command List`,
@@ -565,8 +566,8 @@ Once the validation checks have passed successfully, you'll be able to save your
     HELP_COMMAND_PAGE_CONFIG_GUIDE: `# __Configuring HomeCord's Settings after Setup__
 After you have setup HomeCord in your Server, you'll still be able to configure its settings for your Home Channel.
 
-To do so, simply use the \`/settings\` Command *(:information_source: requires "**Manage Server**" Permission by default)*, and include any of the listed config options you want to change.
-If you only want to view your current configuration setup, simply send the Command *without* including any of the options.`,
+To do so, simply use the \`/settings edit\` Command *(:information_source: requires "**Manage Server**" Permission by default)*, and include any of the listed config options you want to change.
+If you only want to view your current configuration setup, simply use the \`/settings view\` Command.`,
 
     HELP_COMMAND_PAGE_HOME_CHANNEL: `# __What are HomeCord's "Home" Channels?__
 HomeCord's "Home" Channels function similarly to the old [Server Home Experiment](<https://support.discord.com/hc/en-us/articles/6156116949911>) Discord ran, and later scrapped, in 2022/2023.
@@ -650,7 +651,7 @@ When a Role is added to your Block List, HomeCord will NOT:
 - *Does NOT require any Permissions by default to use*
   - \`/help\` - Shows HomeCord's Help Pages and official links.
   - \`/preferences\` - View or edit your own User-based settings within HomeCord.
-  - \`/invite\` - Shows the invite link you can use to add HomeCord to your own Server.
+  - \`/add-app\` - Shows the Add App link you can use to add HomeCord to your own Server.
   - \`/support\` - Shows a link to HomeCord's Support Server, and to its Documentation.`,
 
     HELP_COMMAND_PAGE_COMMAND_PERMISSIONS: `# __Setting Permissions for HomeCord's Commands__
