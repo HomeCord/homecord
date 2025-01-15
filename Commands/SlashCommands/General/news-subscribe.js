@@ -108,8 +108,6 @@ export const SlashCommand = {
             await api.interactions.editReply(DISCORD_APP_USER_ID, interaction.token, { content: localize(interaction.locale, 'SUBSCRIBE_COMMAND_ERROR', `<#${InputChannel.value}>`) });
         });
 
-        //await api.interactions.reply(interaction.id, interaction.token, { flags: MessageFlags.Ephemeral, content: "This Command has not yet been implemented yet!" });
-
         return;
     }
 }
