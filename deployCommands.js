@@ -8,10 +8,13 @@ import * as HelpCommand from './Commands/SlashCommands/General/help.js';
 import * as AddAppCommand from './Commands/SlashCommands/General/add-app.js';
 import * as SupportCommand from './Commands/SlashCommands/General/support.js';
 import * as NewsSubscribeCommand from './Commands/SlashCommands/General/news-subscribe.js';
+// Management
+import * as SetupCommand from './Commands/SlashCommands/Management/setup.js';
 
 // Array for bulk-registering Commands
 const AllCommands = [ 
-    HelpCommand.SlashCommand.getRegisterData(), AddAppCommand.SlashCommand.getRegisterData(), SupportCommand.SlashCommand.getRegisterData(), NewsSubscribeCommand.SlashCommand.getRegisterData()
+    HelpCommand.SlashCommand.getRegisterData(), AddAppCommand.SlashCommand.getRegisterData(), SupportCommand.SlashCommand.getRegisterData(), NewsSubscribeCommand.SlashCommand.getRegisterData(),
+    SetupCommand.SlashCommand.getRegisterData()
 ];
 
 
@@ -19,7 +22,7 @@ const AllCommands = [
 DiscordClient.once(GatewayDispatchEvents.Ready, async ({ data: readyData, api }) => {
 
     // Register single Command Globally
-    await api.applicationCommands.createGlobalCommand(DISCORD_APP_USER_ID, NewsSubscribeCommand.SlashCommand.getRegisterData());
+    await api.applicationCommands.createGlobalCommand(DISCORD_APP_USER_ID, SetupCommand.SlashCommand.getRegisterData());
     
     // Register single Command to a specific Guild
     //await api.applicationCommands.createGuildCommand(DISCORD_APP_USER_ID, 'GUILD_ID_PLACEHOLDER', COMMAND_PLACEHOLDER);
