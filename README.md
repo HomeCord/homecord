@@ -1,14 +1,19 @@
-*Want to jump to a specific heading? Use the navigation menu! (Which doesn't exist on GitHub's Mobile App sadly)* ↗
-
 # HomeCord
 
 Feature Messages, Events, Forum Posts, and more while getting an overview of recent & noteworthy activity in your Server with HomeCord's Home Channels!
 
 *It can even be used as an ephemeral Starboard if you wish!*
 
-- [Add HomeCord to your Server](https://discord.com/oauth2/authorize?client_id=1156152328290840606&permissions=537250896&scope=applications.commands+bot)
-- [View HomeCord's Documentation](https://homecord.gitbook.io/docs)
-- [Join HomeCord's Support Server](https://discord.gg/BdXQjkADgd)
+> [!IMPORTANT]
+> HomeCord is now deprecated, and will be fully shut down sometime in May 2025.
+> 
+> The developer apologises for this decision. This is not something he wanted to do, but a mixture of financial struggles (not being able to pay for HomeCord's hosting anymore) and Discord [hiring a new CEO](https://discord.com/blog/passing-the-torch) from Activision Blizzard's upper management means that HomeCord's developer no longer has the passion for making Discord Apps/Bots that he once did.
+> 
+> HomeCord's code (where you are right now) will remain open-sourced, but archived.
+
+- ~~Add HomeCord to your Server~~
+- ~~View HomeCord's Documentation~~
+- ~~Join HomeCord's Support Server~~
 
 ---
 
