@@ -9,6 +9,8 @@ Feature Messages, Events, Forum Posts, and more while getting an overview of rec
 > 
 > The developer apologises for this decision. This is not something he wanted to do, but a mixture of financial struggles (not being able to pay for HomeCord's hosting anymore) and Discord [hiring a new CEO](https://discord.com/blog/passing-the-torch) from Activision Blizzard's upper management means that HomeCord's developer no longer has the passion for making Discord Apps/Bots that he once did.
 > 
+> Plus, he wants to move onto expanding his programming skillset, and not just solely make Discord Apps/Bots.
+> 
 > HomeCord's code (where you are right now) will remain open-sourced, but archived.
 
 - ~~Add HomeCord to your Server~~
