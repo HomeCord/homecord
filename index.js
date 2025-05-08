@@ -1,140 +1,111 @@
-const { RateLimitError, DMChannel, PartialGroupDMChannel, MessageType, ChannelType, Message } = require("discord.js");
-const Mongoose = require("mongoose");
-const fs = require("node:fs");
-const path = require("node:path");
-const { AutoPoster } = require("topgg-autoposter");
-const { DiscordClient, Collections, checkPomelo } = require("./constants.js");
-const Config = require("./config.js");
+import { GatewayDispatchEvents, PresenceUpdateStatus } from '@discordjs/core';
+import { ChannelType, InteractionType, MessageType } from 'discord-api-types/v10';
+import { isChatInputApplicationCommandInteraction, isContextMenuApplicationCommandInteraction, isMessageComponentButtonInteraction, isMessageComponentSelectMenuInteraction } from 'discord-api-types/utils';
+import { AutoPoster } from 'topgg-autoposter';
+import * as fs from 'node:fs';
+import * as Mongoose from 'mongoose';
 
-const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js");
-const SlashCommandHandler = require("./BotModules/Handlers/SlashCommandHandler.js");
-const ContextCommandHandler = require("./BotModules/Handlers/ContextCommandHandler.js");
-const ButtonHandler = require("./BotModules/Handlers/ButtonHandler.js");
-const SelectHandler = require("./BotModules/Handlers/SelectHandler.js");
-const AutocompleteHandler = require("./BotModules/Handlers/AutocompleteHandler.js");
-const ModalHandler = require("./BotModules/Handlers/ModalHandler.js");
+import { DiscordClient, UtilityCollections } from './Utility/utilityConstants.js';
+import { handleTextCommand } from './Handlers/Commands/textCommandHandler.js';
+import { handleSlashCommand } from './Handlers/Commands/slashCommandHandler.js';
+import { handleContextCommand } from './Handlers/Commands/contextCommandHandler.js';
+import { handleButton } from './Handlers/Interactions/buttonHandler.js';
+import { handleSelect } from './Handlers/Interactions/selectHandler.js';
+import { handleAutocomplete } from './Handlers/Interactions/autocompleteHandler.js';
+import { handleModal } from './Handlers/Interactions/modalHandler.js';
+import { logInfo } from './Utility/loggingModule.js';
+import { DISCORD_APP_USER_ID, MONGO_STRING, TOP_GG_TOKEN } from './config.js';
 
-const { LogWarn, LogError, LogInfo } = require("./BotModules/LoggingModule.js");
-const { restartTimersOnStartup } = require("./BotModules/TimerModule.js");
-const { processMessageReply, processMessageReaction, processMessageInThread } = require("./BotModules/Events/MessageEvents.js");
-const { removeGuild } = require("./BotModules/DatabaseModule.js");
-const { GuildConfig, GuildBlocklist, FeaturedChannel, FeaturedThread, FeaturedEvent } = require("./Mongoose/Models.js");
-
-const { refreshEventsThreads, refreshHeader } = require("./BotModules/HomeModule.js");
-const { resetHome, resetHomeSliently } = require("./BotModules/ResetHomeModule.js");
-const { removeMessage, bulkRemoveMessages } = require("./BotModules/Events/RemoveEvents.js");
-const { processGuildEventUserAdd, processGuildEventUpdate } = require("./BotModules/Events/GuildEventEvents.js");
-const { processThreadUpdate } = require("./BotModules/Events/ThreadEvents.js");
-
-
-
-// Just so its mutable
-DiscordClient.DebugMode = false;
-
-// For auto-posting stats to TopGG Page
-//   IF statement is to prevent my testing (development) version from messing with the Server Count stat on the TopGG website
-let TopggPoster;
-if ( DiscordClient.user.id !== "795718481873469500" ) { TopggPoster = AutoPoster(Config.TopGGToken, DiscordClient); }
 
 
 
-/******************************************************************************* */
-// BRING IN FILES FOR COMMANDS AND INTERACTIONS
-// Text Commands
-const TextCommandFiles = fs.readdirSync("./TextCommands").filter(file => file.endsWith(".js"));
-for ( const File of TextCommandFiles )
-{
-    const TempCommand = require(`./TextCommands/${File}`);
-    Collections.TextCommands.set(TempCommand.Name, TempCommand);
+// For auto-posting stats to TopGG Page
+//    IF statement is to prevent my Testing (Developer) version from messing with the stats during testing!
+let topggPoster;
+if ( DISCORD_APP_USER_ID !== '795718481873469500' ) { topggPoster = AutoPoster(TOP_GG_TOKEN, DiscordClient); }
+
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Bring in files for Commands & Interactions
+
+//  Text Commands
+const TextCommandFiles = fs.readdirSync('./Commands/TextCommands').filter(file => file.endsWith('.js'));
+
+for ( const File of TextCommandFiles ) {
+    const TempFile = await import(`./Commands/TextCommands/${File}`);
+    UtilityCollections.TextCommands.set(TempFile.TextCommand.name, TempFile.TextCommand);
 }
 
 // Slash Commands
-const SlashFoldersPath = path.join(__dirname, 'Interactions/SlashCommands');
-const SlashCommandFolders = fs.readdirSync(SlashFoldersPath);
+const SlashFolders = fs.readdirSync('./Commands/SlashCommands');
 
-for ( const Folder of SlashCommandFolders )
-{
-    const SlashCommandsPath = path.join(SlashFoldersPath, Folder);
-    const SlashCommandFiles = fs.readdirSync(SlashCommandsPath).filter(file => file.endsWith(".js"));
-    
-    for ( const File of SlashCommandFiles )
-    {
-        const FilePath = path.join(SlashCommandsPath, File);
-        const TempCommand = require(FilePath);
-        if ( 'execute' in TempCommand && 'registerData' in TempCommand ) { Collections.SlashCommands.set(TempCommand.Name, TempCommand); }
-        else { console.warn(`[WARNING] The Slash Command at ${FilePath} is missing required "execute" or "registerData" methods.`); }
+for ( const Folder of SlashFolders ) {
+    const SlashCommandFiles = fs.readdirSync(`./Commands/SlashCommands/${Folder}`).filter(file => file.endsWith(".js"));
+
+    for ( const File of SlashCommandFiles ) {
+        const TempFile = await import(`./Commands/SlashCommands/${Folder}/${File}`);
+        if ( 'executeCommand' in TempFile.SlashCommand && 'getRegisterData' in TempFile.SlashCommand ) { UtilityCollections.SlashCommands.set(TempFile.SlashCommand.name, TempFile.SlashCommand); }
+        else { console.warn(`[WARNING] The Slash Command at ./Commands/SlashCommands/${Folder}/${File} is missing required "executeCommand" or "getRegisterData" methods.`); }
     }
 }
 
 // Context Commands
-const ContextFoldersPath = path.join(__dirname, 'Interactions/ContextCommands');
-const ContextCommandFolders = fs.readdirSync(ContextFoldersPath);
+const ContextFolders = fs.readdirSync(`./Commands/ContextCommands`);
 
-for ( const Folder of ContextCommandFolders )
-{
-    const ContextCommandsPath = path.join(ContextFoldersPath, Folder);
-    const ContextCommandFiles = fs.readdirSync(ContextCommandsPath).filter(file => file.endsWith(".js"));
-    
-    for ( const File of ContextCommandFiles )
-    {
-        const FilePath = path.join(ContextCommandsPath, File);
-        const TempCommand = require(FilePath);
-        if ( 'execute' in TempCommand && 'registerData' in TempCommand ) { Collections.ContextCommands.set(TempCommand.Name, TempCommand); }
-        else { console.warn(`[WARNING] The Context Command at ${FilePath} is missing required "execute" or "registerData" methods.`); }
+for ( const Folder of ContextFolders ) {
+    const ContextCommandFiles = fs.readdirSync(`./Commands/ContextCommands/${Folder}`).filter(file => file.endsWith(".js"));
+
+    for ( const File of ContextCommandFiles ) {
+        const TempFile = await import(`./Commands/ContextCommands/${Folder}/${File}`);
+        if ( 'executeCommand' in TempFile.ContextCommand && 'getRegisterData' in TempFile.ContextCommand ) { UtilityCollections.ContextCommands.set(TempFile.ContextCommand.name, TempFile.ContextCommand); }
+        else { console.warn(`[WARNING] The Context Command at ./Commands/ContextCommands/${Folder}/${File} is missing required "executeCommand" or "getRegisterData" methods.`); }
     }
 }
 
 // Buttons
-const ButtonFoldersPath = path.join(__dirname, 'Interactions/Buttons');
-const ButtonFolders = fs.readdirSync(ButtonFoldersPath);
+const ButtonFolders = fs.readdirSync(`./Interactions/Buttons`);
 
-for ( const Folder of ButtonFolders )
-{
-    const ButtonPath = path.join(ButtonFoldersPath, Folder);
-    const ButtonFiles = fs.readdirSync(ButtonPath).filter(file => file.endsWith(".js"));
-    
-    for ( const File of ButtonFiles )
-    {
-        const FilePath = path.join(ButtonPath, File);
-        const TempFile = require(FilePath);
-        if ( 'execute' in TempFile ) { Collections.Buttons.set(TempFile.Name, TempFile); }
-        else { console.warn(`[WARNING] The Button at ${FilePath} is missing required "execute" method.`); }
+for ( const Folder of ButtonFolders ) {
+    const ButtonFiles = fs.readdirSync(`./Interactions/Buttons/${Folder}`).filter(file => file.endsWith(".js"));
+
+    for ( const File of ButtonFiles ) {
+        const TempFile = await import(`./Interactions/Buttons/${Folder}/${File}`);
+        if ( 'executeButton' in TempFile.Button ) { UtilityCollections.Buttons.set(TempFile.Button.name, TempFile.Button); }
+        else { console.warn(`[WARNING] The Button at ./Interactions/Buttons/${Folder}/${File} is missing required "executeButton" method.`); }
     }
 }
 
 // Selects
-const SelectFoldersPath = path.join(__dirname, 'Interactions/Selects');
-const SelectFolders = fs.readdirSync(SelectFoldersPath);
+const SelectFolders = fs.readdirSync(`./Interactions/Selects`);
 
-for ( const Folder of SelectFolders )
-{
-    const SelectPath = path.join(SelectFoldersPath, Folder);
-    const SelectFiles = fs.readdirSync(SelectPath).filter(file => file.endsWith(".js"));
-    
-    for ( const File of SelectFiles )
-    {
-        const FilePath = path.join(SelectPath, File);
-        const TempFile = require(FilePath);
-        if ( 'execute' in TempFile ) { Collections.Selects.set(TempFile.Name, TempFile); }
-        else { console.warn(`[WARNING] The Select at ${FilePath} is missing required "execute" method.`); }
+for ( const Folder of SelectFolders ) {
+    const SelectFiles = fs.readdirSync(`./Interactions/Selects/${Folder}`).filter(file => file.endsWith(".js"));
+
+    for ( const File of SelectFiles ) {
+        const TempFile = await import(`./Interactions/Selects/${Folder}/${File}`);
+        if ( 'executeSelect' in TempFile.Select ) { UtilityCollections.Selects.set(TempFile.Select.name, TempFile.Select); }
+        else { console.warn(`[WARNING] The Select at ./Interactions/Selects/${Folder}/${File} is missing required "executeSelect" method.`); }
     }
 }
 
 // Modals
-const ModalFoldersPath = path.join(__dirname, 'Interactions/Modals');
-const ModalFolders = fs.readdirSync(ModalFoldersPath);
+const ModalFolders = fs.readdirSync(`./Interactions/Modals`);
 
-for ( const Folder of ModalFolders )
-{
-    const ModalPath = path.join(ModalFoldersPath, Folder);
-    const ModalFiles = fs.readdirSync(ModalPath).filter(file => file.endsWith(".js"));
-    
-    for ( const File of ModalFiles )
-    {
-        const FilePath = path.join(ModalPath, File);
-        const TempFile = require(FilePath);
-        if ( 'execute' in TempFile ) { Collections.Modals.set(TempFile.Name, TempFile); }
-        else { console.warn(`[WARNING] The Modal at ${FilePath} is missing required "execute" method.`); }
+for ( const Folder of ModalFolders ) {
+    const ModalFiles = fs.readdirSync(`./Interactions/Modals/${Folder}`).filter(file => file.endsWith(".js"));
+
+    for ( const File of ModalFiles ) {
+        const TempFile = await import(`./Interactions/Modals/${Folder}/${File}`);
+        if ( 'executeModal' in TempFile.Modal ) { UtilityCollections.Modals.set(TempFile.Modal.name, TempFile.Modal); }
+        else { console.warn(`[WARNING] The Modal at ./Interactions/Modals/${Folder}/${File} is missing required "executeModal" method.`); }
     }
 }
 
@@ -145,16 +116,14 @@ for ( const Folder of ModalFolders )
 
 
 
-/******************************************************************************* */
-// DISCORD - READY EVENT
-DiscordClient.once('ready', async () => {
-    DiscordClient.user.setPresence({ status: 'online' });
 
-    // Restart Timers
-    await restartTimersOnStartup();
+// *******************************
+//  Discord Ready Event
+DiscordClient.once(GatewayDispatchEvents.Ready, async () => {
+    // Set status
+    await DiscordClient.updatePresence(0, { status: PresenceUpdateStatus.Online });
 
-    console.log(`${checkPomelo(DiscordClient.user) ? `${DiscordClient.user.username}` : `${DiscordClient.user.username}#${DiscordClient.user.discriminator}`} is online and ready!`);
-    return;
+    console.log(`Online & Ready!`);
 });
 
 
@@ -164,26 +133,13 @@ DiscordClient.once('ready', async () => {
 
 
 
-/******************************************************************************* */
-// DEBUGGING AND ERROR LOGGING
-// Warnings
-process.on('warning', async (warning) => { await LogWarn(null, warning); return; });
-DiscordClient.on('warn', async (warning) => { await LogWarn(null, warning); return; });
 
-// Unhandled Promise Rejections
-process.on('unhandledRejection', async (err) => { await LogError(err); return; });
-
-// Discord Errors
-DiscordClient.on('error', async (err) => { await LogError(err); return; });
-
-// Discord Rate Limit - Only uncomment when debugging
-//DiscordClient.rest.on('rateLimited', (RateLimitError) => { console.log("***DISCORD RATELIMIT HIT: ", RateLimitError); return; });
-
-// Mongoose Errors
-Mongoose.connection.on('error', async err => { await LogError(err); });
-
-// TopGG Errors
-TopggPoster.on('error', async (err) => { await LogError(err); });
+// *******************************
+//  Debugging and Error Logging
+process.on('warning', console.warn);
+process.on('unhandledRejection', console.error);
+//Mongoose.connection.on('error', console.error);
+//topggPoster.on('error', console.error);
 
 
 
@@ -192,64 +148,42 @@ TopggPoster.on('error', async (err) => { await LogError(err); });
 
 
 
-/******************************************************************************* */
-// DISCORD - MESSAGE CREATE EVENT
 
-DiscordClient.on('messageCreate', async (message) => {
+// *******************************
+//  Discord Message Create Event
+const SystemMessageTypes = [
+    MessageType.RecipientAdd, MessageType.RecipientRemove, MessageType.Call, MessageType.ChannelNameChange,
+    MessageType.ChannelIconChange, MessageType.ChannelPinnedMessage, MessageType.UserJoin, MessageType.GuildBoost,
+    MessageType.GuildBoostTier1, MessageType.GuildBoostTier2, MessageType.GuildBoostTier3, MessageType.ChannelFollowAdd,
+    MessageType.GuildDiscoveryDisqualified, MessageType.GuildDiscoveryRequalified, MessageType.GuildDiscoveryGracePeriodInitialWarning,
+    MessageType.GuildDiscoveryGracePeriodFinalWarning, MessageType.ThreadCreated, MessageType.GuildInviteReminder, MessageType.AutoModerationAction,
+    MessageType.RoleSubscriptionPurchase, MessageType.InteractionPremiumUpsell, MessageType.StageStart, MessageType.StageEnd, MessageType.StageSpeaker,
+    MessageType.StageTopic, MessageType.GuildApplicationPremiumSubscription, MessageType.GuildIncidentAlertModeEnabled,
+    MessageType.GuildIncidentAlertModeDisabled, MessageType.GuildIncidentReportRaid, MessageType.GuildIncidentReportFalseAlarm,
+    MessageType.PurchaseNotification, MessageType.PollResult
+];
 
-    // Bots
+DiscordClient.on(GatewayDispatchEvents.MessageCreate, async ({ data: message, api }) => {
+    // Bots/Apps
     if ( message.author.bot ) { return; }
 
     // System Messages
-    if ( message.system || message.author.system ) { return; }
+    if ( message.author.system || SystemMessageTypes.includes(message.type) ) { return; }
 
-    // DM Channel Messages
-    if ( message.channel.type === ChannelType.DM || message.channel.type === ChannelType.GroupDM ) { return; }
+    // No need to filter out messages from DMs since that can be controlled via the Intents system!
+    // Can't even check that anyways without an API call since Discord's API doesn't provide even a partial Channel object with Messages
 
-    // Safe-guard against Discord Outages
-    if ( !message.guild.available ) { return; }
-
+    // Wish I could add a safe-guard check for guild.avaliable BUT DISCORD'S API DOESN'T PROVIDE EVEN A PARTIAL GUILD OBJECT WITH MESSAGES EITHER :upside_down:
 
 
     // Check for (and handle) Commands
-    let textCommandStatus = await TextCommandHandler.Main(message);
-    if ( textCommandStatus === false )
-    {
-        // No Command detected, thus standard Message
+    let textCommandStatus = await handleTextCommand(message, api);
 
-        // Ignore if in Home Channel
-        if ( await GuildConfig.exists({ homeChannelId: message.channelId }) != null ) { return; }
-
-        // TODO: Ignore if a Forward
-
-        
-        // If a direct reply, check for highlighting! (if enabled)
-        let homeConfig = await GuildConfig.findOne({ guildId: message.guildId });
-
-        if ( homeConfig?.messageActivity !== "DISABLED" && message.type === MessageType.Reply )
-        {
-            await processMessageReply(message);
-        }
-
-
-        // If sent in Public Thread Channel check for highlighting! (if enabled)
-        if ( homeConfig?.threadActivity !== "DISABLED" && (message.channel.type === ChannelType.PublicThread || message.channel.type === ChannelType.AnnouncementThread) )
-        {
-            await processMessageInThread(message);
-        }
-
-        return;
+    if ( textCommandStatus === 'NOT_A_COMMAND' ) {
+        // This is a Standard Message. As such, perform HomeCord functions.
     }
-    else if ( textCommandStatus === null )
-    {
-        // Prefix was detected, but wasn't a command on the bot
-        return;
-    }
-    else
-    {
-        // Command failed or successful
-        return;
-    }
+
+    return;
 });
 
 
@@ -259,52 +193,26 @@ DiscordClient.on('messageCreate', async (message) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - INTERACTION CREATE EVENT
 
-DiscordClient.on('interactionCreate', async (interaction) => {
-    if ( interaction.isChatInputCommand() )
-    {
-        // Slash Command
-        await SlashCommandHandler.Main(interaction);
-        return;
-    }
-    else if ( interaction.isContextMenuCommand() )
-    {
-        // Context Command
-        await ContextCommandHandler.Main(interaction);
-        return;
-    }
-    else if ( interaction.isButton() )
-    {
-        // Button
-        await ButtonHandler.Main(interaction);
-        return;
-    }
-    else if ( interaction.isAnySelectMenu() )
-    {
-        // Select
-        await SelectHandler.Main(interaction);
-        return;
-    }
-    else if ( interaction.isAutocomplete() )
-    {
-        // Autocomplete
-        await AutocompleteHandler.Main(interaction);
-        return;
-    }
-    else if ( interaction.isModalSubmit() )
-    {
-        // Modal
-        await ModalHandler.Main(interaction);
-        return;
-    }
-    else
-    {
-        // Unknown or unhandled new type of Interaction
-        await LogInfo(`****Unrecognised or new unhandled Interaction type triggered:\n${interaction.type}\n${interaction}`);
-        return;
-    }
+// *******************************
+//  Discord Interaction Create Event
+DiscordClient.on(GatewayDispatchEvents.InteractionCreate, async ({ data: interaction, api }) => {
+    // Slash Commands
+    if ( isChatInputApplicationCommandInteraction(interaction) ) { await handleSlashCommand(interaction, api); }
+    // Context Commands
+    else if ( isContextMenuApplicationCommandInteraction(interaction) ) { await handleContextCommand(interaction, api); }
+    // Buttons
+    else if ( isMessageComponentButtonInteraction(interaction) ) { await handleButton(interaction, api); }
+    // Selects
+    else if ( isMessageComponentSelectMenuInteraction(interaction) ) { await handleSelect(interaction, api); }
+    // Autocomplete
+    else if ( interaction.type === InteractionType.ApplicationCommandAutocomplete ) { await handleAutocomplete(interaction, api); }
+    // Modals
+    else if ( interaction.type === InteractionType.ModalSubmit ) { await handleModal(interaction, api); }
+    // Others
+    else { await logInfo(`****Unrecognised or new unhandled Interaction Type triggered: ${interaction.type}`, api); }
+
+    return;
 });
 
 
@@ -314,15 +222,45 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - GUILD DELETE EVENT
 
-DiscordClient.on('guildDelete', async (guild) => {
+// *******************************
+//  Discord Guild Delete Event
+DiscordClient.on(GatewayDispatchEvents.GuildDelete, async ({ data: guild, api }) => {
+    // Sanity check to ensure this Event was triggered due to actually being removed from the Guild, and not due to a Discord Outage
+    if ( guild.unavailable ) { return; }
+
+    // HomeCord has been removed from a Guild, thus clear that Guild's data from Database
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Message Delete Event
+DiscordClient.on(GatewayDispatchEvents.MessageDelete, ({ data: message, api }) => {
+    // Check if Message was part of HomeCord's systems. If so, perform deletion from Home Channel and/or Database
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+//  Discord Channel Delete Event
+DiscordClient.on(GatewayDispatchEvents.ChannelDelete, ({ data: channel, api }) => {
+    // Sanity Check for DMs/GDMs
+    if ( channel.type === ChannelType.DM || channel.type === ChannelType.GroupDM ) { return; }
     
-    // Purge all data relating to that Guild
-    await removeGuild(guild.id);
-
-    return;
+    // Check of deleted Channel was part of HomeCord's systems. If so, delete from Database
 });
 
 
@@ -332,26 +270,11 @@ DiscordClient.on('guildDelete', async (guild) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - MESSAGE DELETE EVENT
 
-DiscordClient.on('messageDelete', async (message) => {
-
-    // Ignore any other messages that have NOT been sent under HomeCord's Webhook(s)
-    if ( message.webhookId == null ) { return; }
-
-    // Ignore anything NOT from Home Channel
-    if ( await GuildConfig.exists({ homeChannelId: message.channelId }) == null ) { return; }
-
-    // Check if Message is needed for core function of Home Channel
-    let isMessageNeeded = await GuildConfig.exists({ $or: [ { headerMessageId: message.id }, { eventThreadsMessageId: message.id }, { audioMessageId: message.id } ] });
-
-    // Deleted Message is needed - reset Home & post message in Home Channel stating so
-    if ( isMessageNeeded != null ) { await resetHome(message.guildId); }
-    // Deleted Message is not needed for core function of Home Channel, thus treat it as featured message and delete from DB
-    else { await removeMessage(message); }
-
-    return;
+// *******************************
+//  Discord Message Reaction Add Event
+DiscordClient.on(GatewayDispatchEvents.MessageReactionAdd, ({ data: reaction, api }) => {
+    // If Message Highlighting is enabled by Guild, perform checks to see if Message can be Highlighted and, if so, do it.
 });
 
 
@@ -361,39 +284,11 @@ DiscordClient.on('messageDelete', async (message) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - CHANNEL DELETE EVENT
 
-DiscordClient.on('channelDelete', async (oldChannel) => {
-    
-    // Ignore DMs
-    if ( oldChannel instanceof DMChannel ) { return; }
-
-
-    // Check against Block List
-    if ( await GuildBlocklist.exists({ blockedId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await GuildBlocklist.deleteMany({ blockedId: oldChannel.id, guildId: oldChannel.guildId }); return; }
-
-    // Check against Featured Channels
-    if ( await FeaturedChannel.exists({ channelId: oldChannel.id, guildId: oldChannel.guildId }) != null )
-    {
-        await FeaturedChannel.deleteMany({ channelId: oldChannel.id, guildId: oldChannel.guildId });
-        await refreshHeader(oldChannel.guildId, oldChannel.guild.preferredLocale, oldChannel.guild.name, oldChannel.guild.description);
-        return;
-    }
-
-    // Check against Featured Threads
-    if ( await FeaturedThread.exists({ threadId: oldChannel.id, guildId: oldChannel.guildId }) != null )
-    {
-        await FeaturedThread.deleteMany({ threadId: oldChannel.id, guildId: oldChannel.guildId });
-        await refreshEventsThreads(oldChannel.guildId, oldChannel.guild.preferredLocale);
-        return;
-    }
-
-    // Check if Home Channel was deleted
-    if ( await GuildConfig.exists({ homeChannelId: oldChannel.id, guildId: oldChannel.guildId }) != null ) { await resetHomeSliently(oldChannel.guildId); return; }
-
-    return;
-
+// *******************************
+//  Discord Message Delete Bulk Event
+DiscordClient.on(GatewayDispatchEvents.MessageDeleteBulk, ({ data: messageBulk, api }) => {
+    // If any of the deleted Messages are part of HomeCord's systems - delete from Database/Home Channel.
 });
 
 
@@ -403,34 +298,11 @@ DiscordClient.on('channelDelete', async (oldChannel) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - MESSAGE REACTION ADD EVENT
 
-DiscordClient.on('messageReactionAdd', async (reaction, user) => {
-
-    // Just in case, ignore DMs
-    if ( reaction.message?.channel?.type === ChannelType.DM ) { return; }
-
-    // Catch for partials
-    if ( reaction.partial ) { await reaction.fetch(); }
-
-    // Ignore if in Home Channel
-    if ( await GuildConfig.exists({ homeChannelId: reaction.message.channelId }) != null ) { return; }
-
-    // Check for highlighting! (if enabled)
-    let guildConfig = await GuildConfig.findOne({ guildId: reaction.message.guildId });
-
-    // Ignore Unicode Stars for now, depending on Config
-    //   Just to prevent being flooded by Starboard Bots
-    if ( reaction.emoji.name === "⭐" && guildConfig.allowStarReactions !== true ) { return; }
-
-    if ( guildConfig?.messageActivity !== "DISABLED" )
-    {
-        await processMessageReaction(reaction, user);
-    }
-
-    return;
-
+// *******************************
+//  Discord Guild Role Delete Event
+DiscordClient.on(GatewayDispatchEvents.GuildRoleDelete, ({ data: role, api }) => {
+    // If deleted Role was block-listed, delete from database.
 });
 
 
@@ -440,33 +312,11 @@ DiscordClient.on('messageReactionAdd', async (reaction, user) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - MESSAGE DELETE BULK EVENT
 
-DiscordClient.on('messageDeleteBulk', async (messageCollection, channel) => {
-
-    // Filter out messages NOT sent by a webhook
-    messageCollection = messageCollection.filter(message => message.webhookId != null);
-    if ( messageCollection.size < 1 ) { return; }
-
-    // Ignore if NOT in Home Channel
-    if ( await GuildConfig.exists({ homeChannelId: channel.id }) == null ) { return; }
-
-    // Check if one or more of the messages are needed for core function of Home Channel
-    let filterArray = [];
-    messageCollection.forEach(message => {
-        filterArray.push({ headerMessageId: message.id });
-        filterArray.push({ eventThreadsMessageId: message.id });
-        filterArray.push({ audioMessageId: message.id });
-    });
-
-    // One or more of the deleted message(s) are needed - so reset Home
-    if ( await GuildConfig.exists({ $or: filterArray }) != null ) { await resetHome(channel.guildId); }
-    // None of the deleted Messages are needed, so pass onto processer
-    else { await bulkRemoveMessages(messageCollection, channel); }
-
-    return;
-
+// *******************************
+//  Discord Guild Scheduled Event Delete Event
+DiscordClient.on(GatewayDispatchEvents.GuildScheduledEventDelete, ({ data: scheduledEvent, api }) => {
+    // If part of HomeCord's systems, delete from database/Home Channel
 });
 
 
@@ -476,16 +326,11 @@ DiscordClient.on('messageDeleteBulk', async (messageCollection, channel) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - ROLE DELETE EVENT
 
-DiscordClient.on('roleDelete', async (oldRole) => {
-
-    // Check Block List
-    if ( await GuildBlocklist.exists({ blockedId: oldRole.id, guildId: oldRole.guild.id }) != null ) { await GuildBlocklist.deleteMany({ blockedId: oldRole.id, guildId: oldRole.guild.id }); return; }
-
-    return;
-
+// *******************************
+//  Discord Thread Delete Event
+DiscordClient.on(GatewayDispatchEvents.ThreadDelete, ({ data: thread, api }) => {
+    // If part of HomeCord's systems, delete from database/Home Channel.
 });
 
 
@@ -495,21 +340,11 @@ DiscordClient.on('roleDelete', async (oldRole) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - GUILD SCHEDULED EVENT DELETE EVENT
 
-DiscordClient.on('guildScheduledEventDelete', async (oldEvent) => {
-
-    // Check against Featured Events
-    if ( await FeaturedEvent.exists({ guildId: oldEvent.guildId, eventId: oldEvent.id }) != null )
-    {
-        await FeaturedEvent.deleteMany({ guildId: oldEvent.guildId, eventId: oldEvent.id });
-        await refreshEventsThreads(oldEvent.guildId, oldEvent?.guild?.preferredLocale);
-        return;
-    }
-    
-    return;
-
+// *******************************
+//  Discord Guild Scheduled Event User Add Event
+DiscordClient.on(GatewayDispatchEvents.GuildScheduledEventUserAdd, ({ data: scheduledEvent, api }) => {
+    // If Event Highlighting is enabled in Guild, check if Event meets Threshold and if so, Highlight it
 });
 
 
@@ -519,21 +354,11 @@ DiscordClient.on('guildScheduledEventDelete', async (oldEvent) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - THREAD DELETE EVENT
 
-DiscordClient.on('threadDelete', async (oldThread) => {
-
-    // Check against Featured Threads
-    if ( await FeaturedThread.exists({ threadId: oldThread.id, guildId: oldThread.guildId }) != null )
-    {
-        await FeaturedThread.deleteMany({ threadId: oldThread.id, guildId: oldThread.guildId });
-        await refreshEventsThreads(oldThread.guildId, oldThread.guild.preferredLocale);
-        return;
-    }
-
-    return;
-
+// *******************************
+//  Discord Guild Scheduled Event Update Event
+DiscordClient.on(GatewayDispatchEvents.GuildScheduledEventUpdate, ({ data: scheduledEvent, api }) => {
+    // If Event is part of HomeCord's systems, and Event has now finished or been cancelled, delete from database/Home Channel
 });
 
 
@@ -543,22 +368,11 @@ DiscordClient.on('threadDelete', async (oldThread) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - GUILD SCHEDULED EVENT USER ADD EVENT
 
-DiscordClient.on('guildScheduledEventUserAdd', async (scheduledEvent, user) => {
-    
-    // Only run if Scheduled Event highlighting is enabled
-    let guildConfig = await GuildConfig.findOne({ guildId: scheduledEvent.guildId });
-    if ( guildConfig == null ) { return; }
-    
-    if ( guildConfig.eventActivity !== "DISABLED" )
-    {
-        await processGuildEventUserAdd(scheduledEvent, user);
-    }
-
-    return;
-
+// *******************************
+//  Discord Thread Update Event
+DiscordClient.on(GatewayDispatchEvents.ThreadUpdate, ({ data: thread, api }) => {
+    // If Thread is now archived, and is a part of HomeCord's systems, then delete from database/Home Channel
 });
 
 
@@ -568,66 +382,7 @@ DiscordClient.on('guildScheduledEventUserAdd', async (scheduledEvent, user) => {
 
 
 
-/******************************************************************************* */
-// DISCORD - GUILD SCHEDULED EVENT UPDATE EVENT
-
-DiscordClient.on('guildScheduledEventUpdate', async (oldEvent, newEvent) => {
-
-    // There MUST be an old event to be compared with - thus, reject instantly if none is present
-    if ( !oldEvent ) { return; }
-
-    // Throw straight into method IF EVENT HIGHLIGHTING IS ENABLED
-    let guildConfig = await GuildConfig.findOne({ guildId: newEvent.guildId });
-    if ( guildConfig == null ) { return; }
-    
-    if ( guildConfig.eventActivity !== "DISABLED" )
-    {
-        // Only perform checks if the Event in question IS featured or highlighted
-        if ( await FeaturedEvent.exists({ guildId: newEvent.guildId, eventId: newEvent.id }) == null ) { return; }
-
-        await processGuildEventUpdate(oldEvent, newEvent);
-    }
-
-    return;
-
-});
 
 
-
-
-
-
-
-
-/******************************************************************************* */
-// DISCORD - THREAD UPDATE EVENT
-
-DiscordClient.on('threadUpdate', async (oldThread, newThread) => {
-
-    // Throw straight into method IF THREAD HIGHLIGHTING IS ENABLED
-    let guildConfig = await GuildConfig.findOne({ guildId: newThread.guildId });
-    if ( guildConfig == null ) { return; }
-    
-    if ( guildConfig.threadActivity !== "DISABLED" )
-    {
-        // Only perform checks if the Thread in question IS featured or highlighted
-        if ( await FeaturedThread.exists({ guildId: newThread.guildId, threadId: newThread.id }) == null ) { return; }
-
-        await processThreadUpdate(oldThread, newThread);
-    }
-
-    return;
-
-});
-
-
-
-
-
-
-
-
-/******************************************************************************* */
-
-DiscordClient.login(Config.TOKEN).catch(console.error); // Login to and start the Discord Bot Client
-Mongoose.connect(Config.MongoString).catch(console.error);
+// *******************************
+Mongoose.connect(MONGO_STRING).catch(console.error);

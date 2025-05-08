@@ -3,10 +3,4 @@ config.js
 /.vscode
 /Mongoose
 
-bulkDeployCommands.js
-deployCommands.js
-
-/JsonFiles/Hidden/
 /Resources/activityThresholds.js
-
-/TextCommands/test.js

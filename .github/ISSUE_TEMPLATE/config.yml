@@ -6,5 +6,5 @@ contact_links:
     url: https://discord.gg/BdXQjkADgd
     about: Need real-time help & support? Head on over to our Support Server on Discord.
   - name: Invite Bot
-    url: https://discord.com/oauth2/authorize?client_id=1156152328290840606&permissions=537250896&scope=applications.commands+bot
+    url: https://discord.com/oauth2/authorize?client_id=1156152328290840606
     about: Want to invite HomeCord to your own Server? Use this link here!

@@ -1,65 +1,69 @@
-const { StringSelectMenuInteraction } = require("discord.js");
-const { localize } = require("../../../BotModules/LocalizationModule");
-
-module.exports = {
-    // Select's Name
-    //     Used as its custom ID (or at least the start of it)
-    Name: "help-pages",
-
-    // Select's Description
-    Description: `Handles showing the specified help pages in the Help Command`,
-
-    // Cooldown, in seconds
-    //     Defaults to 3 seconds if missing
-    Cooldown: 3,
+import { API, MessageFlags } from '@discordjs/core';
+import { localize } from '../../../Utility/localizeResponses.js';
 
 
-
-    /**
-     * Executes the Select
-     * @param {StringSelectMenuInteraction} interaction 
+export const Select = {
+    /** The Select's name - set as the START of the Button's Custom ID, with extra data being separated with a "_" AFTER the name
+     * @example "selectName_extraData"
+     * @type {String}
      */
-    async execute(interaction)
-    {
+    name: "help-pages",
+
+    /** Select's Description, mostly for reminding me what it does!
+     * @type {String}
+     */
+    description: "Handles showing the specified help pages in the Help Command",
+
+    /** Select's cooldown, in seconds (whole number integers!)
+     * @type {Number}
+     */
+    cooldown: 3,
+
+    /** Runs the Select
+     * @param {import('discord-api-types/v10').APIMessageComponentSelectMenuInteraction} interaction 
+     * @param {API} api
+     * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     */
+    async executeSelect(interaction, api, interactionUser) {
         // Grab selected page and display its...page
-        const SelectedPage = interaction.values.shift();
+        const SelectedPage = interaction.data.values.shift();
 
         switch (SelectedPage)
         {
             case "index":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_INDEX') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_INDEX') });
                 break;
                 
             case "setup-guide":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_SETUP_GUIDE') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_SETUP_GUIDE') });
                 break;
 
             case "config-guide":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_CONFIG_GUIDE') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_CONFIG_GUIDE') });
                 break;
 
             case "highlight-vs-feature":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_HIGHLIGHT_VS_FEATURE') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_HIGHLIGHT_VS_FEATURE') });
                 break;
 
             case "message-privacy":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_MESSAGE_PRIVACY') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_MESSAGE_PRIVACY') });
                 break;
 
             case "blocklist":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_BLOCKLIST') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_BLOCKLIST') });
                 break;
 
             case "command-list":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_COMMAND_LIST') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_COMMAND_LIST') });
                 break;
 
             case "command-permissions":
-                await interaction.update({ content: localize(interaction.locale, 'HELP_COMMAND_PAGE_COMMAND_PERMISSIONS') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'HELP_COMMAND_PAGE_COMMAND_PERMISSIONS') });
                 break;
 
             default:
-                await interaction.update({ content: localize(interaction.locale, 'SELECT_MENU_ERROR_GENERIC') });
+                await api.interactions.updateMessage(interaction.id, interaction.token, { content: localize(interaction.locale, 'SELECT_MENU_ERROR_GENERIC') });
                 break;
         }
 
